@@ -1,6 +1,11 @@
 /* global bootstrap: false */
 // sample : https://getbootstrap.com/docs/5.2/examples/cheatsheet/
 // deep clone : https://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-deep-clone-an-object-in-javascript
+/*
+pretty js : http://hilite.me/
+border CSS : border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;
+style : friendly
+*/
 
 (($) => {
   'use strict';
@@ -82,6 +87,20 @@
       if (el.desc)
         desc = `<div class="card-header">${el.desc}</div>`;
 
+      let sourcecode = '';
+
+      if (el.sourcecode)
+        sourcecode =
+          `<div class="card-footer text-muted">
+            <pre class="m-0">${el.sourcecode}</pre>
+          </div>`;
+
+      if (el.colorcode)
+        sourcecode =
+          `<div class="card-footer text-muted overflow-hidden p-0">
+            ${el.colorcode}
+          </div>`;
+
       const article = $(`<article class="${article_class}" id="${el.id}">
         <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
           <h3>${el.title.replace(' (', '<br>(')}</h3>
@@ -94,7 +113,7 @@
             <div class="card-body grid-container">
               <div id="edg_${el.id}"></div>
             </div>
-            <div class="card-footer text-muted"><pre class="m-0">${el.sourcecode}</pre></div>
+            ${sourcecode}
           </div>
         </div>
       </article>`);
@@ -122,31 +141,70 @@
   const default_functionality_content = $(`<li><a class="d-inline-flex align-items-center rounded text-decoration-none" href="#defaultfunctionality">Default Functionality</a></li>`);
   // toc_aside.append(default_functionality_content);
 
+  const defaultfunc_sourcecode =
+    "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
+    "  id          : '#edg_defaultfunc',\n" +
+    "  altrows     : true,\n" +
+    "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
+    "  columngroups: [\n" +
+    "    { text: 'Buyer Details', name: 'buyer' },\n" +
+    "  ],\n" +
+    "  dataSource  : source,\n" +
+    "});";
+  // $('#defaultfunc')
+  //   .find('pre')
+  //   .html(defaultfunc_sourcecode);
+
+  const defaultfunc_colorcode =
+    '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
+    '2\n' +
+    '3\n' +
+    '4\n' +
+    '5\n' +
+    '6\n' +
+    '7\n' +
+    '8\n' +
+    '9</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+    '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_defaultfunc&#39;</span>,\n' +
+    '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+    '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+    '  columngroups<span style="color: #666666">:</span> [\n' +
+    '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Buyer Details&#39;</span>, name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;buyer&#39;</span> },\n' +
+    '  ],\n' +
+    '  dataSource  <span style="color: #666666">:</span> source,\n' +
+    '});\n' +
+    '</pre></td></tr></table></div>';
+  $('#defaultfunc')
+    .find('.card-footer')
+    .replaceWith(`<div class="card-footer text-muted overflow-hidden p-0">
+      ${defaultfunc_colorcode}
+    </div>`);
+
   // Append aside content
   const aside_list = [
-    {
-      // Append default section
-      id    : 'defaults',
-      title : 'Default',
-      menu  : [
-        {
-          id        : 'defaultfunc',
-          title     : `Default Functionality`,
-          doc       : null,
-          desc      : `EnhanceDataGrid default showing row number with aggregate Row Total.`,
-          sourcecode:
-            "new EnhanceDataGrid({\n" +
-            "  id          : '#edg_defaultfunc',\n" +
-            "  altrows     : true,\n" +
-            "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
-            "  columngroups: [\n" +
-            "    { text: 'Buyer Details', name: 'buyer' },\n" +
-            "  ],\n" +
-            "  dataSource  : source,\n" +
-            "});",
-        },
-      ],
-    },
+    // {
+    //   // Append default section
+    //   id    : 'defaults',
+    //   title : 'Default',
+    //   menu  : [
+    //     {
+    //       id        : 'defaultfunc',
+    //       title     : `Default Functionality`,
+    //       doc       : null,
+    //       desc      : `EnhanceDataGrid default showing row number with aggregate Row Total.`,
+    //       sourcecode:
+    //         "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
+    //         "  id          : '#edg_defaultfunc',\n" +
+    //         "  altrows     : true,\n" +
+    //         "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
+    //         "  columngroups: [\n" +
+    //         "    { text: 'Buyer Details', name: 'buyer' },\n" +
+    //         "  ],\n" +
+    //         "  dataSource  : source,\n" +
+    //         "});",
+    //     },
+    //   ],
+    // },
     {
       // Append search input section
       id    : 'searchinputs',
@@ -161,7 +219,7 @@
             Simply sort the desire column, key in the keyword in the search input, then press ENTER.
             Press ESC to clear the filter.`,
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_enterfilter',\n" +
             "  buttonTheme : 'material-purple',\n" +
             "  altrows     : true,\n" +
@@ -169,6 +227,23 @@
             "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource  : source,\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
+            '2\n' +
+            '3\n' +
+            '4\n' +
+            '5\n' +
+            '6\n' +
+            '7\n' +
+            '8</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_enterfilter&#39;</span>,\n' +
+            '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  searchInput <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'enterfind',
@@ -178,7 +253,7 @@
             The (Ctrl + Enter) keyboard shortcut feature is included with Find mode and can be enabled by setup the property <i class="text-danger">enterFind : true</i>.
             The example below shows a grid in pure find mode. `,
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id              : '#edg_enterfind',\n" +
             "  buttonTheme     : 'material-purple',\n" +
             "  altrows         : true,\n" +
@@ -190,6 +265,31 @@
             "  columns         : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource      : source,\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10\n' +
+            '11\n' +
+            '12</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id              <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_enterfind&#39;</span>,\n' +
+            '  buttonTheme     <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows         <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  searchInput     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  showFindButton  <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  enterFind       <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  showFilterButton<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span>,\n' +
+            '  enterFilter     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span>,\n' +
+            '  columns         <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource      <span style="color: #666666">:</span> source,\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'enterfilterfind',
@@ -197,7 +297,7 @@
           doc       : null,
           desc      : `Filter and Find modes can be enabled at the same time.`,
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id            : '#edg_enterfilterfind',\n" +
             "  buttonTheme   : 'material-purple',\n" +
             "  altrows       : true,\n" +
@@ -207,6 +307,27 @@
             "  columns       : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource    : source,\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id            <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_enterfilterfind&#39;</span>,\n' +
+            '  buttonTheme   <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows       <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  searchInput   <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  showFindButton<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  enterFind     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns       <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource    <span style="color: #666666">:</span> source,\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'autofilter',
@@ -214,7 +335,7 @@
           doc       : null,
           desc      : null,
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_autofilter',\n" +
             "  buttonTheme : 'material-purple',\n" +
             "  altrows     : true,\n" +
@@ -223,6 +344,25 @@
             "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource  : source,\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
+            '2\n' +
+            '3\n' +
+            '4\n' +
+            '5\n' +
+            '6\n' +
+            '7\n' +
+            '8\n' +
+            '9</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_autofilter&#39;</span>,\n' +
+            '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  searchInput <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  autoFilter  <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'autofind',
@@ -230,7 +370,7 @@
           doc       : null,
           desc      : null,
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_autofind',\n" +
             "  buttonTheme : 'material-purple',\n" +
             "  altrows     : true,\n" +
@@ -239,6 +379,25 @@
             "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource  : source,\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
+            '2\n' +
+            '3\n' +
+            '4\n' +
+            '5\n' +
+            '6\n' +
+            '7\n' +
+            '8\n' +
+            '9</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_autofind&#39;</span>,\n' +
+            '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  searchInput <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  autoFind    <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'autodelaytiming',
@@ -246,7 +405,7 @@
           doc       : null,
           desc      : null,
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id              : '#edg_autodelaytiming',\n" +
             "  buttonTheme     : 'material-purple',\n" +
             "  altrows         : true,\n" +
@@ -256,6 +415,27 @@
             "  columns         : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource      : source,\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id              <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_autodelaytiming&#39;</span>,\n' +
+            '  buttonTheme     <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows         <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  searchInput     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  autoFilter      <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  autoDelayTiming <span style="color: #666666">:</span> <span style="color: #40a070">500</span>,\n' +
+            '  columns         <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource      <span style="color: #666666">:</span> source,\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'filterrow',
@@ -263,7 +443,7 @@
           doc       : null,
           desc      : null,
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id                  : '#edg_filterrow',\n" +
             "  buttonTheme         : 'material-purple',\n" +
             "  altrows             : true,\n" +
@@ -273,6 +453,27 @@
             "  columns             : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource          : source,\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id                  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_filterrow&#39;</span>,\n' +
+            '  buttonTheme         <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows             <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  searchInput         <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  showfilterrow       <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  showFilterRowButton <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span>,\n' +
+            '  columns             <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource          <span style="color: #666666">:</span> source,\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
       ],
     },
@@ -287,7 +488,7 @@
           doc       : null,
           desc      : null,
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_reloadbutton',\n" +
             "  buttonTheme : 'material-purple',\n" +
             "  searchInput : true,\n" +
@@ -297,6 +498,27 @@
             "    { button: 'reload' },\n" +
             "  ]\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_reloadbutton&#39;</span>,\n' +
+            '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  searchInput <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  tbElement   <span style="color: #666666">:</span> [\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;reload&#39;</span> },\n' +
+            '  ]\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'addbutton',
@@ -323,9 +545,9 @@
           id        : 'printbutton',
           title     : 'Print Button',
           doc       : null,
-          desc      : null,
+          desc      : 'Print button open URL in new window tab.',
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_printbutton',\n" +
             "  buttonTheme : 'material-purple',\n" +
             "  altrows     : true,\n" +
@@ -339,6 +561,35 @@
             "    },\n" +
             "  ]\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10\n' +
+            '11\n' +
+            '12\n' +
+            '13\n' +
+            '14</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_printbutton&#39;</span>,\n' +
+            '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> JSON.parse(JSON.stringify(source)),\n' +
+            '  tbElement   <span style="color: #666666">:</span> [\n' +
+            '    {\n' +
+            '      button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;print&#39;</span>,\n' +
+            '      text  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Open Documentation&#39;</span>,\n' +
+            '      url   <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;url_link&#39;</span>\n' +
+            '    },\n' +
+            '  ]\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'excelbutton',
@@ -346,7 +597,7 @@
           doc       : null,
           desc      : null,
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_excelbutton',\n" +
             "  buttonTheme : 'material-purple',\n" +
             "  altrows     : true,\n" +
@@ -359,6 +610,33 @@
             "    },\n" +
             "  ]\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10\n' +
+            '11\n' +
+            '12\n' +
+            '13</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_excelbutton&#39;</span>,\n' +
+            '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  tbElement   <span style="color: #666666">:</span> [\n' +
+            '    {\n' +
+            '      button  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;excel&#39;</span>,\n' +
+            '      filename<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;My_Excel_File&#39;</span>,\n' +
+            '    },\n' +
+            '  ]\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'csvbutton',
@@ -366,7 +644,7 @@
           doc       : null,
           desc      : null,
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_csvbutton',\n" +
             "  buttonTheme : 'material-purple',\n" +
             "  altrows     : true,\n" +
@@ -379,6 +657,33 @@
             "    },\n" +
             "  ]\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10\n' +
+            '11\n' +
+            '12\n' +
+            '13</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_csvbutton&#39;</span>,\n' +
+            '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  tbElement   <span style="color: #666666">:</span> [\n' +
+            '    {\n' +
+            '      button  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;csv&#39;</span>,\n' +
+            '      filename<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;My_CSV_File&#39;</span>,\n' +
+            '    },\n' +
+            '  ]\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'custombtnbutton',
@@ -386,7 +691,7 @@
           doc       : null,
           desc      : null,
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_custombtnbutton',\n" +
             "  buttonTheme : 'material-purple',\n" +
             "  altrows     : true,\n" +
@@ -403,6 +708,41 @@
             "    },\n" +
             "  ]\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10\n' +
+            '11\n' +
+            '12\n' +
+            '13\n' +
+            '14\n' +
+            '15\n' +
+            '16\n' +
+            '17</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_custombtnbutton&#39;</span>,\n' +
+            '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  tbElement   <span style="color: #666666">:</span> [\n' +
+            '    {\n' +
+            '      button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;custombutton&#39;</span>,\n' +
+            '      icon  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;fa-solid fa-earth&#39;</span>,\n' +
+            '      text  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Hello World !&#39;</span>,\n' +
+            '      click <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">function</span>() {\n' +
+            '        <span style="color: #007020">window</span>.alert(<span style="color: #4070a0">&#39;Hello World !&#39;</span>);\n' +
+            '      },\n' +
+            '    },\n' +
+            '  ]\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'custombutton',
@@ -410,9 +750,8 @@
           doc       : null,
           desc      : null,
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_custombutton',\n" +
-            "  buttonTheme : 'material-purple',\n" +
             "  altrows     : true,\n" +
             "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource  : source,\n" +
@@ -423,6 +762,31 @@
             "    },\n" +
             "  ]\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10\n' +
+            '11\n' +
+            '12</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_custombutton&#39;</span>,\n' +
+            '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  tbElement   <span style="color: #666666">:</span> [\n' +
+            '    {\n' +
+            '      button    <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;custom&#39;</span>,\n' +
+            '      buttonNode<span style="color: #666666">:</span> $(<span style="color: #4070a0">&#39;&lt;i class=&quot;text-primary&quot;&gt;Welcome to EnhanceDataGrid.js !&#39;</span>)\n' +
+            '    },\n' +
+            '  ]\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'divider',
@@ -430,7 +794,7 @@
           doc       : null,
           desc      : null,
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_divider',\n" +
             "  buttonTheme : 'material-purple',\n" +
             "  altrows     : true,\n" +
@@ -446,6 +810,39 @@
             "    },\n" +
             "  ]\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10\n' +
+            '11\n' +
+            '12\n' +
+            '13\n' +
+            '14\n' +
+            '15\n' +
+            '16</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_divider&#39;</span>,\n' +
+            '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  tbElement   <span style="color: #666666">:</span> [\n' +
+            '    { button <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;reload&#39;</span> },\n' +
+            '    { button <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;divider&#39;</span> },\n' +
+            '    {\n' +
+            '      button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;print&#39;</span>,\n' +
+            '      text  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Documentation&#39;</span>,\n' +
+            '      url   <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;https://www.rightpristine.com/zeikman/EnhanceDataGrid/doc/EnhanceDataGrid.html&#39;</span>\n' +
+            '    },\n' +
+            '  ]\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'separator',
@@ -453,7 +850,7 @@
           doc       : null,
           desc      : null,
           sourcecode:
-            "new EnhanceDataGrid({\n" +
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_separator',\n" +
             "  buttonTheme : 'material-purple',\n" +
             "  altrows     : true,\n" +
@@ -469,6 +866,39 @@
             "    },\n" +
             "  ]\n" +
             "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10\n' +
+            '11\n' +
+            '12\n' +
+            '13\n' +
+            '14\n' +
+            '15\n' +
+            '16</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_separator&#39;</span>,\n' +
+            '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  tbElement   <span style="color: #666666">:</span> [\n' +
+            '    { button <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;reload&#39;</span> },\n' +
+            '    { button <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;separator&#39;</span> },\n' +
+            '    {\n' +
+            '      button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;custombutton&#39;</span>,\n' +
+            '      icon  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;none&#39;</span>,\n' +
+            '      text  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Oh no... Do not leave me T_T&#39;</span>,\n' +
+            '    },\n' +
+            '  ]\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
       ],
     },
@@ -487,28 +917,204 @@
       title : 'Data Sources',
       menu  : [
         {
-          id        : 'jsonsource',
+          id        : 'json_source',
           title     : 'JSON Source',
           doc       : null,
           desc      : null,
-          sourcecode: '',
+          sourcecode:
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
+            "  id: '#edg_jsonsource',\n" +
+            "  altrows: true,\n" +
+            "  columns: JSON.parse(JSON.stringify(columns)),\n" +
+            "  columns: [\n" +
+            "    { text: 'Company Name', datafield: 'CompanyName', width: 250 },\n" +
+            "    { text: 'Contact Name', datafield: 'ContactName', width: 150 },\n" +
+            "    { text: 'Contact Title', datafield: 'ContactTitle', width: 180 },\n" +
+            "    { text: 'City', datafield: 'City', width: 120 },\n" +
+            "    { text: 'Country', datafield: 'Country' },\n" +
+            "  ],\n" +
+            "  jsonSource: {\n" +
+            "    url: 'demo/customers.txt',\n" +
+            "    datafields: [\n" +
+            "      { name: 'CompanyName', type: 'string' },\n" +
+            "      { name: 'ContactName', type: 'string' },\n" +
+            "      { name: 'ContactTitle', type: 'string' },\n" +
+            "      { name: 'Address', type: 'string' },\n" +
+            "      { name: 'City', type: 'string' },\n" +
+            "      { name: 'Country', type: 'string' },\n" +
+            "    ]\n" +
+            "  },\n" +
+            "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10\n' +
+            '11\n' +
+            '12\n' +
+            '13\n' +
+            '14\n' +
+            '15\n' +
+            '16\n' +
+            '17\n' +
+            '18\n' +
+            '19\n' +
+            '20\n' +
+            '21\n' +
+            '22\n' +
+            '23</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_jsonsource&#39;</span>,\n' +
+            '  altrows<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns<span style="color: #666666">:</span> columns_array,\n' +
+            '  columns<span style="color: #666666">:</span> [\n' +
+            '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Company Name&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;CompanyName&#39;</span>, width<span style="color: #666666">:</span> <span style="color: #40a070">250</span> },\n' +
+            '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Contact Name&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;ContactName&#39;</span>, width<span style="color: #666666">:</span> <span style="color: #40a070">150</span> },\n' +
+            '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Contact Title&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;ContactTitle&#39;</span>, width<span style="color: #666666">:</span> <span style="color: #40a070">180</span> },\n' +
+            '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;City&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;City&#39;</span>, width<span style="color: #666666">:</span> <span style="color: #40a070">120</span> },\n' +
+            '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Country&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Country&#39;</span> },\n' +
+            '  ],\n' +
+            '  jsonSource<span style="color: #666666">:</span> {\n' +
+            '    url<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;demo/customers.txt&#39;</span>,\n' +
+            '    datafields<span style="color: #666666">:</span> [\n' +
+            '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;CompanyName&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
+            '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;ContactName&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
+            '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;ContactTitle&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
+            '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Address&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
+            '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;City&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
+            '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Country&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
+            '    ]\n' +
+            '  },\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
-          id        : 'datasource',
+          id        : 'data_source',
           title     : 'DataSource',
           doc       : null,
           desc      : null,
-          sourcecode: '',
+          sourcecode:
+            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
+            "  id: '#edg_datasource',\n" +
+            "  altrows: true,\n" +
+            "  columns: JSON.parse(JSON.stringify(columns)),\n" +
+            "  columns: [\n" +
+            "    { text: 'Company Name', datafield: 'CompanyName', width: 250 },\n" +
+            "    { text: 'Contact Name', datafield: 'ContactName', width: 150 },\n" +
+            "    { text: 'Contact Title', datafield: 'ContactTitle', width: 180 },\n" +
+            "    { text: 'City', datafield: 'City', width: 120 },\n" +
+            "    { text: 'Country', datafield: 'Country' },\n" +
+            "  ],\n" +
+            "  dataSource: {\n" +
+            "    datatype: 'json',\n" +
+            "    id: 'CustomerID',\n" +
+            "    url: 'demo/customers.txt',\n" +
+            "    datafields: [\n" +
+            "      { name: 'CompanyName', type: 'string' },\n" +
+            "      { name: 'ContactName', type: 'string' },\n" +
+            "      { name: 'ContactTitle', type: 'string' },\n" +
+            "      { name: 'Address', type: 'string' },\n" +
+            "      { name: 'City', type: 'string' },\n" +
+            "      { name: 'Country', type: 'string' },\n" +
+            "    ]\n" +
+            "  },\n" +
+            "});",
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10\n' +
+            '11\n' +
+            '12\n' +
+            '13\n' +
+            '14\n' +
+            '15\n' +
+            '16\n' +
+            '17\n' +
+            '18\n' +
+            '19\n' +
+            '20\n' +
+            '21\n' +
+            '22\n' +
+            '23\n' +
+            '24\n' +
+            '25</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id        <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_data_source&#39;</span>,\n' +
+            '  altrows   <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns   <span style="color: #666666">:</span> columns_array,\n' +
+            '  columns   <span style="color: #666666">:</span> [\n' +
+            '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Company Name&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;CompanyName&#39;</span>, width<span style="color: #666666">:</span> <span style="color: #40a070">250</span> },\n' +
+            '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Contact Name&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;ContactName&#39;</span>, width<span style="color: #666666">:</span> <span style="color: #40a070">150</span> },\n' +
+            '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Contact Title&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;ContactTitle&#39;</span>, width<span style="color: #666666">:</span> <span style="color: #40a070">180</span> },\n' +
+            '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;City&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;City&#39;</span>, width<span style="color: #666666">:</span> <span style="color: #40a070">120</span> },\n' +
+            '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Country&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Country&#39;</span> },\n' +
+            '  ],\n' +
+            '  dataSource<span style="color: #666666">:</span> {\n' +
+            '    datatype<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;json&#39;</span>,\n' +
+            '    id<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;CustomerID&#39;</span>,\n' +
+            '    url<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;demo/customers.txt&#39;</span>,\n' +
+            '    datafields<span style="color: #666666">:</span> [\n' +
+            '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;CompanyName&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
+            '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;ContactName&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
+            '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;ContactTitle&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
+            '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Address&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
+            '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;City&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
+            '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Country&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
+            '    ]\n' +
+            '  },\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
+        // {
+        //   id        : 'dataadapter',
+        //   title     : 'DataAdapter',
+        //   doc       : null,
+        //   desc      : null,
+        //   sourcecode: '',
+        // },
+      ],
+    },
+    {
+      // Append xxx
+      id    : 'ids',
+      title : 'title',
+      menu  : [
         {
-          id        : 'dataadapter',
-          title     : 'DataAdapter',
+          id        : 'article_id',
+          title     : `article_name`,
           doc       : null,
           desc      : null,
-          sourcecode: '',
+          sourcecode: null,
+          colorcode: null
         },
       ],
     },
+    // {
+    //   // Append xxx
+    //   id    : 'ids',
+    //   title : 'title',
+    //   menu  : [
+    //     {
+    //       id        : 'article_id',
+    //       title     : `article_name`,
+    //       doc       : null,
+    //       desc      : null,
+    //       sourcecode: null,
+    //       colorcode: null
+    //     },
+    //   ],
+    // },
   ];
 
   aside_list.forEach((item, index) => {
@@ -529,170 +1135,6 @@
   // ===================================================================================================================
 
   // Init EnhanceDataGrid
-
-  const combodata = [
-    {
-      "CustomerID": "ALFKI",
-      "CompanyName": "Alfreds Futterkiste",
-      "ContactName": "Maria Anders",
-      "ContactTitle": "Sales Representative",
-      "Address": "Obere Str. 57",
-      "City": "Berlin",
-      "Country": "Germany"
-    }, {
-      "CustomerID": "ANATR",
-      "CompanyName": "Ana Trujillo Emparedados y helados",
-      "ContactName": "Ana Trujillo",
-      "ContactTitle": "Owner",
-      "Address": "Avda. de la Constitucin 2222",
-      "City": "Mxico D.F.",
-      "Country": "Mexico"
-    }, {
-      "CustomerID": "ANTON",
-      "CompanyName": "Antonio Moreno Taquera",
-      "ContactName": "Antonio Moreno",
-      "ContactTitle": "Owner",
-      "Address": "Mataderos 2312",
-      "City": "Mxico D.F.",
-      "Country": "Mexico"
-    }, {
-      "CustomerID": "AROUT",
-      "CompanyName": "Around the Horn",
-      "ContactName": "Thomas Hardy",
-      "ContactTitle": "Sales Representative",
-      "Address": "120 Hanover Sq.",
-      "City": "London",
-      "Country": "UK"
-    }, {
-      "CustomerID": "BERGS",
-      "CompanyName": "Berglunds snabbkp",
-      "ContactName": "Christina Berglund",
-      "ContactTitle": "Order Administrator",
-      "Address": "Berguvsvgen 8",
-      "City": "Lule",
-      "Country": "Sweden"
-    }, {
-      "CustomerID": "BLAUS",
-      "CompanyName": "Blauer See Delikatessen",
-      "ContactName": "Hanna Moos",
-      "ContactTitle": "Sales Representative",
-      "Address": "Forsterstr. 57",
-      "City": "Mannheim",
-      "Country": "Germany"
-    }, {
-      "CustomerID": "BLONP",
-      "CompanyName": "Blondesddsl pre et fils",
-      "ContactName": "Frdrique Citeaux",
-      "ContactTitle": "Marketing Manager",
-      "Address": "24, place Klber",
-      "City": "Strasbourg",
-      "Country": "France"
-    }, {
-      "CustomerID": "BOLID",
-      "CompanyName": "Blido Comidas preparadas",
-      "ContactName": "Martn Sommer",
-      "ContactTitle": "Owner",
-      "Address": "C/ Araquil, 67",
-      "City": "Madrid",
-      "Country": "Spain"
-    }, {
-      "CustomerID": "BONAP",
-      "CompanyName": "Bon app'",
-      "ContactName": "Laurence Lebihan",
-      "ContactTitle": "Owner",
-      "Address": "12, rue des Bouchers",
-      "City": "Marseille",
-      "Country": "France"
-    }, {
-      "CustomerID": "BOTTM",
-      "CompanyName": "Bottom-Dollar Markets",
-      "ContactName": "Elizabeth Lincoln",
-      "ContactTitle": "Accounting Manager",
-      "Address": "23 Tsawassen Blvd.",
-      "City": "Tsawassen",
-      "Country": "Canada"
-    }, {
-      "CustomerID": "BSBEV",
-      "CompanyName": "B's Beverages",
-      "ContactName": "Victoria Ashworth",
-      "ContactTitle": "Sales Representative",
-      "Address": "Fauntleroy Circus",
-      "City": "London",
-      "Country": "UK"
-    }, {
-      "CustomerID": "CACTU",
-      "CompanyName": "Cactus Comidas para llevar",
-      "ContactName": "Patricio Simpson",
-      "ContactTitle": "Sales Agent",
-      "Address": "Cerrito 333",
-      "City": "Buenos Aires",
-      "Country": "Argentina"
-    }, {
-      "CustomerID": "CENTC",
-      "CompanyName": "Centro comercial Moctezuma",
-      "ContactName": "Francisco Chang",
-      "ContactTitle": "Marketing Manager",
-      "Address": "Sierras de Granada 9993",
-      "City": "Mxico D.F.",
-      "Country": "Mexico"
-    }, {
-      "CustomerID": "CHOPS",
-      "CompanyName": "Chop-suey Chinese",
-      "ContactName": "Yang Wang",
-      "ContactTitle": "Owner",
-      "Address": "Hauptstr. 29",
-      "City": "Bern",
-      "Country": "Switzerland"
-    }, {
-      "CustomerID": "COMMI",
-      "CompanyName": "Comrcio Mineiro",
-      "ContactName": "Pedro Afonso",
-      "ContactTitle": "Sales Associate",
-      "Address": "Av. dos Lusadas, 23",
-      "City": "Sao Paulo",
-      "Country": "Brazil"
-    }, {
-      "CustomerID": "CONSH",
-      "CompanyName": "Consolidated Holdings",
-      "ContactName": "Elizabeth Brown",
-      "ContactTitle": "Sales Representative",
-      "Address": "Berkeley Gardens 12 Brewery",
-      "City": "London",
-      "Country": "UK"
-    }, {
-      "CustomerID": "DRACD",
-      "CompanyName": "Drachenblut Delikatessen",
-      "ContactName": "Sven Ottlieb",
-      "ContactTitle": "Order Administrator",
-      "Address": "Walserweg 21",
-      "City": "Aachen",
-      "Country": "Germany"
-    }, {
-      "CustomerID": "DUMON",
-      "CompanyName": "Du monde entier",
-      "ContactName": "Janine Labrune",
-      "ContactTitle": "Owner",
-      "Address": "67, rue des Cinquante Otages",
-      "City": "Nantes",
-      "Country": "France"
-    }, {
-      "CustomerID": "EASTC",
-      "CompanyName": "Eastern Connection",
-      "ContactName": "Ann Devon",
-      "ContactTitle": "Sales Agent",
-      "Address": "35 King George",
-      "City": "London",
-      "Country": "UK"
-    }, {
-      "CustomerID": "ERNSH",
-      "CompanyName": "Ernst Handel",
-      "ContactName": "Roland Mendel",
-      "ContactTitle": "Sales Manager",
-      "Address": "Kirchgasse 6",
-      "City": "Graz",
-      "Country": "Austria"
-    }
-  ];
 
   // prepare the data
   const data = new Array();
@@ -888,7 +1330,22 @@
     columns     : JSON.parse(JSON.stringify(columns)),
     dataSource  : JSON.parse(JSON.stringify(source)),
     tbElement   : [
-      { button: 'add' },
+      { button: 'add',
+        click: function() {
+          window.alert('You clicked the add button');
+        },
+      },
+      { button: 'add',
+        text: 'Open jqxWindow',
+        win: '#edg_jqxWindow',
+      },
+      // TODO: page auto-scroll to top, why ???
+      // { button: 'add', text: 'Open jqxWindow (Centered)', win: '#edg_jqxWindow', winOpenOnButton: false },
+      { button: 'add',
+        text: 'Open Modal',
+        modal: '#exampleModal',
+        form: '#exampleForm',
+      },
     ]
   });
 
@@ -901,6 +1358,14 @@
     dataSource  : JSON.parse(JSON.stringify(source)),
     tbElement   : [
       { button: 'edit' },
+      { button: 'edit',
+        text: 'Open jqxWindow',
+        win: '#edg_jqxWindow',
+      },
+      { button: 'edit',
+        text: 'Open Modal',
+        modal: '#exampleModal',
+      },
     ]
   });
 
@@ -912,7 +1377,67 @@
     columns     : JSON.parse(JSON.stringify(columns)),
     dataSource  : JSON.parse(JSON.stringify(source)),
     tbElement   : [
-      { button: 'delete' },
+      { button: 'delete',
+        debug: true, // TODO: need specified in doc that 'debug' only works when 'url' is 'string'
+        text: "url in '<b><i>string</i></b>'",
+        url: 'post_delete.php?mod=delete_data',
+      },
+      { button: 'delete',
+        text: "url in '<b><i>function</i></b>'",
+        title: 'View result in console',
+        url: function(data, id) {
+          window.alert(`Selected Row ID : ${id}. Continue with your own coding...`);
+          console.warn(`Selected Row ID : ${id}`);
+          console.warn('Selected Row Data :');
+          console.log(data);
+        }
+      },
+      { button: 'delete',
+        debug: true,
+        text: '<b><i>check</i></b> function',
+        url: 'delete.php',
+        check: function() {
+          const passed = edg_deletebutton.getSelectedRowData().id % 2 == 0;
+
+          if (passed)
+            window.alert('Checking passed, continue delete progress.');
+          else
+            $.alert({
+              columnClass       : 'medium',
+              animation         : 'zoom',
+              closeAnimation    : 'zoom',
+              animateFromElement: false,
+              backgroundDismiss : true,
+              escapeKey         : true,
+              title             : '',
+              content           :'Odd row return <span style="color:red;">false</span>, click on even row to return <span style="color:blue;">true</span>.',
+            });
+
+          return passed
+            ? true
+            : false;
+        }
+      },
+      { button: 'delete',
+        debug: true,
+        text: 'static <b><i>param</i></b>',
+        title: 'View result in console',
+        url: 'delete.php',
+        param: { p1: 1, p2: 2 },
+      },
+      { button: 'delete',
+        debug: true,
+        text: 'dynamic <b><i>param</i></b>',
+        title: 'View result in console',
+        url: 'delete.php',
+        param: function() {
+          return {
+            random: (Math.random() * 100).toFixed(2)
+          };
+        }
+      },
+      // { button: 'delete'
+      // },
     ]
   });
 
@@ -926,8 +1451,8 @@
     tbElement   : [
       {
         button: 'print',
-        text  : 'Documentation',
-        url   : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/doc/EnhanceDataGrid.html'
+        text  : 'Open Documentation',
+        url   : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html'
       },
     ]
   });
@@ -984,7 +1509,6 @@
   // Component : Custom Node
   const edg_custombutton = new EnhanceDataGrid({
     id          : '#edg_custombutton',
-    buttonTheme : 'material-purple',
     altrows     : true,
     columns     : JSON.parse(JSON.stringify(columns)),
     dataSource  : JSON.parse(JSON.stringify(source)),
@@ -1031,6 +1555,102 @@
       },
     ]
   });
+
+  // Component : json source
+  const edg_json_source = new EnhanceDataGrid({
+    id        : '#edg_json_source',
+    altrows   : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    columns   : [
+      { text: 'Company Name', datafield: 'CompanyName', width: 250 },
+      { text: 'Contact Name', datafield: 'ContactName', width: 150 },
+      { text: 'Contact Title', datafield: 'ContactTitle', width: 180 },
+      { text: 'City', datafield: 'City', width: 120 },
+      { text: 'Country', datafield: 'Country' },
+    ],
+    jsonSource: {
+      url: 'demo/customers.txt',
+      datafields: [
+        { name: 'CompanyName', type: 'string' },
+        { name: 'ContactName', type: 'string' },
+        { name: 'ContactTitle', type: 'string' },
+        { name: 'Address', type: 'string' },
+        { name: 'City', type: 'string' },
+        { name: 'Country', type: 'string' },
+      ]
+    },
+  });
+
+  // Component : data source
+  const edg_data_source = new EnhanceDataGrid({
+    id        : '#edg_data_source',
+    altrows   : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    columns   : [
+      { text: 'Company Name', datafield: 'CompanyName', width: 250 },
+      { text: 'Contact Name', datafield: 'ContactName', width: 150 },
+      { text: 'Contact Title', datafield: 'ContactTitle', width: 180 },
+      { text: 'City', datafield: 'City', width: 120 },
+      { text: 'Country', datafield: 'Country' },
+    ],
+    dataSource: {
+      datatype: 'json',
+      id: 'CustomerID',
+      url: 'demo/customers.txt',
+      datafields: [
+        { name: 'CompanyName', type: 'string' },
+        { name: 'ContactName', type: 'string' },
+        { name: 'ContactTitle', type: 'string' },
+        { name: 'Address', type: 'string' },
+        { name: 'City', type: 'string' },
+        { name: 'Country', type: 'string' },
+      ]
+    },
+  });
+
+  // ===================================================================================================================
+
+  // Init form widgets
+
+  $('#jqxInput')
+    .jqxInput({ width: '100%', height: 31, value: 'hello world' });
+
+  $('#jqxDateTimeInput')
+    .jqxDateTimeInput({ width: '100%', height: 31, value: '2022-01-01' });
+
+  $('div[id^=jqxCheckBox]')
+    .jqxCheckBox({ width: 'auto', height: 26 });
+
+  $('#jqxCheckBox2').val(true);
+
+  $('div[id^=jqxRadioButton]')
+    .jqxRadioButton({ width: 'auto', height: 26 });
+
+  $('#jqxRadioButton2').val(true);
+
+  $('#jqxTextArea')
+    .jqxTextArea({ width: '100%', height: 31 }).val('hello world');
+
+  $('#jqxComboBox')
+    .jqxComboBox({
+      width: '100%',
+      height: 31,
+      selectedIndex: 1,
+      displayMember: "ContactName",
+      source: new $.jqx.dataAdapter({
+        datatype    : 'json',
+        url         : 'demo/customers.txt',
+        async       : false,
+        valueMember : 'CompanyName',
+        datafields  : [
+          { name: 'CompanyName' },
+          { name: 'ContactName' }
+        ],
+      }),
+    });
+
+  $('#edg_jqxWindow')
+    .jqxWindow({ width: 500, height: 300, isModal: true, autoOpen: false });
 
   // ===================================================================================================================
 

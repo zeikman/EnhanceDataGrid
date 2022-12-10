@@ -1355,7 +1355,11 @@ class EnhanceDataGrid {
               if (modal)
                 _openModal(modal/* , { timeout: 2000 } */);
 
-              console.log(self.getSelectedRowData());
+              let debug = false;
+              // debug = true
+
+              if (debug)
+                console.log(self.getSelectedRowData());
             }
 
             $(this).keyup();
@@ -1393,9 +1397,16 @@ class EnhanceDataGrid {
               let _url        = self.#_getGridButtonProps(tbElement, button_id, 'url');
               let _title      = self.#_getGridButtonProps(tbElement, button_id, 'title');
               let _message    = self.#_getGridButtonProps(tbElement, button_id, 'message');
+              let _debug      = self.#_getGridButtonProps(tbElement, button_id, 'debug');
 
               _title = (typeof _title === 'undefined' || _title === '') ? 'Delete Record' : _title;
               _message = (typeof _message === 'undefined' || _message === '') ? 'Are you sure to delete selected record ?' : _message;
+
+              if (typeof _url === 'undefined' || _url === undefined || typeof _url === 'null' || _url === null) {
+                _promptError({ error: controlledMessage.no_url });
+
+                return false;
+              }
 
               $.confirm({
                 useBootstrap      : zProps.useBootstrap,
@@ -1411,11 +1422,6 @@ class EnhanceDataGrid {
                   confirm: {
                     btnClass: 'btn-danger',
                     action: () => {
-                      if (typeof _url === 'undefined' || _url === undefined || typeof _url === 'null' || _url === null) {
-                        _promptError({ error: controlledMessage.no_url });
-                        return false;
-                      }
-
                       // NOTE: user-defined operation
                       if (typeof _url === 'function') {
                         if (data_id)
@@ -1429,8 +1435,11 @@ class EnhanceDataGrid {
                         if (data_id) {
                           // insert data ID
                           const _post = { id: data_id };
-                          _url = EnhanceDataGrid.insertQueryString(_url, _post);
 
+                          // TODO: should _post append to _url ???
+                          // _url = EnhanceDataGrid.insertQueryString(_url, _post);
+
+                          // TODO: combine extra params to _url_? or _post_?
                           // combine extra parameters
                           if (_params && typeof _params === 'object')
                             _url = EnhanceDataGrid.insertQueryString(_url, _params);
@@ -1438,8 +1447,11 @@ class EnhanceDataGrid {
                           if (_params && typeof _params === 'function')
                             _url = EnhanceDataGrid.insertQueryString(_url, _params());
 
-                          console.log(`$.post() to ${_url}`);
-                          return true;
+                          if (_debug === true || _debug === 'true') {
+                            console.log(`%c$.post() to '${_url}' with $_POST ${JSON.stringify(_post)}`, 'color: red; font-weight: bold;');
+
+                            return true;
+                          }
 
                           $.post(_url, _post)
                             .done(resp => {
@@ -1471,10 +1483,10 @@ class EnhanceDataGrid {
                   },
                   cancel: () => {},
                   // somethingElse: {
-                  //   text: 'Something else',
-                  //   btnClass: 'btn-blue',
-                  //   keys: ['enter', 'shift'],
-                  //   action: () => {
+                  //   text     : 'Something else',
+                  //   btnClass : 'btn-blue',
+                  //   keys     : ['enter', 'shift'],
+                  //   action   : () => {
                   //     $.alert('Something else?');
                   //   }
                   // }
@@ -1613,7 +1625,7 @@ class EnhanceDataGrid {
       if ($(form).length > 0) {
         // TODO: enhance for reset form input
         let debug = false;
-        debug = true;
+        // debug = true;
 
         if (debug)
           console.log(EnhanceDataGrid.transformStringToObject($(form).serialize()));
@@ -2312,7 +2324,7 @@ class EnhanceDataGrid {
    * @param {String}          prop.id                             - Grid's ID.
    * @param {Object}          [prop.jsonSource]                   - Grid's data source preset with JSON data type.
    * @param {Object}          [prop.dataSource]                   - Grid's data source object.
-   * @param {Object}          [prop.dataAdapter]                  - Grid's data adapter object.
+   * @!param {Object}          [prop.dataAdapter]                  - Grid's data adapter object.
    * @param {String}          [prop.checkedDatafield='selected']  - Data field which use to get all selected data ID.
    * @param {String}          [prop.buttonTheme='']               - Default theme for built-in button component.
    * @param {Boolean}         [prop.useBootstrap=false]           - Enable/Disable Bootstrap Theme on Grid message.
@@ -2453,10 +2465,9 @@ class EnhanceDataGrid {
      *   showstatusbar      : true,
      *   // EnhanceDataGrid properties
      *   id                 : '#grid_id',
-     *   // using either one, (1)jsonSource | (2)dataSource | (3)dataAdapter
-     *   jsonSource         : source_json_object,                       // method (1)
-     *   dataSource         : source_url_object,                        // method (2), refer to updateSourceUrl() method for example
-     *   dataAdapter        : new $.jqx.dataAdapter(source_url_object), // method (3)
+     *   // using either one, (1)jsonSource | (2)dataSource
+     *   jsonSource         : source_json_object, // method (1)
+     *   dataSource         : source_url_object,  // method (2), refer to updateSourceUrl() method for example
      *   // dateFormat         : 'yyyy-MM-dd',
      *   checkedDatafield   : 'checked',
      *   buttonTheme        : 'fresh',

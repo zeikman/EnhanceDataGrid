@@ -103,6 +103,7 @@
           <button class="btn d-inline-flex align-items-center collapsed border-0" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#introductions-collapse" aria-controls="introductions-collapse">Introduction</button>
           <ul class="list-unstyled ps-3 collapse" id="introductions-collapse">
             <li><a class="d-inline-flex align-items-center rounded text-decoration-none" href="#enhancedatagrid">EDG</a></li>
+            <li><a class="d-inline-flex align-items-center rounded text-decoration-none" href="#defaultfunc">Default Functionality</a></li>
           </ul>
         </li>
       </ul>
@@ -145,7 +146,176 @@
           </ul>
         </div>
       </article>
+
+      <article class="my-3" id="defaultfunc">
+        <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+          <h3>Default Functionality</h3>
+          <a class="d-flex align-items-center" target="_blank" href="https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html">Documentation</a>
+        </div>
+
+        <div class="position-relative">
+          <div class="card">
+            <div class="card-header">
+              This example shows the basic syntax of EnhanceDataGrid.
+              By Default, EnhanceDataGrid displays the row number along with the aggregate Row Total.
+            </div>
+            <div class="card-body grid-container">
+              <div id="edg_defaultfunc"></div>
+            </div>
+            <div class="card-footer text-muted">
+              <pre class="m-0">
+                <!-- const edg_defaultfunc = new EnhanceDataGrid({
+                  id          : '#edg_defaultfunc',
+                  altrows     : true,
+                  columns     : JSON.parse(JSON.stringify(columns)),
+                  columngroups: [
+                    { text: 'Buyer Details', name: 'buyer' },
+                  ],
+                  dataSource  : JSON.parse(JSON.stringify(source)),
+                }); -->
+              </pre>
+            </div>
+          </div>
+        </div>
+      </article>
     </section>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">'form' property testing</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="exampleForm">
+            <input type="hidden" name="hidden_hello" value="hello" />
+            <input type="hidden" name="hidden_world" value="world" />
+
+            <div class="row">
+              <div class="col">
+                <h5>Bootstrap</h5>
+                <div class="form-group">
+                  <div>Bootstrap Input</div>
+                  <input type="text" id="input" name="normal_input" class="form-control form-control-sm" placeholder="Bootstrap Input" value="testing 123" />
+                </div>
+                <div class="form-group">
+                  <div>Bootstrap Date</div>
+                  <input type="date" id="date" name="normal_date" class="form-control form-control-sm" value="2022-01-01" />
+                </div>
+                <div class="form-group">
+                  <div>Bootstrap Checks</div>
+                  <div class="d-flex">
+                    <div class="form-check me-3">
+                      <input class="form-check-input" type="checkbox" id="checksDefault" name="normal_checksDefault">
+                      <label class="form-check-label" for="checksDefault">
+                        Default checkbox
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="checksChecked" name="normal_checksChecked" checked>
+                      <label class="form-check-label" for="checksChecked">
+                        Checked checkbox
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div>Boostrap Radio</div>
+                  <div class="d-flex">
+                    <div class="form-check me-3">
+                      <input class="form-check-input" type="radio" name="normal_RadioIput" id="flexRadioDefault1">
+                      <label class="form-check-label" for="flexRadioDefault1">
+                        Default radio
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="normal_RadioIput" id="flexRadioDefault2" checked>
+                      <label class="form-check-label" for="flexRadioDefault2">
+                        Default checked radio
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div>Boostrap Select</div>
+                  <select id="select" name="normal_select" class="form-select form-select-sm">
+                    <option value="0">Open this select menu</option>
+                    <option value="1" selected>One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <div>Boostrap Textarea</div>
+                  <textarea id="textarea" name="normal_textarea" rows="1" class="form-control form-control-sm">hello world</textarea>
+                </div>
+              </div>
+
+              <div class="col">
+                <h5>jQWidgets</h5>
+                <div class="form-group">
+                  <div>jqxInput</div>
+                  <input type="text" id="jqxInput" name="jqxInput" />
+                </div>
+                <div class="form-group">
+                  <div>jqxDateTimeInput</div>
+                  <div id="jqxDateTimeInput" name="jqxDateTimeInput"></div>
+                </div>
+                <div class="form-group">
+                  <div>jqxCheckBox</div>
+                  <div class="d-flex">
+                    <div id="jqxCheckBox" name="jqxCheckBox" class="me-3">
+                      Entertainment
+                    </div>
+                    <div id="jqxCheckBox2" name="jqxCheckBox2" class="me-3">
+                      <span>Computers</span>
+                    </div>
+                    <div id="jqxCheckBox3" name="jqxCheckBox3" class="me-3">
+                      <span>Sports</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div>jqxRadioButton</div>
+                  <div class="d-flex">
+                    <div id="jqxRadioButton" class="me-3">
+                      12 Months Contract
+                    </div>
+                    <div id="jqxRadioButton2">
+                      <span>6 Months Contract</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div>jqxComboBox</div>
+                  <div id="jqxComboBox" name="jqxComboBox"></div>
+                </div>
+                <div class="form-group">
+                  <div>jqxTextArea</div>
+                  <textarea id="jqxTextArea" name="jqxTextArea"></textarea>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-none">
+
+    <!-- jqxWindow -->
+    <div id="edg_jqxWindow" caption="jqxWindow">
+      <div>jqxWindows content.</div>
+    </div>
+
   </div>
 
   <!-- jQuery -->
