@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>documentation.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css" integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="EnhanceDataGrid.html">EnhanceDataGrid</a><ul class='methods'><li data-type='method'><a href="EnhanceDataGrid.html#.debounce">debounce</a></li><li data-type='method'><a href="EnhanceDataGrid.html#.getSearchParameters">getSearchParameters</a></li><li data-type='method'><a href="EnhanceDataGrid.html#.insertQueryString">insertQueryString</a></li><li data-type='method'><a href="EnhanceDataGrid.html#.isEmptyString">isEmptyString</a></li><li data-type='method'><a href="EnhanceDataGrid.html#.isNull">isNull</a></li><li data-type='method'><a href="EnhanceDataGrid.html#.isUndefined">isUndefined</a></li><li data-type='method'><a href="EnhanceDataGrid.html#.isUnset">isUnset</a></li><li data-type='method'><a href="EnhanceDataGrid.html#.isValidKeyboardInput">isValidKeyboardInput</a></li><li data-type='method'><a href="EnhanceDataGrid.html#.throttle">throttle</a></li><li data-type='method'><a href="EnhanceDataGrid.html#.transformObjectToString">transformObjectToString</a></li><li data-type='method'><a href="EnhanceDataGrid.html#.transformStringToObject">transformStringToObject</a></li><li data-type='method'><a href="EnhanceDataGrid.html#clearSelection">clearSelection</a></li><li data-type='method'><a href="EnhanceDataGrid.html#getAllDirty">getAllDirty</a></li><li data-type='method'><a href="EnhanceDataGrid.html#getCellValue">getCellValue</a></li><li data-type='method'><a href="EnhanceDataGrid.html#getCheckedItems">getCheckedItems</a></li><li data-type='method'><a href="EnhanceDataGrid.html#getDirty">getDirty</a></li><li data-type='method'><a href="EnhanceDataGrid.html#getRowData">getRowData</a></li><li data-type='method'><a href="EnhanceDataGrid.html#getRows">getRows</a></li><li data-type='method'><a href="EnhanceDataGrid.html#getSelectedCellValue">getSelectedCellValue</a></li><li data-type='method'><a href="EnhanceDataGrid.html#getSelectedRowData">getSelectedRowData</a></li><li data-type='method'><a href="EnhanceDataGrid.html#getSelectedRowIndex">getSelectedRowIndex</a></li><li data-type='method'><a href="EnhanceDataGrid.html#getSelectedRowIndexes">getSelectedRowIndexes</a></li><li data-type='method'><a href="EnhanceDataGrid.html#getSourceUrl">getSourceUrl</a></li><li data-type='method'><a href="EnhanceDataGrid.html#hideColumn">hideColumn</a></li><li data-type='method'><a href="EnhanceDataGrid.html#on">on</a></li><li data-type='method'><a href="EnhanceDataGrid.html#refresh">refresh</a></li><li data-type='method'><a href="EnhanceDataGrid.html#showColumn">showColumn</a></li><li data-type='method'><a href="EnhanceDataGrid.html#updateBoundData">updateBoundData</a></li><li data-type='method'><a href="EnhanceDataGrid.html#updateCellValue">updateCellValue</a></li><li data-type='method'><a href="EnhanceDataGrid.html#updateSelectedCellValue">updateSelectedCellValue</a></li><li data-type='method'><a href="EnhanceDataGrid.html#updateSourceUrl">updateSourceUrl</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">documentation.js</h1>
+    
+
+    <!--container.tmpl-->
+
+
+
+
+    <!--source.tmpl-->
+
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileOverview Write what's going on in the file here. >> sudo jsdoc documentation.js -c config.json -t loke-jsdoc-theme-2.1.0
+ *
+ * @file      A library that extend jQWidgets jqxGrid widget and provides lot of useful build-in methods
+ * @name      EnhanceDataGrid Library Documentation
+ * @author    Tan Yong Xiang &lt;zeikmanoffice@gmail.com>
+ * @license   MIT License
+ * @copyright 2022 Tan Yong Xiang
+ * @version   0.2.0
+ *
+ * @license
+ * &lt;p style="margin: 0; text-align: justify;">
+ * Copyright (c) 2022 Tan Yong Xiang
+ * &lt;br>&lt;br>
+ *
+ * &lt;b>MIT License&lt;/b>
+ * &lt;br>&lt;br>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ * and associated documentation files (the "Software"), to deal in the Software without restriction,
+ * including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * &lt;br>&lt;br>
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or
+ * substantial portions of the Software.
+ * &lt;br>&lt;br>
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * &lt;/p>
+ */
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Sat Dec 10 2022 16:13:04 GMT+0800 (Malaysia Time) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
