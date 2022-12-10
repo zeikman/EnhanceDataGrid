@@ -532,7 +532,7 @@ class EnhanceDataGrid {
     filtermode          : 'excel',
     enabletooltips      : true,
     showaggregates      : true,
-    showstatusbar       : true,
+    // showstatusbar       : false, // true,  // TODO: update to false and detect showRowIndex
     // EnhanceDataGrid default properties
     autoFilter          : false,
     autoFind            : false,
@@ -636,9 +636,15 @@ class EnhanceDataGrid {
     const tbElement     = zProps.tbElement;
     const hasTbElement  = tbElement.length > 0;
     const showSearchBar = typeof zProps.searchInput === 'boolean' && zProps.searchInput;
+    const showRowIndex  = typeof zProps.showRowIndex === 'boolean' && zProps.showRowIndex;
 
-    // show toolbar
-    if (hasTbElement || showSearchBar) props.showtoolbar = true;
+    // show toolbar checking
+    if (hasTbElement || showSearchBar)
+      props.showtoolbar = true;
+
+    // show statusbar checking
+    if (showRowIndex && EnhanceDataGrid.isUnset(props.showstatusbar))
+      props.showstatusbar = true;
 
     // setup source
     this.#_jsonSource = zProps.jsonSource; // { url=string, datafields=[ ], opt={ async } }
@@ -1275,10 +1281,22 @@ class EnhanceDataGrid {
     };
 
     const controlledMessage = {
-      no_row_selected : 'Please select one of the record first.',
-      no_data_id      : 'No data ID found !',
-      no_row_print    : 'No record for printing.',
-      no_url          : 'Please specified "url" property.',
+      no_row_selected: {
+        title   : 'No Record Selected',
+        message : 'Please select one of the record first.',
+      },
+      no_data_id: {
+        title   : 'Property "id" Not Found',
+        message : 'No data ID found !',
+      },
+      no_row_print: {
+        title   : 'No Record Found',
+        message : 'No record for printing.',
+      },
+      no_url: {
+        title   : 'Property "url" Not Found',
+        message : 'Please specified "url" property.',
+      },
     };
 
     const buttonEvent = {
@@ -1364,7 +1382,10 @@ class EnhanceDataGrid {
 
             $(this).keyup();
           } else {
-            _promptError({ error: controlledMessage.no_row_selected });
+            _promptError({
+              title: controlledMessage.no_row_selected.title,
+              error: controlledMessage.no_row_selected.message,
+            });
           }
         },
         _delete: function(event) {
@@ -1399,11 +1420,16 @@ class EnhanceDataGrid {
               let _message    = self.#_getGridButtonProps(tbElement, button_id, 'message');
               let _debug      = self.#_getGridButtonProps(tbElement, button_id, 'debug');
 
-              _title = (typeof _title === 'undefined' || _title === '') ? 'Delete Record' : _title;
+              // TODO: think about usage of title in 'delete' button
+              // _title = (typeof _title === 'undefined' || _title === '') ? 'Delete Record' : _title;
+              _title = 'Delete Record';
               _message = (typeof _message === 'undefined' || _message === '') ? 'Are you sure to delete selected record ?' : _message;
 
               if (typeof _url === 'undefined' || _url === undefined || typeof _url === 'null' || _url === null) {
-                _promptError({ error: controlledMessage.no_url });
+                _promptError({
+                  title: controlledMessage.no_url.title,
+                  error: controlledMessage.no_url.message,
+                });
 
                 return false;
               }
@@ -1472,8 +1498,8 @@ class EnhanceDataGrid {
                             // });
                         } else {
                           self.#_alert({
-                            title: '',
-                            content: controlledMessage.no_data_id,
+                            title   : controlledMessage.no_data_id.title,
+                            content : controlledMessage.no_data_id.message,
                           });
 
                           return false;
@@ -1496,7 +1522,10 @@ class EnhanceDataGrid {
 
             $(this).keyup();
           } else {
-            _promptError({ error: controlledMessage.no_row_selected });
+            _promptError({
+              title: controlledMessage.no_row_selected.title,
+              error: controlledMessage.no_row_selected.message,
+            });
           }
         },
         _find: function(event) {
@@ -1544,7 +1573,11 @@ class EnhanceDataGrid {
             let _url      = self.#_getGridButtonProps(tbElement, button_id, 'url');
 
             if (typeof _url === 'undefined' || _url === undefined || typeof _url === 'null' || _url === null) {
-              _promptError({ error: controlledMessage.no_url });
+              _promptError({
+                title: controlledMessage.no_url.title,
+                error: controlledMessage.no_url.message,
+              });
+
               return false;
             }
 
@@ -1558,7 +1591,10 @@ class EnhanceDataGrid {
 
             window.open(_url);
           } else {
-            _promptError({ error: controlledMessage.no_row_print });
+            _promptError({
+              title: controlledMessage.no_row_print.title,
+              error: controlledMessage.no_row_print.message,
+            });
           }
         },
         _excel: function(event) {
@@ -1705,12 +1741,17 @@ class EnhanceDataGrid {
 
     function _promptError(opt) {
       if (zProps.useBootstrap)
-        _createModalError.call(self, 'No Record Selected', opt.error);
+        _createModalError.call(
+          self,
+          opt.title ? opt.title : 'No Record Selected',
+          opt.error
+        );
       else
         self.#_alert(opt.error);
     }
 
     function _createModalError(modalTitle, modalBody) {
+      // check bootstrap variable exist
       if (typeof bootstrap === 'object') {
         const modal_error_id = `${this.#_id}_edit_modal_error`;
         const modal_error = `<div id="${modal_error_id.slice(1)}" class="modal fade" tabindex="-1">
@@ -2318,7 +2359,7 @@ class EnhanceDataGrid {
    * @param {String}          prop.jqxGridProperties.filtermode='excel'   - The property specifies the type of rendering of the Filter Menu.
    * @param {Boolean}         prop.jqxGridProperties.enabletooltips=true  - Enable/Disable the grid tooltips.
    * @param {Boolean}         prop.jqxGridProperties.showaggregates=true  - Show/Hide the aggregates in the grid's statusbar.
-   * @param {Boolean}         prop.jqxGridProperties.showstatusbar=true   - Show/Hide the grid's statusbar.
+   * @!param {Boolean}         prop.jqxGridProperties.showstatusbar=true   - Show/Hide the grid's statusbar.
    *
    * @param {Object}          prop                                - EnhanceDataGrid object properties, sets [prop]{@link EnhanceDataGrid#prop}.
    * @param {String}          prop.id                             - Grid's ID.
@@ -2462,7 +2503,7 @@ class EnhanceDataGrid {
      *   filtermode         : 'excel',
      *   enabletooltips     : true,
      *   showaggregates     : true,
-     *   showstatusbar      : true,
+     *   // showstatusbar      : true,
      *   // EnhanceDataGrid properties
      *   id                 : '#grid_id',
      *   // using either one, (1)jsonSource | (2)dataSource

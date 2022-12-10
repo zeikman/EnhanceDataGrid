@@ -171,7 +171,7 @@ style : friendly
     '  columngroups<span style="color: #666666">:</span> [\n' +
     '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Buyer Details&#39;</span>, name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;buyer&#39;</span> },\n' +
     '  ],\n' +
-    '  dataSource  <span style="color: #666666">:</span> source,\n' +
+    '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
     '});\n' +
     '</pre></td></tr></table></div>';
   $('#defaultfunc')
@@ -239,9 +239,9 @@ style : friendly
             '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_enterfilter&#39;</span>,\n' +
             '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  searchInput <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  <i class="hl">searchInput <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span></i>,\n' +
             '  columns     <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '});\n' +
             '</pre></td></tr></table></div>'
         },
@@ -251,7 +251,7 @@ style : friendly
           doc       : null,
           desc      : `If you prefer 'Find' data instead of 'Filter' data, setup grid in Find mode using property <i class="text-danger">showFindButton : true</i>.
             The (Ctrl + Enter) keyboard shortcut feature is included with Find mode and can be enabled by setup the property <i class="text-danger">enterFind : true</i>.
-            The example below shows a grid in pure find mode. `,
+            The example below shows a grid in pure Find mode. `,
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id              : '#edg_enterfind',\n" +
@@ -282,12 +282,12 @@ style : friendly
             '  buttonTheme     <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows         <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  searchInput     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  showFindButton  <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  enterFind       <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  showFilterButton<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span>,\n' +
-            '  enterFilter     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span>,\n' +
+            '  <i class="hl">showFindButton  <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span></i>,\n' +
+            '  <i class="hl">enterFind       <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span></i>,\n' +
+            '  <i class="hl">showFilterButton<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span></i>,\n' +
+            '  <i class="hl">enterFilter     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span></i>,\n' +
             '  columns         <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource      <span style="color: #666666">:</span> source,\n' +
+            '  dataSource      <span style="color: #666666">:</span> source_object,\n' +
             '});\n' +
             '</pre></td></tr></table></div>'
         },
@@ -322,10 +322,10 @@ style : friendly
             '  buttonTheme   <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows       <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  searchInput   <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  showFindButton<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  enterFind     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  <i class="hl">showFindButton<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span></i>,\n' +
+            '  <i class="hl">enterFind     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span></i>,\n' +
             '  columns       <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource    <span style="color: #666666">:</span> source,\n' +
+            '  dataSource    <span style="color: #666666">:</span> source_object,\n' +
             '});\n' +
             '</pre></td></tr></table></div>'
         },
@@ -358,9 +358,9 @@ style : friendly
             '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  searchInput <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  autoFilter  <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  <i class="hl">autoFilter  <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span></i>,\n' +
             '  columns     <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '});\n' +
             '</pre></td></tr></table></div>'
         },
@@ -393,9 +393,9 @@ style : friendly
             '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  searchInput <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  autoFind    <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  <i class="hl">autoFind    <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span></i>,\n' +
             '  columns     <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '});\n' +
             '</pre></td></tr></table></div>'
         },
@@ -431,9 +431,9 @@ style : friendly
             '  altrows         <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  searchInput     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  autoFilter      <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  autoDelayTiming <span style="color: #666666">:</span> <span style="color: #40a070">500</span>,\n' +
+            '  <i class="hl">autoDelayTiming <span style="color: #666666">:</span> <span style="color: #40a070">500</span></i>,\n' +
             '  columns         <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource      <span style="color: #666666">:</span> source,\n' +
+            '  dataSource      <span style="color: #666666">:</span> source_object,\n' +
             '});\n' +
             '</pre></td></tr></table></div>'
         },
@@ -468,10 +468,10 @@ style : friendly
             '  buttonTheme         <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows             <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  searchInput         <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  showfilterrow       <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  showFilterRowButton <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span>,\n' +
+            '  <i class="hl">showfilterrow       <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span></i>,\n' +
+            '  <i class="hl">showFilterRowButton <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span></i>,\n' +
             '  columns             <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource          <span style="color: #666666">:</span> source,\n' +
+            '  dataSource          <span style="color: #666666">:</span> source_object,\n' +
             '});\n' +
             '</pre></td></tr></table></div>'
         },
@@ -513,9 +513,9 @@ style : friendly
             '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  searchInput <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  columns     <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '  tbElement   <span style="color: #666666">:</span> [\n' +
-            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;reload&#39;</span> },\n' +
+            '    { <i class="hl">button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;reload&#39;</span></i> },\n' +
             '  ]\n' +
             '});\n' +
             '</pre></td></tr></table></div>'
@@ -580,10 +580,10 @@ style : friendly
             '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  columns     <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource  <span style="color: #666666">:</span> JSON.parse(JSON.stringify(source)),\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '  tbElement   <span style="color: #666666">:</span> [\n' +
             '    {\n' +
-            '      button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;print&#39;</span>,\n' +
+            '      <i class="hl">button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;print&#39;</span></i>,\n' +
             '      text  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Open Documentation&#39;</span>,\n' +
             '      url   <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;url_link&#39;</span>\n' +
             '    },\n' +
@@ -628,10 +628,10 @@ style : friendly
             '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  columns     <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '  tbElement   <span style="color: #666666">:</span> [\n' +
             '    {\n' +
-            '      button  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;excel&#39;</span>,\n' +
+            '      <i class="hl">button  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;excel&#39;</span></i>,\n' +
             '      filename<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;My_Excel_File&#39;</span>,\n' +
             '    },\n' +
             '  ]\n' +
@@ -675,10 +675,10 @@ style : friendly
             '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  columns     <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '  tbElement   <span style="color: #666666">:</span> [\n' +
             '    {\n' +
-            '      button  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;csv&#39;</span>,\n' +
+            '      <i class="hl">button  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;csv&#39;</span></i>,\n' +
             '      filename<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;My_CSV_File&#39;</span>,\n' +
             '    },\n' +
             '  ]\n' +
@@ -730,10 +730,10 @@ style : friendly
             '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  columns     <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '  tbElement   <span style="color: #666666">:</span> [\n' +
             '    {\n' +
-            '      button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;custombutton&#39;</span>,\n' +
+            '      <i class="hl">button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;custombutton&#39;</span></i>,\n' +
             '      icon  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;fa-solid fa-earth&#39;</span>,\n' +
             '      text  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Hello World !&#39;</span>,\n' +
             '      click <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">function</span>() {\n' +
@@ -778,10 +778,10 @@ style : friendly
             '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_custombutton&#39;</span>,\n' +
             '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  columns     <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '  tbElement   <span style="color: #666666">:</span> [\n' +
             '    {\n' +
-            '      button    <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;custom&#39;</span>,\n' +
+            '      <i class="hl">button    <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;custom&#39;</span></i>,\n' +
             '      buttonNode<span style="color: #666666">:</span> $(<span style="color: #4070a0">&#39;&lt;i class=&quot;text-primary&quot;&gt;Welcome to EnhanceDataGrid.js !&#39;</span>)\n' +
             '    },\n' +
             '  ]\n' +
@@ -831,10 +831,10 @@ style : friendly
             '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  columns     <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '  tbElement   <span style="color: #666666">:</span> [\n' +
             '    { button <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;reload&#39;</span> },\n' +
-            '    { button <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;divider&#39;</span> },\n' +
+            '    { <i class="hl">button <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;divider&#39;</span></i> },\n' +
             '    {\n' +
             '      button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;print&#39;</span>,\n' +
             '      text  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Documentation&#39;</span>,\n' +
@@ -887,10 +887,10 @@ style : friendly
             '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  columns     <span style="color: #666666">:</span> columns_array,\n' +
-            '  dataSource  <span style="color: #666666">:</span> source,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '  tbElement   <span style="color: #666666">:</span> [\n' +
             '    { button <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;reload&#39;</span> },\n' +
-            '    { button <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;separator&#39;</span> },\n' +
+            '    { <i class="hl">button <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;separator&#39;</span></i> },\n' +
             '    {\n' +
             '      button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;custombutton&#39;</span>,\n' +
             '      icon  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;none&#39;</span>,\n' +
@@ -979,7 +979,7 @@ style : friendly
             '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;City&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;City&#39;</span>, width<span style="color: #666666">:</span> <span style="color: #40a070">120</span> },\n' +
             '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Country&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Country&#39;</span> },\n' +
             '  ],\n' +
-            '  jsonSource<span style="color: #666666">:</span> {\n' +
+            '  <i class="hl">jsonSource</i><span style="color: #666666">:</span> {\n' +
             '    url<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;demo/customers.txt&#39;</span>,\n' +
             '    datafields<span style="color: #666666">:</span> [\n' +
             '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;CompanyName&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
@@ -1060,7 +1060,7 @@ style : friendly
             '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;City&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;City&#39;</span>, width<span style="color: #666666">:</span> <span style="color: #40a070">120</span> },\n' +
             '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Country&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Country&#39;</span> },\n' +
             '  ],\n' +
-            '  dataSource<span style="color: #666666">:</span> {\n' +
+            '  <i class="hl">dataSource</i><span style="color: #666666">:</span> {\n' +
             '    datatype<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;json&#39;</span>,\n' +
             '    id<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;CustomerID&#39;</span>,\n' +
             '    url<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;demo/customers.txt&#39;</span>,\n' +
@@ -1087,17 +1087,131 @@ style : friendly
     },
     {
       // Append xxx
-      id    : 'ids',
-      title : 'title',
+      id    : 'features',
+      title : 'Features',
       menu  : [
         {
-          id        : 'article_id',
-          title     : `article_name`,
+          id        : 'rowindex',
+          title     : `Row Index`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
+            '2\n' +
+            '3\n' +
+            '4\n' +
+            '5\n' +
+            '6\n' +
+            '7\n' +
+            '8</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id            <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_rowindex&#39;</span>,\n' +
+            '  altrows       <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  showstatusbar <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span>,\n' +
+            '  rowIndexWidth <span style="color: #666666">:</span> <span style="color: #40a070">100</span>,\n' +
+            '  columns       <span style="color: #666666">:</span> JSON.parse(JSON.stringify(columns)),\n' +
+            '  dataSource    <span style="color: #666666">:</span> JSON.parse(JSON.stringify(source)),\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
+        },
+        {
+          id        : 'centeredcolumns',
+          title     : `Centered Columns`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id              <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_centeredcolumns&#39;</span>,\n' +
+            '  altrows         <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  centeredColumns <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns         <span style="color: #666666">:</span> JSON.parse(JSON.stringify(columns)),\n' +
+            '  dataSource      <span style="color: #666666">:</span> JSON.parse(JSON.stringify(source)),\n' +
+            '  columngroups    <span style="color: #666666">:</span> [\n' +
+            '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Buyer Details&#39;</span>, name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;buyer&#39;</span> },\n' +
+            '  ],\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
+        },
+        {
+          id        : 'usebootstrap',
+          title     : `Bootstrap Modal`,
           doc       : null,
           desc      : null,
           sourcecode: null,
           colorcode: null
         },
+        // {
+        //   id        : 'article_id',
+        //   title     : `article_name`,
+        //   doc       : null,
+        //   desc      : null,
+        //   sourcecode: null,
+        //   colorcode: null
+        // },
+      ],
+    },
+    {
+      // Append xxx
+      id    : 'methods',
+      title : 'Methods',
+      menu  : [
+        {
+          id        : 'clearselection',
+          title     : `clearSelection()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'refresh',
+          title     : `refresh()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        // refresh
+        // updateBoundData
+        // on
+        // getAllDirty
+        // getDirty
+        // getCheckedItems
+        // getCellValue
+        // getRows
+        // getRowData
+        // getSelectedRowData
+        // getSelectedCellValue
+        // getSelectedRowIndex
+        // getSelectedRowIndexes
+        // hideColumn
+        // showColumn
+        // updateCellValue
+        // updateSelectedCellValue
+        // getSourceUrl
+        // updateSourceUrl
+
+        // debounce
+        // getSearchParameters
+        // insertQueryString
+        // isEmptyString
+        // isNull
+        // isUndefined
+        // isUnset
+        // isValidKeyboardInput
+        // throttle
+        // transformObjectToString
+        // transformStringToObject
       ],
     },
     // {
@@ -1357,7 +1471,11 @@ style : friendly
     columns     : JSON.parse(JSON.stringify(columns)),
     dataSource  : JSON.parse(JSON.stringify(source)),
     tbElement   : [
-      { button: 'edit' },
+      { button: 'edit',
+        click: function() {
+          window.alert('You clicked the edit button');
+        },
+      },
       { button: 'edit',
         text: 'Open jqxWindow',
         win: '#edg_jqxWindow',
@@ -1606,6 +1724,43 @@ style : friendly
         { name: 'Country', type: 'string' },
       ]
     },
+  });
+
+  // Feature : Row Index
+  const edg_rowindex = new EnhanceDataGrid({
+    id            : '#edg_rowindex',
+    altrows       : true,
+    showstatusbar : false,
+    rowIndexWidth : 100,
+    columns       : JSON.parse(JSON.stringify(columns)),
+    dataSource    : JSON.parse(JSON.stringify(source)),
+  });
+
+  // Feature : Centered Columns
+  const edg_centeredcolumns = new EnhanceDataGrid({
+    id              : '#edg_centeredcolumns',
+    altrows         : true,
+    centeredColumns : true,
+    columns         : JSON.parse(JSON.stringify(columns)),
+    dataSource      : JSON.parse(JSON.stringify(source)),
+    columngroups    : [
+      { text: 'Buyer Details', name: 'buyer' },
+    ],
+  });
+
+  // Feature : Centered Columns
+  const edg_usebootstrap = new EnhanceDataGrid({
+    id          : '#edg_usebootstrap',
+    buttonTheme : 'material-purple',
+    altrows     : true,
+    useBootstrap: true,
+    columns     : JSON.parse(JSON.stringify(columns)),
+    dataSource  : JSON.parse(JSON.stringify(source)),
+    tbElement   : [
+      { button: 'edit' },
+      { button: 'delete' },
+      { button: 'print' },
+    ]
   });
 
   // ===================================================================================================================
