@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Tan Yong Xiang">
+  <meta name="generator" content="Hugo 0.104.2">
+
+  <title>EnhanceDataGrid.js · Enhanced jQWidgets jqxGrid</title>
+
+  <link rel="icon" href="jqwidgets.ico" />
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/cheatsheet/" />
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" type="text/css" />
+  <!-- jQuery-Confirm -->
+  <link rel="stylesheet" href="jquery-confirm/jquery-confirm.min.css" type="text/css" />
+  <!-- jQWidgets -->
+  <link rel="stylesheet" href="jqwidgets/jqwidgets/styles/jqx.base.css" type="text/css" />
+  <link rel="stylesheet" href="jqwidgets/jqwidgets/styles/jqx.material.css" type="text/css" />
+  <link rel="stylesheet" href="jqwidgets/jqwidgets/styles/jqx.material-purple.css" type="text/css" />
+  <link rel="stylesheet" href="jqwidgets/jqwidgets/styles/jqx.fresh.css" type="text/css" />
+  <link rel="stylesheet" href="jqwidgets/jqwidgets/styles/jqx.light.css" type="text/css" />
+  <!-- EnhanceDataGrid -->
+  <link rel="stylesheet" href="src/EnhanceDataGrid.css" type="text/css" />
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    .b-example-divider {
+      height: 3rem;
+      background-color: rgba(0, 0, 0, .1);
+      border: solid rgba(0, 0, 0, .15);
+      border-width: 1px 0;
+      box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+
+    .b-example-vr {
+      flex-shrink: 0;
+      width: 1.5rem;
+      height: 100vh;
+    }
+
+    .bi {
+      vertical-align: -.125em;
+      fill: currentColor;
+    }
+
+    .nav-scroller {
+      position: relative;
+      z-index: 2;
+      height: 2.75rem;
+      overflow-y: hidden;
+    }
+
+    .nav-scroller .nav {
+      display: flex;
+      flex-wrap: nowrap;
+      padding-bottom: 1rem;
+      margin-top: -1px;
+      overflow-x: auto;
+      text-align: center;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+  </style>
+
+  <!-- Custom styles for this template -->
+  <link href="demo/demo.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <header class="bd-header bg-dark py-3 d-flex align-items-stretch border-bottom border-dark">
+    <div class="container-fluid d-flex align-items-center">
+      <h1 class="d-flex align-items-center fs-4 text-white mb-0">
+        <!-- <img src="../images/bootstrap-logo-white.svg" width="38" height="30" class="me-3" alt="Bootstrap"> -->
+        <!-- <img src="../images/logo-jqwidgets-white.svg" height="30" class="me-3" alt="Bootstrap"> -->
+        EnhanceDataGrid.js
+      </h1>
+      <a class="ms-auto link-light text-decoration-none" hreflang="ar">&copy; 2022 Zeikman</a>
+      <!-- <a class="ms-auto link-light text-decoration-none" hreflang="ar">&copy; 2022 Zeikman &#10072; All rights reserved</a> -->
+      <!-- <a href="../examples/cheatsheet-rtl/" class="ms-auto link-light" hreflang="ar">RTL cheatsheet</a> -->
+    </div>
+  </header>
+
+  <aside class="bd-aside sticky-xl-top text-muted align-self-start mb-3 mb-xl-5 px-2 overflow-auto">
+    <h2 class="h6 pt-4 pb-3 mb-4 border-bottom">On this page</h2>
+    <nav class="small" id="toc">
+      <ul class="list-unstyled">
+        <li class="my-2">
+          <button class="btn d-inline-flex align-items-center collapsed border-0" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#introductions-collapse" aria-controls="introductions-collapse">Introduction</button>
+          <ul class="list-unstyled ps-3 collapse" id="introductions-collapse">
+            <li><a class="d-inline-flex align-items-center rounded text-decoration-none" href="#enhancedatagrid">EDG</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <div class="bd-cheatsheet container-fluid bg-body">
+    <section id="content">
+      <h2 class="sticky-xl-top fw-bold pt-3 pt-xl-5 pb-2 pb-xl-3">Introduction</h2>
+
+      <article class="my-3" id="enhancedatagrid">
+        <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+          <h3>EDG</h3>
+          <a class="d-flex align-items-center" target="_blank" href="https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html">Documentation</a>
+        </div>
+
+        <div>
+          EnhanceDataGrid (EDG) is an enhanced version of jQWidget <i class="fa-solid fa-chevron-right"></i> jqxGrid with various useful built-in methods and functionalities.
+          EDG inherits all the properties from jqxGrid.
+          EDG is very suitable for use in web applications that require a lot of interaction with the user.
+
+          <h4>Features</h4>
+          <ul class="mt-0">
+            <li>Search Input</li>
+            <li>Useful Built-in Components</li>
+            <li>Simple Data Binding</li>
+            <li>Useful Methods</li>
+          </ul>
+
+          <h4>Dependencies</h4>
+          <ul class="mt-0">
+            <li><a target="_blank" href="https://stuk.github.io/jszip/">JSZIP</a> - Necessary for jqxGrid Export (Excel)</li>
+          </ul>
+
+          <h4>Recommended Plugins</h4>
+          <ul class="mt-0">
+            <li><a target="_blank" href="https://fontawesome.com/">Font Awesome</a> - Default button component's icon</li>
+            <li><a target="_blank" href="https://craftpip.github.io/jquery-confirm/">jQuery-Confirm</a> - Utilizes jQuery.confirm, jQuery.alert, and etc on grid's messaging</li>
+            <li><a target="_blank" href="https://getbootstrap.com/">Bootstrap</a> - Needed when setup <i>useBootstrap:true</i> which utilizes Boostrap Modal on grid's messaging</li>
+          </ul>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <!-- jQuery -->
+  <script src="jqwidgets/scripts/jquery-1.11.1.min.js"></script>
+  <!-- JSZIP -->
+  <script type="text/javascript" src="jszip/jszip.min.js"></script>
+  <!-- Font Awesome -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"
+      integrity="sha512-rpLlll167T5LJHwp0waJCh3ZRf7pO6IT1+LZOhAyP6phAirwchClbTZV3iqL3BMrVxIYRbzGTpli4rfxsCK6Vw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"></script>
+  <!-- Bootstrap -->
+  <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- jQuery-Confirm -->
+  <script type="text/javascript" src="jquery-confirm/jquery-confirm.min.js"></script>
+  <!-- jQWidgets -->
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxcore.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxbuttons.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxinput.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxdatetimeinput.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxcalendar.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxtextarea.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxscrollbar.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxmenu.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxcheckbox.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxcombobox.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxradiobutton.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxlistbox.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxdropdownlist.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxwindow.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxtabs.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxgrid.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxgrid.sort.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxgrid.pager.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxgrid.selection.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxgrid.edit.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxgrid.filter.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxgrid.aggregates.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxgrid.export.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxdata.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxdata.export.js"></script>
+  <script type="text/javascript" src="jqwidgets/jqwidgets/jqxexport.js"></script>
+  <!-- EnhanceDataGrid -->
+  <script type="text/javascript" src="src/EnhanceDataGrid.js"></script>
+  <!-- Demo -->
+  <script src="demo/demo.js"></script>
+
+</body>
+</html>
