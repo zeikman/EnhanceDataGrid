@@ -333,7 +333,7 @@ style : friendly
           id        : 'autofilter',
           title     : `Auto Fitler`,
           doc       : null,
-          desc      : null,
+          desc      : `Auto Filter enables automatic data filtering after user input.`,
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_autofilter',\n" +
@@ -368,7 +368,7 @@ style : friendly
           id        : 'autofind',
           title     : `Auto Find`,
           doc       : null,
-          desc      : null,
+          desc      : `Auto Find enables automatic data finding after user input.`,
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_autofind',\n" +
@@ -403,7 +403,8 @@ style : friendly
           id        : 'autodelaytiming',
           title     : `Auto Delay Timing`,
           doc       : null,
-          desc      : null,
+          desc      : `Auto Filter/Find performs data filtering/finding after certain amount of time after user input.
+            The delay timing can be altered by setting the property <i class="text-danger">autoDelayTiming</i>.`,
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id              : '#edg_autodelaytiming',\n" +
@@ -441,7 +442,9 @@ style : friendly
           id        : 'filterrow',
           title     : `Filter Row`,
           doc       : null,
-          desc      : null,
+          desc      : `EnhanceDataGrid's search input comes with a Filter Row show/hide control button.
+            Property <i class="text-danger">showFilterRowButton</i> controls the Filter Row button's visibility.
+            The example below enables the Filter Row and hides the Filter Row control button.`,
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id                  : '#edg_filterrow',\n" +
@@ -486,7 +489,8 @@ style : friendly
           id        : 'reloadbutton',
           title     : 'Reload Button',
           doc       : null,
-          desc      : null,
+          desc      : `The Reload button will update the bound data, refresh the grid, and clear all row selections.
+            If the data source is binding to an URL, it will trigger the AJAX request to re-get the bound data.`,
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_reloadbutton',\n" +
@@ -524,8 +528,61 @@ style : friendly
           id        : 'addbutton',
           title     : 'Add Button',
           doc       : null,
-          desc      : null,
+          desc: `The Add button comes with some useful features.
+            <ul>
+              <li>You can set the <i class="text-danger">click</i> property with your self-defined function.</li>
+              <li>Setting the <i class="text-danger">win</i> property with an ID will auto-open related jQWidget's jqxWndow widget.</li>
+              <li>Setting the <i class="text-danger">modal</i> property with an ID will auto-open related Bootstrap Modal.</li>
+              <li>Setting the <i class="text-danger">form</i> property with an ID will auto-clear all the relevant inputs within the form tag.</li>
+            </ul>`,
           sourcecode: '',
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10\n' +
+            '11\n' +
+            '12\n' +
+            '13\n' +
+            '14\n' +
+            '15\n' +
+            '16\n' +
+            '17\n' +
+            '18\n' +
+            '19\n' +
+            '20\n' +
+            '21\n' +
+            '22\n' +
+            '23</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_addbutton&#39;</span>,\n' +
+            '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns     <span style="color: #666666">:</span> JSON.parse(JSON.stringify(columns)),\n' +
+            '  dataSource  <span style="color: #666666">:</span> JSON.parse(JSON.stringify(source)),\n' +
+            '  tbElement   <span style="color: #666666">:</span> [\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;add&#39;</span>,\n' +
+            '      click<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">function</span>() {\n' +
+            '        <span style="color: #007020">window</span>.alert(<span style="color: #4070a0">&#39;You clicked the add button&#39;</span>);\n' +
+            '      },\n' +
+            '    },\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;add&#39;</span>,\n' +
+            '      text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Open jqxWindow&#39;</span>,\n' +
+            '      win<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_jqxWindow&#39;</span>,\n' +
+            '    },\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;add&#39;</span>,\n' +
+            '      text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Open Modal&#39;</span>,\n' +
+            '      modal<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#exampleModal&#39;</span>,\n' +
+            '      form<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#exampleForm&#39;</span>,\n' +
+            '    },\n' +
+            '  ]\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'editbutton',
@@ -538,14 +595,96 @@ style : friendly
           id        : 'deletebutton',
           title     : 'Delete Button',
           doc       : null,
-          desc      : null,
+          desc      : `The Delete button comes with some useful features to deal with AJAX request.
+            <ul>
+              <li>Setting the <i class="text-danger">url</i> property in <i class="text-primary">String</i> will fire POST AJAX with selected row's ID appended as URL query string.</li>
+              <li>Setting the <i class="text-danger">url</i> property with a <i class="text-primary">Function</i> will receive two arguments: function(<i class="text-success">selected_row_data</i>, <i class="text-success">selected_row_data_id</i>).</li>
+              <li>If you would like to have some checking done before firing default POST AJAX, set the <i class="text-danger">check</i> property with a <i class="text-primary">Function</i>, then return true to continue POST and vice versa.</li>
+              <li>Setting the <i class="text-danger">param</i> property in an Object will have it appended as static query string to the POST AJAX.</li>
+              <li>If you would like to append some dynamic query string, setthe param property with a <i class="text-primary">Function</i> and return with an Object.</li>
+            </ul>`,
           sourcecode: '',
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10\n' +
+            '11\n' +
+            '12\n' +
+            '13\n' +
+            '14\n' +
+            '15\n' +
+            '16\n' +
+            '17\n' +
+            '18\n' +
+            '19\n' +
+            '20\n' +
+            '21\n' +
+            '22\n' +
+            '23\n' +
+            '24\n' +
+            '25\n' +
+            '26\n' +
+            '27\n' +
+            '28\n' +
+            '29\n' +
+            '30\n' +
+            '31\n' +
+            '32\n' +
+            '33\n' +
+            '34\n' +
+            '35\n' +
+            '36\n' +
+            '37</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_deletebutton&#39;</span>,\n' +
+            '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns     <span style="color: #666666">:</span> JSON.parse(JSON.stringify(columns)),\n' +
+            '  dataSource  <span style="color: #666666">:</span> JSON.parse(JSON.stringify(source)),\n' +
+            '  tbElement   <span style="color: #666666">:</span> [\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;delete&#39;</span>,\n' +
+            '      url<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;post_delete.php?mod=delete_data&#39;</span>,\n' +
+            '    },\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;delete&#39;</span>,\n' +
+            '      url<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">function</span>(data, id) {\n' +
+            '        <span style="color: #60a0b0; font-style: italic">// coding...</span>\n' +
+            '      }\n' +
+            '    },\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;delete&#39;</span>,\n' +
+            '      url<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;delete.php&#39;</span>,\n' +
+            '      check<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">function</span>() {\n' +
+            '        <span style="color: #007020; font-weight: bold">return</span> _condition_to_pass_\n' +
+            '          <span style="color: #666666">?</span> <span style="color: #007020; font-weight: bold">true</span>\n' +
+            '          <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span>;\n' +
+            '      }\n' +
+            '    },\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;delete&#39;</span>,\n' +
+            '      url<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;delete.php&#39;</span>,\n' +
+            '      param<span style="color: #666666">:</span> { p1<span style="color: #666666">:</span> <span style="color: #40a070">1</span>, p2<span style="color: #666666">:</span> <span style="color: #40a070">2</span> },\n' +
+            '    },\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;delete&#39;</span>,\n' +
+            '      url<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;delete.php&#39;</span>,\n' +
+            '      param<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">function</span>() {\n' +
+            '        <span style="color: #007020; font-weight: bold">return</span> {\n' +
+            '          random<span style="color: #666666">:</span> (<span style="color: #007020">Math</span>.random() <span style="color: #666666">*</span> <span style="color: #40a070">100</span>).toFixed(<span style="color: #40a070">2</span>)\n' +
+            '        };\n' +
+            '      }\n' +
+            '    },\n' +
+            '  ]\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'printbutton',
           title     : 'Print Button',
           doc       : null,
-          desc      : 'Print button open URL in new window tab.',
+          desc: `The Print button open URL in new window tab.`,
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_printbutton',\n" +
@@ -595,7 +734,7 @@ style : friendly
           id        : 'excelbutton',
           title     : 'Excel Button',
           doc       : null,
-          desc      : null,
+          desc      : `The Excel button exports the bound data to an Excel file.`,
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_excelbutton',\n" +
@@ -642,7 +781,7 @@ style : friendly
           id        : 'csvbutton',
           title     : 'CSV Button',
           doc       : null,
-          desc      : null,
+          desc      : `The CSV button exports the bound data to a CSV file.`,
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_csvbutton',\n" +
@@ -689,7 +828,7 @@ style : friendly
           id        : 'custombtnbutton',
           title     : 'Custom Button',
           doc       : null,
-          desc      : null,
+          desc      : `You can use the CustomButton button to create your customised button.`,
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_custombtnbutton',\n" +
@@ -748,7 +887,7 @@ style : friendly
           id        : 'custombutton',
           title     : 'Custom Node',
           doc       : null,
-          desc      : null,
+          desc      : `You can use the Custom button to create your own element.`,
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_custombutton',\n" +
@@ -792,7 +931,7 @@ style : friendly
           id        : 'divider',
           title     : 'Divider',
           doc       : null,
-          desc      : null,
+          desc      : `Divider is used to expand the space between two elements.`,
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_divider',\n" +
@@ -848,7 +987,7 @@ style : friendly
           id        : 'separator',
           title     : 'Separator',
           doc       : null,
-          desc      : null,
+          desc      : 'Separator create a gap between two elements.',
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id          : '#edg_separator',\n" +
@@ -1118,7 +1257,7 @@ style : friendly
           id        : 'centeredcolumns',
           title     : `Centered Columns`,
           doc       : null,
-          desc      : null,
+          desc      : `By setting <i class="text-danger">centeredColumns: true</i>, you can centre all columns at once. (All columns and column groups)`,
           sourcecode: null,
           colorcode:
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
@@ -1133,7 +1272,7 @@ style : friendly
             '10</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
             '  id              <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_centeredcolumns&#39;</span>,\n' +
             '  altrows         <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  centeredColumns <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  <i class="hl">centeredColumns <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span></i>,\n' +
             '  columns         <span style="color: #666666">:</span> JSON.parse(JSON.stringify(columns)),\n' +
             '  dataSource      <span style="color: #666666">:</span> JSON.parse(JSON.stringify(source)),\n' +
             '  columngroups    <span style="color: #666666">:</span> [\n' +
@@ -1148,7 +1287,33 @@ style : friendly
           doc       : null,
           desc      : null,
           sourcecode: null,
-          colorcode: null
+          colorcode:
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10\n' +
+            '11\n' +
+            '12\n' +
+            '13</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_usebootstrap&#39;</span>,\n' +
+            '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  <i class="hl">useBootstrap<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span></i>,\n' +
+            '  columns     <span style="color: #666666">:</span> JSON.parse(JSON.stringify(columns)),\n' +
+            '  dataSource  <span style="color: #666666">:</span> JSON.parse(JSON.stringify(source)),\n' +
+            '  tbElement   <span style="color: #666666">:</span> [\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;edit&#39;</span> },\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;delete&#39;</span> },\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;print&#39;</span> },\n' +
+            '  ]\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         // {
         //   id        : 'article_id',
@@ -1181,26 +1346,150 @@ style : friendly
           sourcecode: null,
           colorcode: null
         },
-        // refresh
-        // updateBoundData
-        // on
-        // getAllDirty
-        // getDirty
-        // getCheckedItems
-        // getCellValue
-        // getRows
-        // getRowData
-        // getSelectedRowData
-        // getSelectedCellValue
-        // getSelectedRowIndex
-        // getSelectedRowIndexes
-        // hideColumn
-        // showColumn
-        // updateCellValue
-        // updateSelectedCellValue
-        // getSourceUrl
-        // updateSourceUrl
-
+        {
+          id        : 'updateBoundData',
+          title     : `updateBoundData()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'on',
+          title     : `on()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'getAllDirty',
+          title     : `getAllDirty()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'getDirty',
+          title     : `getDirty()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'getCheckedItems',
+          title     : `getCheckedItems()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'getCellValue',
+          title     : `getCellValue()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'getRows',
+          title     : `getRows()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'getRowData',
+          title     : `getRowData()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'getSelectedRowData',
+          title     : `getSelectedRowData()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'getSelectedCellValue',
+          title     : `getSelectedCellValue()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'getSelectedRowIndex',
+          title     : `getSelectedRowIndex()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'getSelectedRowIndexes',
+          title     : `getSelectedRowIndexes()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'hideColumn',
+          title     : `hideColumn()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'showColumn',
+          title     : `showColumn()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'updateCellValue',
+          title     : `updateCellValue()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'updateSelectedCellValue',
+          title     : `updateSelectedCellValue()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'getSourceUrl',
+          title     : `getSourceUrl()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
+        {
+          id        : 'updateSourceUrl',
+          title     : `updateSourceUrl()`,
+          doc       : null,
+          desc      : null,
+          sourcecode: null,
+          colorcode: null
+        },
         // debounce
         // getSearchParameters
         // insertQueryString
