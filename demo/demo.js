@@ -47,7 +47,7 @@ style : friendly
     </section>`);
 
     // TODO: insert official doc link
-    const doc = 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/doc/EnhanceDataGrid.html';
+    const doc = 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html';
 
     menu.forEach(el => {
       /*/
@@ -442,7 +442,7 @@ style : friendly
           id        : 'filterrow',
           title     : `Filter Row`,
           doc       : null,
-          desc      : `EnhanceDataGrid's search input comes with a Filter Row show/hide control button.
+          desc      : `The Search Input comes with a Filter Row show/hide control button.
             Property <i class="text-danger">showFilterRowButton</i> controls the Filter Row button's visibility.
             The example below enables the Filter Row and hides the Filter Row control button.`,
           sourcecode:
@@ -578,7 +578,7 @@ style : friendly
             '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;add&#39;</span>,\n' +
             '      text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Open Modal&#39;</span>,\n' +
             '      modal<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#exampleModal&#39;</span>,\n' +
-            '      form<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#exampleForm&#39;</span>,\n' +
+            '      form<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#exampleBootstrapForm&#39;</span>,\n' +
             '    },\n' +
             '  ]\n' +
             '});\n' +
@@ -1059,7 +1059,9 @@ style : friendly
           id        : 'json_source',
           title     : 'JSON Source',
           doc       : null,
-          desc      : null,
+          desc      : `Property <i class="text-danger">jsonSource</i> is the simplest data source declaration.
+            It is the same as the <i class="text-danger">dataSource</i> property with preset options : { datatype: 'json', id: 'id', cache: false }.
+            You just need to specify the object property <i class="text-danger">url</i> and <i class="text-danger">datafields</i>.`,
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id: '#edg_jsonsource',\n" +
@@ -1119,8 +1121,8 @@ style : friendly
             '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Country&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Country&#39;</span> },\n' +
             '  ],\n' +
             '  <i class="hl">jsonSource</i><span style="color: #666666">:</span> {\n' +
-            '    url<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;demo/customers.txt&#39;</span>,\n' +
-            '    datafields<span style="color: #666666">:</span> [\n' +
+            '    <i class="text-black"><b>url</b></i><span style="color: #666666">:</span> <span style="color: #4070a0">&#39;demo/customers.txt&#39;</span>,\n' +
+            '    <i class="text-black"><b>datafields</b></i><span style="color: #666666">:</span> [\n' +
             '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;CompanyName&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
             '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;ContactName&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
             '      { name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;ContactTitle&#39;</span>, type<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;string&#39;</span> },\n' +
@@ -1136,7 +1138,8 @@ style : friendly
           id        : 'data_source',
           title     : 'DataSource',
           doc       : null,
-          desc      : null,
+          desc      : `Property <i class="text-danger">dataSource</i> is the basic data source declaration for EnhanceDataGrid.
+            It will be automatically passed into the jqxGrid's <i class="text-danger">source</i> property as the option object of <i class="text-primary">new</i> <i class="text-black">$.jqx.dataAdapter(<b>dataSource</b>)</i>.`,
           sourcecode:
             "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
             "  id: '#edg_datasource',\n" +
@@ -1233,7 +1236,9 @@ style : friendly
           id        : 'rowindex',
           title     : `Row Index`,
           doc       : null,
-          desc      : null,
+          desc      : `By dDefault, EnhanceDataGrid displays the row number along with the aggregate Row Total.
+            You can simply hide the aggregate Row by setting jqxGrid's property <i class="text-danger">showstatusbar: false</i>.
+            The <i class="text-danger">rowIndexWidth</i> property allows you to change the width of the row number column.`,
           sourcecode: null,
           colorcode:
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
@@ -1285,8 +1290,8 @@ style : friendly
           id        : 'usebootstrap',
           title     : `Bootstrap Modal`,
           doc       : null,
-          desc      : null,
-          sourcecode: null,
+          desc      : `Property <i class="text-danger">useBootstrap: true</i> will change the EnhanceDataGrid meseage to using Bootstrap Modal, if Bootstrap default variable is found.`,
+          sourcecode: '',
           colorcode:
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -1308,8 +1313,8 @@ style : friendly
             '  columns     <span style="color: #666666">:</span> JSON.parse(JSON.stringify(columns)),\n' +
             '  dataSource  <span style="color: #666666">:</span> JSON.parse(JSON.stringify(source)),\n' +
             '  tbElement   <span style="color: #666666">:</span> [\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;reload&#39;</span> },\n' +
             '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;edit&#39;</span> },\n' +
-            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;delete&#39;</span> },\n' +
             '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;print&#39;</span> },\n' +
             '  ]\n' +
             '});\n' +
@@ -1725,6 +1730,23 @@ style : friendly
     ]
   });
 
+  function disableScroll() {
+    // Get the current page scroll position
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+    // if any scroll is attempted, set this to the previous value
+    window.onscroll = function () {
+      window.scrollTo(scrollLeft, scrollTop);
+    };
+
+    console.log('run me')
+  }
+
+  function enableScroll() {
+    window.onscroll = function () { };
+  }
+
   // Component : Add
   const edg_addbutton = new EnhanceDataGrid({
     id          : '#edg_addbutton',
@@ -1741,13 +1763,22 @@ style : friendly
       { button: 'add',
         text: 'Open jqxWindow',
         win: '#edg_jqxWindow',
+        form: '#exampleJqwidgetsForm',
       },
-      // TODO: page auto-scroll to top, why ???
-      // { button: 'add', text: 'Open jqxWindow (Centered)', win: '#edg_jqxWindow', winOpenOnButton: false },
+      // TODO: page auto-scroll to top, why ??? may need enhance to calculate the centered position by myself
+      // { button: 'add',
+      //   text: 'Open jqxWindow (Centered)',
+      //   win: '#edg_jqxWindow',
+      //   winOpenOnButton: false,
+      //   // beforeClick: function() {
+      //   //   disableScroll();
+      //   //   console.log('hey run')
+      //   // }
+      // },
       { button: 'add',
         text: 'Open Modal',
         modal: '#exampleModal',
-        form: '#exampleForm',
+        form: '#exampleBootstrapForm',
       },
     ]
   });
@@ -1768,10 +1799,39 @@ style : friendly
       { button: 'edit',
         text: 'Open jqxWindow',
         win: '#edg_jqxWindow',
+        beforeClick: function() {
+          $('#jqxInput').val('new hello world');
+
+          $('#jqxDateTimeInput').val('2022-12-31');
+
+          $('#jqxCheckBox').val(true);
+          $('#jqxCheckBox2').val(true);
+          $('#jqxCheckBox3').val(true);
+
+          $('#jqxRadioButton').val(true);
+
+          $('#jqxComboBox').val('Hanna Moos');
+
+          $('#jqxTextArea').val('new hello world');
+        },
       },
       { button: 'edit',
         text: 'Open Modal',
         modal: '#exampleModal',
+        beforeClick: function() {
+          $('#input').val('tesing abc');
+
+          $('#date').val('2022-12-31');
+
+          $('#checksDefault').prop('checked', true);
+          $('#checksChecked').prop('checked', false);
+
+          $('#flexRadioDefault1').prop('checked', true);
+
+          $('#select').val(3);
+
+          $('#textarea').val('new hello world');
+        },
       },
     ]
   });
@@ -2046,8 +2106,8 @@ style : friendly
     columns     : JSON.parse(JSON.stringify(columns)),
     dataSource  : JSON.parse(JSON.stringify(source)),
     tbElement   : [
+      { button: 'reload' },
       { button: 'edit' },
-      { button: 'delete' },
       { button: 'print' },
     ]
   });
@@ -2093,8 +2153,10 @@ style : friendly
       }),
     });
 
+  // TODO: enhance jqxWindow declaration
+  // https://www.jqwidgets.com/jquery-widgets-demo/demos/jqxwindow/index.htm#demos/jqxwindow/defaultfunctionality.htm
   $('#edg_jqxWindow')
-    .jqxWindow({ width: 500, height: 300, isModal: true, autoOpen: false });
+    .jqxWindow({ width: 500, height: 420, isModal: true, autoOpen: false });
 
   // ===================================================================================================================
 

@@ -1442,8 +1442,8 @@ class EnhanceDataGrid {
                 animateFromElement: false,
                 backgroundDismiss : true,
                 escapeKey         : true,
-                title: _title,
-                content: _message,
+                title             : _title,
+                content           : _message,
                 buttons: {
                   confirm: {
                     btnClass: 'btn-danger',

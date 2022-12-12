@@ -580,7 +580,7 @@ class EnhanceDataGrid {
     filtermode          : 'excel',
     enabletooltips      : true,
     showaggregates      : true,
-    showstatusbar       : true,
+    // showstatusbar       : false, // true,  // TODO: update to false and detect showRowIndex
     // EnhanceDataGrid default properties
     autoFilter          : false,
     autoFind            : false,
@@ -684,9 +684,15 @@ class EnhanceDataGrid {
     const tbElement     = zProps.tbElement;
     const hasTbElement  = tbElement.length > 0;
     const showSearchBar = typeof zProps.searchInput === 'boolean' &amp;&amp; zProps.searchInput;
+    const showRowIndex  = typeof zProps.showRowIndex === 'boolean' &amp;&amp; zProps.showRowIndex;
 
-    // show toolbar
-    if (hasTbElement || showSearchBar) props.showtoolbar = true;
+    // show toolbar checking
+    if (hasTbElement || showSearchBar)
+      props.showtoolbar = true;
+
+    // show statusbar checking
+    if (showRowIndex &amp;&amp; EnhanceDataGrid.isUnset(props.showstatusbar))
+      props.showstatusbar = true;
 
     // setup source
     this.#_jsonSource = zProps.jsonSource; // { url=string, datafields=[ ], opt={ async } }
@@ -1323,10 +1329,22 @@ class EnhanceDataGrid {
     };
 
     const controlledMessage = {
-      no_row_selected : 'Please select one of the record first.',
-      no_data_id      : 'No data ID found !',
-      no_row_print    : 'No record for printing.',
-      no_url          : 'Please specified "url" property.',
+      no_row_selected: {
+        title   : 'No Record Selected',
+        message : 'Please select one of the record first.',
+      },
+      no_data_id: {
+        title   : 'Property "id" Not Found',
+        message : 'No data ID found !',
+      },
+      no_row_print: {
+        title   : 'No Record Found',
+        message : 'No record for printing.',
+      },
+      no_url: {
+        title   : 'Property "url" Not Found',
+        message : 'Please specified "url" property.',
+      },
     };
 
     const buttonEvent = {
@@ -1403,12 +1421,19 @@ class EnhanceDataGrid {
               if (modal)
                 _openModal(modal/* , { timeout: 2000 } */);
 
-              console.log(self.getSelectedRowData());
+              let debug = false;
+              // debug = true
+
+              if (debug)
+                console.log(self.getSelectedRowData());
             }
 
             $(this).keyup();
           } else {
-            _promptError({ error: controlledMessage.no_row_selected });
+            _promptError({
+              title: controlledMessage.no_row_selected.title,
+              error: controlledMessage.no_row_selected.message,
+            });
           }
         },
         _delete: function(event) {
@@ -1441,9 +1466,21 @@ class EnhanceDataGrid {
               let _url        = self.#_getGridButtonProps(tbElement, button_id, 'url');
               let _title      = self.#_getGridButtonProps(tbElement, button_id, 'title');
               let _message    = self.#_getGridButtonProps(tbElement, button_id, 'message');
+              let _debug      = self.#_getGridButtonProps(tbElement, button_id, 'debug');
 
-              _title = (typeof _title === 'undefined' || _title === '') ? 'Delete Record' : _title;
+              // TODO: think about usage of title in 'delete' button
+              // _title = (typeof _title === 'undefined' || _title === '') ? 'Delete Record' : _title;
+              _title = 'Delete Record';
               _message = (typeof _message === 'undefined' || _message === '') ? 'Are you sure to delete selected record ?' : _message;
+
+              if (typeof _url === 'undefined' || _url === undefined || typeof _url === 'null' || _url === null) {
+                _promptError({
+                  title: controlledMessage.no_url.title,
+                  error: controlledMessage.no_url.message,
+                });
+
+                return false;
+              }
 
               $.confirm({
                 useBootstrap      : zProps.useBootstrap,
@@ -1453,17 +1490,12 @@ class EnhanceDataGrid {
                 animateFromElement: false,
                 backgroundDismiss : true,
                 escapeKey         : true,
-                title: _title,
-                content: _message,
+                title             : _title,
+                content           : _message,
                 buttons: {
                   confirm: {
                     btnClass: 'btn-danger',
                     action: () => {
-                      if (typeof _url === 'undefined' || _url === undefined || typeof _url === 'null' || _url === null) {
-                        _promptError({ error: controlledMessage.no_url });
-                        return false;
-                      }
-
                       // NOTE: user-defined operation
                       if (typeof _url === 'function') {
                         if (data_id)
@@ -1477,8 +1509,11 @@ class EnhanceDataGrid {
                         if (data_id) {
                           // insert data ID
                           const _post = { id: data_id };
-                          _url = EnhanceDataGrid.insertQueryString(_url, _post);
 
+                          // TODO: should _post append to _url ???
+                          // _url = EnhanceDataGrid.insertQueryString(_url, _post);
+
+                          // TODO: combine extra params to _url_? or _post_?
                           // combine extra parameters
                           if (_params &amp;&amp; typeof _params === 'object')
                             _url = EnhanceDataGrid.insertQueryString(_url, _params);
@@ -1486,8 +1521,11 @@ class EnhanceDataGrid {
                           if (_params &amp;&amp; typeof _params === 'function')
                             _url = EnhanceDataGrid.insertQueryString(_url, _params());
 
-                          console.log(`$.post() to ${_url}`);
-                          return true;
+                          if (_debug === true || _debug === 'true') {
+                            console.log(`%c$.post() to '${_url}' with $_POST ${JSON.stringify(_post)}`, 'color: red; font-weight: bold;');
+
+                            return true;
+                          }
 
                           $.post(_url, _post)
                             .done(resp => {
@@ -1508,8 +1546,8 @@ class EnhanceDataGrid {
                             // });
                         } else {
                           self.#_alert({
-                            title: '',
-                            content: controlledMessage.no_data_id,
+                            title   : controlledMessage.no_data_id.title,
+                            content : controlledMessage.no_data_id.message,
                           });
 
                           return false;
@@ -1519,10 +1557,10 @@ class EnhanceDataGrid {
                   },
                   cancel: () => {},
                   // somethingElse: {
-                  //   text: 'Something else',
-                  //   btnClass: 'btn-blue',
-                  //   keys: ['enter', 'shift'],
-                  //   action: () => {
+                  //   text     : 'Something else',
+                  //   btnClass : 'btn-blue',
+                  //   keys     : ['enter', 'shift'],
+                  //   action   : () => {
                   //     $.alert('Something else?');
                   //   }
                   // }
@@ -1532,7 +1570,10 @@ class EnhanceDataGrid {
 
             $(this).keyup();
           } else {
-            _promptError({ error: controlledMessage.no_row_selected });
+            _promptError({
+              title: controlledMessage.no_row_selected.title,
+              error: controlledMessage.no_row_selected.message,
+            });
           }
         },
         _find: function(event) {
@@ -1580,7 +1621,11 @@ class EnhanceDataGrid {
             let _url      = self.#_getGridButtonProps(tbElement, button_id, 'url');
 
             if (typeof _url === 'undefined' || _url === undefined || typeof _url === 'null' || _url === null) {
-              _promptError({ error: controlledMessage.no_url });
+              _promptError({
+                title: controlledMessage.no_url.title,
+                error: controlledMessage.no_url.message,
+              });
+
               return false;
             }
 
@@ -1594,7 +1639,10 @@ class EnhanceDataGrid {
 
             window.open(_url);
           } else {
-            _promptError({ error: controlledMessage.no_row_print });
+            _promptError({
+              title: controlledMessage.no_row_print.title,
+              error: controlledMessage.no_row_print.message,
+            });
           }
         },
         _excel: function(event) {
@@ -1661,7 +1709,7 @@ class EnhanceDataGrid {
       if ($(form).length > 0) {
         // TODO: enhance for reset form input
         let debug = false;
-        debug = true;
+        // debug = true;
 
         if (debug)
           console.log(EnhanceDataGrid.transformStringToObject($(form).serialize()));
@@ -1741,12 +1789,17 @@ class EnhanceDataGrid {
 
     function _promptError(opt) {
       if (zProps.useBootstrap)
-        _createModalError.call(self, 'No Record Selected', opt.error);
+        _createModalError.call(
+          self,
+          opt.title ? opt.title : 'No Record Selected',
+          opt.error
+        );
       else
         self.#_alert(opt.error);
     }
 
     function _createModalError(modalTitle, modalBody) {
+      // check bootstrap variable exist
       if (typeof bootstrap === 'object') {
         const modal_error_id = `${this.#_id}_edit_modal_error`;
         const modal_error = `&lt;div id="${modal_error_id.slice(1)}" class="modal fade" tabindex="-1">
@@ -2354,13 +2407,13 @@ class EnhanceDataGrid {
    * @param {String}          prop.jqxGridProperties.filtermode='excel'   - The property specifies the type of rendering of the Filter Menu.
    * @param {Boolean}         prop.jqxGridProperties.enabletooltips=true  - Enable/Disable the grid tooltips.
    * @param {Boolean}         prop.jqxGridProperties.showaggregates=true  - Show/Hide the aggregates in the grid's statusbar.
-   * @param {Boolean}         prop.jqxGridProperties.showstatusbar=true   - Show/Hide the grid's statusbar.
+   * @!param {Boolean}         prop.jqxGridProperties.showstatusbar=true   - Show/Hide the grid's statusbar.
    *
    * @param {Object}          prop                                - EnhanceDataGrid object properties, sets [prop]{@link EnhanceDataGrid#prop}.
    * @param {String}          prop.id                             - Grid's ID.
    * @param {Object}          [prop.jsonSource]                   - Grid's data source preset with JSON data type.
    * @param {Object}          [prop.dataSource]                   - Grid's data source object.
-   * @param {Object}          [prop.dataAdapter]                  - Grid's data adapter object.
+   * @!param {Object}          [prop.dataAdapter]                  - Grid's data adapter object.
    * @param {String}          [prop.checkedDatafield='selected']  - Data field which use to get all selected data ID.
    * @param {String}          [prop.buttonTheme='']               - Default theme for built-in button component.
    * @param {Boolean}         [prop.useBootstrap=false]           - Enable/Disable Bootstrap Theme on Grid message.
@@ -2498,13 +2551,12 @@ class EnhanceDataGrid {
      *   filtermode         : 'excel',
      *   enabletooltips     : true,
      *   showaggregates     : true,
-     *   showstatusbar      : true,
+     *   // showstatusbar      : true,
      *   // EnhanceDataGrid properties
      *   id                 : '#grid_id',
-     *   // using either one, (1)jsonSource | (2)dataSource | (3)dataAdapter
-     *   jsonSource         : source_json_object,                       // method (1)
-     *   dataSource         : source_url_object,                        // method (2), refer to updateSourceUrl() method for example
-     *   dataAdapter        : new $.jqx.dataAdapter(source_url_object), // method (3)
+     *   // using either one, (1)jsonSource | (2)dataSource
+     *   jsonSource         : source_json_object, // method (1)
+     *   dataSource         : source_url_object,  // method (2), refer to updateSourceUrl() method for example
      *   // dateFormat         : 'yyyy-MM-dd',
      *   checkedDatafield   : 'checked',
      *   buttonTheme        : 'fresh',
@@ -3156,7 +3208,7 @@ class EnhanceDataGrid {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Sat Dec 10 2022 16:13:04 GMT+0800 (Malaysia Time) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Mon Dec 12 2022 20:55:11 GMT+0800 (Malaysia Time) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>

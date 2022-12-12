@@ -157,7 +157,7 @@
           <div class="card">
             <div class="card-header">
               This example shows the basic syntax of EnhanceDataGrid.
-              By Default, EnhanceDataGrid displays the row number along with the aggregate Row Total.
+              By default, EnhanceDataGrid displays the row number along with the aggregate Row Total.
             </div>
             <div class="card-body grid-container">
               <div id="edg_defaultfunc"></div>
@@ -190,22 +190,22 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="exampleForm">
+          <form id="exampleBootstrapForm">
             <input type="hidden" name="hidden_hello" value="hello" />
             <input type="hidden" name="hidden_world" value="world" />
 
             <div class="row">
               <div class="col">
-                <h5>Bootstrap</h5>
-                <div class="form-group">
+                <!-- <h5>Bootstrap</h5> -->
+                <div class="mb-3">
                   <div>Bootstrap Input</div>
                   <input type="text" id="input" name="normal_input" class="form-control form-control-sm" placeholder="Bootstrap Input" value="testing 123" />
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                   <div>Bootstrap Date</div>
                   <input type="date" id="date" name="normal_date" class="form-control form-control-sm" value="2022-01-01" />
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                   <div>Bootstrap Checks</div>
                   <div class="d-flex">
                     <div class="form-check me-3">
@@ -222,7 +222,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                   <div>Boostrap Radio</div>
                   <div class="d-flex">
                     <div class="form-check me-3">
@@ -239,7 +239,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                   <div>Boostrap Select</div>
                   <select id="select" name="normal_select" class="form-select form-select-sm">
                     <option value="0">Open this select menu</option>
@@ -248,23 +248,23 @@
                     <option value="3">Three</option>
                   </select>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                   <div>Boostrap Textarea</div>
                   <textarea id="textarea" name="normal_textarea" rows="1" class="form-control form-control-sm">hello world</textarea>
                 </div>
               </div>
 
-              <div class="col">
+              <!-- <div class="col">
                 <h5>jQWidgets</h5>
-                <div class="form-group">
+                <div class="mb-3">
                   <div>jqxInput</div>
                   <input type="text" id="jqxInput" name="jqxInput" />
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                   <div>jqxDateTimeInput</div>
                   <div id="jqxDateTimeInput" name="jqxDateTimeInput"></div>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                   <div>jqxCheckBox</div>
                   <div class="d-flex">
                     <div id="jqxCheckBox" name="jqxCheckBox" class="me-3">
@@ -278,7 +278,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                   <div>jqxRadioButton</div>
                   <div class="d-flex">
                     <div id="jqxRadioButton" class="me-3">
@@ -289,15 +289,15 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                   <div>jqxComboBox</div>
                   <div id="jqxComboBox" name="jqxComboBox"></div>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                   <div>jqxTextArea</div>
                   <textarea id="jqxTextArea" name="jqxTextArea"></textarea>
                 </div>
-              </div>
+              </div> -->
             </div>
           </form>
         </div>
@@ -313,7 +313,59 @@
 
     <!-- jqxWindow -->
     <div id="edg_jqxWindow" caption="jqxWindow">
-      <div>jqxWindows content.</div>
+      <div>
+        <form id="exampleJqwidgetsForm">
+          <input type="hidden" name="hidden_hello" value="hello" />
+          <input type="hidden" name="hidden_world" value="world" />
+
+          <div class="row m-0">
+            <div class="col">
+              <!-- <h5>jQWidgets</h5> -->
+              <div class="mb-3">
+                <div>jqxInput</div>
+                <input type="text" id="jqxInput" name="jqxInput" />
+              </div>
+              <div class="mb-3">
+                <div>jqxDateTimeInput</div>
+                <div id="jqxDateTimeInput" name="jqxDateTimeInput"></div>
+              </div>
+              <div class="mb-3">
+                <div>jqxCheckBox</div>
+                <div class="d-flex">
+                  <div id="jqxCheckBox" name="jqxCheckBox" class="me-3">
+                    Entertainment
+                  </div>
+                  <div id="jqxCheckBox2" name="jqxCheckBox2" class="me-3">
+                    <span>Computers</span>
+                  </div>
+                  <div id="jqxCheckBox3" name="jqxCheckBox3" class="me-3">
+                    <span>Sports</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div>jqxRadioButton</div>
+                <div class="d-flex">
+                  <div id="jqxRadioButton" class="me-3">
+                    12 Months Contract
+                  </div>
+                  <div id="jqxRadioButton2">
+                    <span>6 Months Contract</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div>jqxComboBox</div>
+                <div id="jqxComboBox" name="jqxComboBox"></div>
+              </div>
+              <div class="mb-3">
+                <div>jqxTextArea</div>
+                <textarea id="jqxTextArea" name="jqxTextArea"></textarea>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
 
   </div>
