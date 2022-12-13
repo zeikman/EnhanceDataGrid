@@ -25,7 +25,8 @@ It is recommended to use with the following libraries to have a prettier UI expe
 
 ### How to use
 
-Full [documentation](https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/) is over here.
+Full documentation is over [here](https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/).
+And the demonstration is over [here](https://www.rightpristine.com/zeikman/EnhanceDataGrid/).
 
 ```javascript
 // jsonSource comes with some preset options
@@ -78,10 +79,10 @@ const grid = new EnhanceDataGrid({
 <table>
   <thead>
     <tr>
-      <th style="text-align: left;">Properties</th>
-      <th style="text-align: left;">Type</th>
-      <th style="text-align: left;">Description</th>
-      <th style="text-align: left;">Default</th>
+      <th>Properties</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
     </tr>
   </thead>
   <tbody>
@@ -131,7 +132,7 @@ const grid = new EnhanceDataGrid({
     <tr>
       <td>useBootstrap</td>
       <td>Boolean</td>
-      <td>Enable/Disable Bootstrap Theme on Grid message.</td>
+      <td>Enable/Disable Bootstrap Theme on grid message.</td>
       <td>false</td>
     </tr>
     <tr>
@@ -224,8 +225,8 @@ const grid = new EnhanceDataGrid({
 <table>
   <thead>
     <tr>
-      <th style="text-align: left;">Method</th>
-      <th style="text-align: left;">Description</th>
+      <th>Method</th>
+      <th>Description</th>
     </tr>
   </thead>
   <tbody>
@@ -307,7 +308,7 @@ const grid = new EnhanceDataGrid({
     </tr>
     <tr>
       <td>updateSourceUrl</td>
-      <td>Update URL of data source and refresh Grid.</td>
+      <td>Update URL of data source and refresh grid.</td>
     </tr>
   </tbody>
 </table>
@@ -317,26 +318,26 @@ const grid = new EnhanceDataGrid({
 <table>
   <thead>
     <tr>
-      <th style="text-align: left;">Static Method</th>
-      <th style="text-align: left;">Description</th>
+      <th>Static Method</th>
+      <th>Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>isNull</td>
-      <td>Check input is <code>null</code>.</td>
+      <td>Check whether input is <code>null</code>.</td>
     </tr>
     <tr>
       <td>isUndefined</td>
-      <td>Check input is <code>undefined</code>.</td>
+      <td>Check whether input is <code>undefined</code>.</td>
     </tr>
     <tr>
       <td>isEmptyString</td>
-      <td>Check input is empty string.</td>
+      <td>Check whether input is empty string.</td>
     </tr>
     <tr>
       <td>isUnset</td>
-      <td>Check input is unset.</td>
+      <td>Check whether input is unset.</td>
     </tr>
     <tr>
       <td>transformStringToObject</td>
@@ -364,7 +365,7 @@ const grid = new EnhanceDataGrid({
     </tr>
     <tr>
       <td>isValidKeyboardInput</td>
-      <td>Check whether is a valid keyboard input.</td>
+      <td>Check whether keypress is a valid keyboard input.</td>
     </tr>
   </tbody>
 </table>
