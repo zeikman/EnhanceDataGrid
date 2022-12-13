@@ -7,6 +7,8 @@ border CSS : border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;
 style : friendly
 */
 
+EDG = EnhanceDataGrid;
+
 (($) => {
   'use strict';
 
@@ -46,10 +48,8 @@ style : friendly
       <h2 class="sticky-xl-top fw-bold pt-3 pt-xl-5 pb-2 pb-xl-3">${title}</h2>
     </section>`);
 
-    // TODO: insert official doc link
-    const doc = 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html';
-
     menu.forEach(el => {
+
       /*/
       // in jqxTabs
       const article = $(`<article class="my-3" id="${el.id}">
@@ -82,6 +82,28 @@ style : friendly
       if (el.is_last == 1)
         article_class += ' mb-5 pb-5';
 
+      let body = `<div id="edg_${el.id}"></div>`;
+
+      if (el.ratio) {
+        const ratio = el.ratio.split(',');
+        const flex_body = $(`<div class="d-flex flex-row h-100"></div>`);
+
+        ratio.forEach((rate, index) => {
+          const numb = index + 1;
+          let box = $(`<div id="edg_${el.id}_box${numb}" class="col-${rate} _border"></div>`);
+
+          // first box is always the EDG demo
+          if (index == 0)
+            box = $(`<div id="edg_${el.id}_box${numb}" class="col-${rate} _border">
+              <div id="edg_${el.id}"></div>
+            </div>`);
+
+          flex_body.append(box);
+        });
+
+        body = flex_body[0].outerHTML;
+      }
+
       let desc = '';
 
       if (el.desc)
@@ -101,7 +123,12 @@ style : friendly
             ${el.colorcode}
           </div>`;
 
-      const article = $(`<article class="${article_class}" id="${el.id}">
+      let doc = el.doc;
+
+      if (!doc)
+        doc = 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html';
+
+      let article = $(`<article class="${article_class}" id="${el.id}">
         <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
           <h3>${el.title.replace(' (', '<br>(')}</h3>
           <a class="d-flex align-items-center" target="_blank" href="${doc}">Documentation</a>
@@ -111,12 +138,31 @@ style : friendly
           <div class="card">
             ${desc}
             <div class="card-body grid-container">
-              <div id="edg_${el.id}"></div>
+              ${body}
             </div>
             ${sourcecode}
           </div>
         </div>
       </article>`);
+
+      if (el.static) {
+        if (el.desc)
+          desc = `<div class="card-body">${el.desc}</div>`;
+
+        article = $(`<article class="${article_class}" id="${el.id}">
+          <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+            <h3>${el.title.replace(' (', '<br>(')}</h3>
+            <a class="d-flex align-items-center" target="_blank" href="${doc}">Documentation</a>
+          </div>
+
+          <div class="position-relative">
+            <div class="card">
+              ${desc}
+              ${sourcecode}
+            </div>
+          </div>
+        </article>`);
+      }
       //*/
 
       section.append(article);
@@ -156,15 +202,18 @@ style : friendly
   //   .html(defaultfunc_sourcecode);
 
   const defaultfunc_colorcode =
-    '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
-    '2\n' +
-    '3\n' +
-    '4\n' +
-    '5\n' +
-    '6\n' +
-    '7\n' +
-    '8\n' +
-    '9</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+    '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+    ' 2\n' +
+    ' 3\n' +
+    ' 4\n' +
+    ' 5\n' +
+    ' 6\n' +
+    ' 7\n' +
+    ' 8\n' +
+    ' 9\n' +
+    '10\n' +
+    '11\n' +
+    '12</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">const</span> grid <span style="color: #666666">=</span> <span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
     '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_defaultfunc&#39;</span>,\n' +
     '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
     '  columns     <span style="color: #666666">:</span> columns_array,\n' +
@@ -173,7 +222,11 @@ style : friendly
     '  ],\n' +
     '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
     '});\n' +
+    '\n' +
+    '<span style="color: #60a0b0; font-style: italic">// get original jqxGrid object</span>\n' +
+    '<span style="color: #007020; font-weight: bold">const</span> jqxGridObject = grid.jqxGrid;\n' +
     '</pre></td></tr></table></div>';
+
   $('#defaultfunc')
     .find('.card-footer')
     .replaceWith(`<div class="card-footer text-muted overflow-hidden p-0">
@@ -227,7 +280,7 @@ style : friendly
             "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource  : source,\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
             '2\n' +
             '3\n' +
@@ -265,7 +318,7 @@ style : friendly
             "  columns         : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource      : source,\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -307,7 +360,7 @@ style : friendly
             "  columns       : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource    : source,\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -344,7 +397,7 @@ style : friendly
             "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource  : source,\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
             '2\n' +
             '3\n' +
@@ -379,7 +432,7 @@ style : friendly
             "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource  : source,\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
             '2\n' +
             '3\n' +
@@ -416,7 +469,7 @@ style : friendly
             "  columns         : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource      : source,\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -456,7 +509,7 @@ style : friendly
             "  columns             : JSON.parse(JSON.stringify(columns)),\n" +
             "  dataSource          : source,\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -502,7 +555,7 @@ style : friendly
             "    { button: 'reload' },\n" +
             "  ]\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -536,7 +589,7 @@ style : friendly
               <li>Setting the <i class="text-danger">form</i> property with an ID will auto-clear all the relevant inputs within the form tag.</li>
             </ul>`,
           sourcecode: '',
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -559,26 +612,28 @@ style : friendly
             '20\n' +
             '21\n' +
             '22\n' +
-            '23</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '23\n' +
+            '24</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
             '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_addbutton&#39;</span>,\n' +
             '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  columns     <span style="color: #666666">:</span> JSON.parse(JSON.stringify(columns)),\n' +
-            '  dataSource  <span style="color: #666666">:</span> JSON.parse(JSON.stringify(source)),\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '  tbElement   <span style="color: #666666">:</span> [\n' +
-            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;add&#39;</span>,\n' +
+            '    { <i class="hl">button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;add&#39;</span></i>,\n' +
             '      click<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">function</span>() {\n' +
             '        <span style="color: #007020">window</span>.alert(<span style="color: #4070a0">&#39;You clicked the add button&#39;</span>);\n' +
             '      },\n' +
             '    },\n' +
             '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;add&#39;</span>,\n' +
             '      text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Open jqxWindow&#39;</span>,\n' +
-            '      win<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_jqxWindow&#39;</span>,\n' +
+            '      <i class="hl">win<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_jqxWindow&#39;</span></i>,\n' +
+            '      <i class="hl">form<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#exampleJqwidgetsForm&#39;</span></i>,\n' +
             '    },\n' +
             '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;add&#39;</span>,\n' +
             '      text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Open Modal&#39;</span>,\n' +
-            '      modal<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#exampleModal&#39;</span>,\n' +
-            '      form<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#exampleBootstrapForm&#39;</span>,\n' +
+            '      <i class="hl">modal<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#exampleModal&#39;</span></i>,\n' +
+            '      <i class="hl">form<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#exampleBootstrapForm&#39;</span></i>,\n' +
             '    },\n' +
             '  ]\n' +
             '});\n' +
@@ -588,8 +643,71 @@ style : friendly
           id        : 'editbutton',
           title     : 'Edit Button',
           doc       : null,
-          desc      : null,
-          sourcecode: '',
+          desc      : `The Edit button has the same features as the Add button except that it does not support the <i class="text-danger">form</i> property.
+            There are two properties which are very useful in Edit button :
+            <ul>
+              <li><i class="text-danger">beforeClick</i> property, which supports a callback function for the Edit button click-keydown event</li>
+              <li><i class="text-danger">afterClick</i> property, which supports a callback function for the Edit button click-keyup event</li>
+            </ul>
+            Please take note that the <i class="text-danger">win</i>/<i class="text-danger">modal</i> property that auto-open <i class="text-black">jqxWindow</i>/<i class="text-black">Modal</i> happened between the click-keydown and click-keyup events.<br /><br />
+            When click on Edit button, event trigger sequence : <i>click-keydown</i> <i class="fa-solid fa-chevron-right"></i> <i>auto-open</i> <i class="fa-solid fa-chevron-right"></i> <i>click-keyup</i>.`,
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
+            ' 2\n' +
+            ' 3\n' +
+            ' 4\n' +
+            ' 5\n' +
+            ' 6\n' +
+            ' 7\n' +
+            ' 8\n' +
+            ' 9\n' +
+            '10\n' +
+            '11\n' +
+            '12\n' +
+            '13\n' +
+            '14\n' +
+            '15\n' +
+            '16\n' +
+            '17\n' +
+            '18\n' +
+            '19\n' +
+            '20\n' +
+            '21\n' +
+            '22\n' +
+            '23\n' +
+            '24\n' +
+            '25\n' +
+            '26\n' +
+            '27\n' +
+            '28</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_editbutton&#39;</span>,\n' +
+            '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
+            '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
+            '  tbElement   <span style="color: #666666">:</span> [\n' +
+            '    { <i class="hl">button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;edit&#39;</span></i>,\n' +
+            '      click<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">function</span>() {\n' +
+            '        <span style="color: #007020">window</span>.alert(<span style="color: #4070a0">&#39;You clicked the edit button&#39;</span>);\n' +
+            '      },\n' +
+            '    },\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;edit&#39;</span>,\n' +
+            '      text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Open jqxWindow&#39;</span>,\n' +
+            '      <i class="hl">win<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_jqxWindow&#39;</span></i>,\n' +
+            '      <i class="hl">beforeClick</i><span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">function</span>() {\n' +
+            '        <span style="color: #60a0b0; font-style: italic">// fill in data before jqxWindow open</span>\n' +
+            '      },\n' +
+            '    },\n' +
+            '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;edit&#39;</span>,\n' +
+            '      text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Open Modal&#39;</span>,\n' +
+            '      <i class="hl">modal<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#exampleModal&#39;</span></i>,\n' +
+            '      <i class="hl">beforeClick</i><span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">function</span>() {\n' +
+            '        <span style="color: #60a0b0; font-style: italic">// fill in data before Bootstrap Modal open</span>\n' +
+            '      },\n' +
+            '    },\n' +
+            '  ]\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
         },
         {
           id        : 'deletebutton',
@@ -604,7 +722,7 @@ style : friendly
               <li>If you would like to append some dynamic query string, setthe param property with a <i class="text-primary">Function</i> and return with an Object.</li>
             </ul>`,
           sourcecode: '',
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -645,8 +763,8 @@ style : friendly
             '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_deletebutton&#39;</span>,\n' +
             '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  columns     <span style="color: #666666">:</span> JSON.parse(JSON.stringify(columns)),\n' +
-            '  dataSource  <span style="color: #666666">:</span> JSON.parse(JSON.stringify(source)),\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '  tbElement   <span style="color: #666666">:</span> [\n' +
             '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;delete&#39;</span>,\n' +
             '      url<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;post_delete.php?mod=delete_data&#39;</span>,\n' +
@@ -700,7 +818,7 @@ style : friendly
             "    },\n" +
             "  ]\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -749,7 +867,7 @@ style : friendly
             "    },\n" +
             "  ]\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -796,7 +914,7 @@ style : friendly
             "    },\n" +
             "  ]\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -847,7 +965,7 @@ style : friendly
             "    },\n" +
             "  ]\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -864,7 +982,8 @@ style : friendly
             '14\n' +
             '15\n' +
             '16\n' +
-            '17</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '17\n' +
+            '18</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
             '  id          <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_custombtnbutton&#39;</span>,\n' +
             '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
@@ -872,10 +991,11 @@ style : friendly
             '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '  tbElement   <span style="color: #666666">:</span> [\n' +
             '    {\n' +
-            '      <i class="hl">button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;custombutton&#39;</span></i>,\n' +
-            '      icon  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;fa-solid fa-earth&#39;</span>,\n' +
-            '      text  <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Hello World !&#39;</span>,\n' +
-            '      click <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">function</span>() {\n' +
+            '      <i class="hl">button    <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;custombutton&#39;</span></i>,\n' +
+            '      icon      <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;fa-solid fa-earth&#39;</span>,\n' +
+            '      iconColor <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;yellow&#39;</span>,\n' +
+            '      text      <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Hello World !&#39;</span>,\n' +
+            '      click<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">function</span>() {\n' +
             '        <span style="color: #007020">window</span>.alert(<span style="color: #4070a0">&#39;Hello World !&#39;</span>);\n' +
             '      },\n' +
             '    },\n' +
@@ -901,7 +1021,7 @@ style : friendly
             "    },\n" +
             "  ]\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -949,7 +1069,7 @@ style : friendly
             "    },\n" +
             "  ]\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -1005,7 +1125,7 @@ style : friendly
             "    },\n" +
             "  ]\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -1086,7 +1206,7 @@ style : friendly
             "    ]\n" +
             "  },\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -1108,11 +1228,9 @@ style : friendly
             '19\n' +
             '20\n' +
             '21\n' +
-            '22\n' +
-            '23</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '22</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
             '  id<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_jsonsource&#39;</span>,\n' +
             '  altrows<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  columns<span style="color: #666666">:</span> columns_array,\n' +
             '  columns<span style="color: #666666">:</span> [\n' +
             '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Company Name&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;CompanyName&#39;</span>, width<span style="color: #666666">:</span> <span style="color: #40a070">250</span> },\n' +
             '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Contact Name&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;ContactName&#39;</span>, width<span style="color: #666666">:</span> <span style="color: #40a070">150</span> },\n' +
@@ -1166,7 +1284,7 @@ style : friendly
             "    ]\n" +
             "  },\n" +
             "});",
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -1190,11 +1308,9 @@ style : friendly
             '21\n' +
             '22\n' +
             '23\n' +
-            '24\n' +
-            '25</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
+            '24</pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">new</span> EnhanceDataGrid({\n' +
             '  id        <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_data_source&#39;</span>,\n' +
             '  altrows   <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
-            '  columns   <span style="color: #666666">:</span> columns_array,\n' +
             '  columns   <span style="color: #666666">:</span> [\n' +
             '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Company Name&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;CompanyName&#39;</span>, width<span style="color: #666666">:</span> <span style="color: #40a070">250</span> },\n' +
             '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Contact Name&#39;</span>, datafield<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;ContactName&#39;</span>, width<span style="color: #666666">:</span> <span style="color: #40a070">150</span> },\n' +
@@ -1228,7 +1344,7 @@ style : friendly
       ],
     },
     {
-      // Append xxx
+      // Append features
       id    : 'features',
       title : 'Features',
       menu  : [
@@ -1236,11 +1352,11 @@ style : friendly
           id        : 'rowindex',
           title     : `Row Index`,
           doc       : null,
-          desc      : `By dDefault, EnhanceDataGrid displays the row number along with the aggregate Row Total.
+          desc      : `By default, EnhanceDataGrid displays the row number along with the aggregate Row Total.
             You can simply hide the aggregate Row by setting jqxGrid's property <i class="text-danger">showstatusbar: false</i>.
             The <i class="text-danger">rowIndexWidth</i> property allows you to change the width of the row number column.`,
           sourcecode: null,
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
             '2\n' +
             '3\n' +
@@ -1253,8 +1369,8 @@ style : friendly
             '  altrows       <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  showstatusbar <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">false</span>,\n' +
             '  rowIndexWidth <span style="color: #666666">:</span> <span style="color: #40a070">100</span>,\n' +
-            '  columns       <span style="color: #666666">:</span> JSON.parse(JSON.stringify(columns)),\n' +
-            '  dataSource    <span style="color: #666666">:</span> JSON.parse(JSON.stringify(source)),\n' +
+            '  columns       <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource    <span style="color: #666666">:</span> source_object,\n' +
             '});\n' +
             '</pre></td></tr></table></div>'
         },
@@ -1264,7 +1380,7 @@ style : friendly
           doc       : null,
           desc      : `By setting <i class="text-danger">centeredColumns: true</i>, you can centre all columns at once. (All columns and column groups)`,
           sourcecode: null,
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -1278,8 +1394,8 @@ style : friendly
             '  id              <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;#edg_centeredcolumns&#39;</span>,\n' +
             '  altrows         <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  <i class="hl">centeredColumns <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span></i>,\n' +
-            '  columns         <span style="color: #666666">:</span> JSON.parse(JSON.stringify(columns)),\n' +
-            '  dataSource      <span style="color: #666666">:</span> JSON.parse(JSON.stringify(source)),\n' +
+            '  columns         <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource      <span style="color: #666666">:</span> source_object,\n' +
             '  columngroups    <span style="color: #666666">:</span> [\n' +
             '    { text<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;Buyer Details&#39;</span>, name<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;buyer&#39;</span> },\n' +
             '  ],\n' +
@@ -1292,7 +1408,7 @@ style : friendly
           doc       : null,
           desc      : `Property <i class="text-danger">useBootstrap: true</i> will change the EnhanceDataGrid meseage to using Bootstrap Modal, if Bootstrap default variable is found.`,
           sourcecode: '',
-          colorcode:
+          colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
             ' 3\n' +
@@ -1310,8 +1426,8 @@ style : friendly
             '  buttonTheme <span style="color: #666666">:</span> <span style="color: #4070a0">&#39;material-purple&#39;</span>,\n' +
             '  altrows     <span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span>,\n' +
             '  <i class="hl">useBootstrap<span style="color: #666666">:</span> <span style="color: #007020; font-weight: bold">true</span></i>,\n' +
-            '  columns     <span style="color: #666666">:</span> JSON.parse(JSON.stringify(columns)),\n' +
-            '  dataSource  <span style="color: #666666">:</span> JSON.parse(JSON.stringify(source)),\n' +
+            '  columns     <span style="color: #666666">:</span> columns_array,\n' +
+            '  dataSource  <span style="color: #666666">:</span> source_object,\n' +
             '  tbElement   <span style="color: #666666">:</span> [\n' +
             '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;reload&#39;</span> },\n' +
             '    { button<span style="color: #666666">:</span> <span style="color: #4070a0">&#39;edit&#39;</span> },\n' +
@@ -1326,186 +1442,497 @@ style : friendly
         //   doc       : null,
         //   desc      : null,
         //   sourcecode: null,
-        //   colorcode: null
+        //   colorcode : null
         // },
       ],
     },
     {
-      // Append xxx
+      // Append methods
       id    : 'methods',
       title : 'Methods',
       menu  : [
         {
           id        : 'clearselection',
-          title     : `clearSelection()`,
-          doc       : null,
+          title     : `clearSelection`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#clearSelection',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode: `grid.clearSelection();`,
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.clearSelection();\n' +
+            '</pre></div>'
         },
         {
           id        : 'refresh',
-          title     : `refresh()`,
-          doc       : null,
+          title     : `refresh`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#refresh',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode: `grid.refresh();`,
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.refresh();\n' +
+            '</pre></div>'
         },
         {
-          id        : 'updateBoundData',
-          title     : `updateBoundData()`,
-          doc       : null,
+          id        : 'updatebounddata',
+          title     : `updateBoundData`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#updateBoundData',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode: `grid.updateBoundData();`,
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.updateBoundData();\n' +
+            '</pre></div>'
         },
         {
           id        : 'on',
-          title     : `on()`,
-          doc       : null,
+          title     : `on`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#on',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode: `grid.on('&lt;jqxGrid-event>', callback_function() { /* coding... */ });`,
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.on(<span style="color: #4070a0">&#39;&lt;jqxGrid-event&gt;&#39;</span>, callback_function() { <span style="color: #60a0b0; font-style: italic">/* coding... */</span> });\n' +
+            '</pre></div>'
         },
         {
-          id        : 'getAllDirty',
-          title     : `getAllDirty()`,
-          doc       : null,
+          id        : 'getalldirty',
+          title     : `getAllDirty`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getAllDirty',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode: `grid.getAllDirty();`,
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getAllDirty();\n' +
+            '</pre></div>'
         },
         {
-          id        : 'getDirty',
-          title     : `getDirty()`,
-          doc       : null,
+          id        : 'getdirty',
+          title     : `getDirty`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getDirty',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode: `grid.getDirty();`,
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getDirty();\n' +
+            '</pre></div>'
         },
         {
-          id        : 'getCheckedItems',
-          title     : `getCheckedItems()`,
-          doc       : null,
+          id        : 'getcheckeditems',
+          title     : `getCheckedItems`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getCheckedItems',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode: `grid.getCheckedItems();`,
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getCheckedItems();\n' +
+            '</pre></div>'
         },
         {
-          id        : 'getCellValue',
-          title     : `getCellValue()`,
-          doc       : null,
+          id        : 'getcellvalue',
+          title     : `getCellValue`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getCellValue',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode:
+            "grid.getCellValue(&lt;rowBoundIndex>, &lt;dataField>);\n" +
+            "// example : get Name of Row 2\n" +
+            "grid.getCellValue(1, 'firstname');",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getCellValue(<span style="color: #666666">&lt;</span>rowBoundIndex<span style="color: #666666">&gt;</span>, <span style="color: #666666">&lt;</span>dataField<span style="color: #666666">&gt;</span>);\n' +
+            '<span style="color: #60a0b0; font-style: italic">// example : get Name of Row 2</span>\n' +
+            'grid.getCellValue(<span style="color: #40a070">1</span>, <span style="color: #4070a0">&#39;firstname&#39;</span>);\n' +
+            '</pre></div>'
         },
         {
-          id        : 'getRows',
-          title     : `getRows()`,
-          doc       : null,
+          id        : 'getrows',
+          title     : `getRows`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getRows',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode: `grid.getRows();`,
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getRows();\n' +
+            '</pre></div>'
         },
         {
-          id        : 'getRowData',
-          title     : `getRowData()`,
-          doc       : null,
+          id        : 'getrowdata',
+          title     : `getRowData`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getRowData',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode:
+            "grid.getRowData(&lt;rowBoundIndex>);\n" +
+            "// example : get data of Row 2\n" +
+            "grid.getRowData(1);",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getRowData(<span style="color: #666666">&lt;</span>rowBoundIndex<span style="color: #666666">&gt;</span>);\n' +
+            '<span style="color: #60a0b0; font-style: italic">// example : get data of Row 2</span>\n' +
+            'grid.getRowData(<span style="color: #40a070">1</span>);\n' +
+            '</pre></div>'
         },
         {
-          id        : 'getSelectedRowData',
-          title     : `getSelectedRowData()`,
-          doc       : null,
+          id        : 'getselectedrowdata',
+          title     : `getSelectedRowData`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getSelectedRowData',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode: `grid.getSelectedRowData();`,
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getSelectedRowData();\n' +
+            '</pre></div>'
         },
         {
-          id        : 'getSelectedCellValue',
-          title     : `getSelectedCellValue()`,
-          doc       : null,
+          id        : 'getselectedcellvalue',
+          title     : `getSelectedCellValue`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getSelectedCellValue',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode:
+            "grid.getSelectedCellValue(&lt;dataField>);\n" +
+            "// example : get selected row's Name\n" +
+            "grid.getSelectedCellValue('firstname');",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getSelectedCellValue(<span style="color: #666666">&lt;</span>dataField<span style="color: #666666">&gt;</span>);\n' +
+            '<span style="color: #60a0b0; font-style: italic">// example : get selected row&#39;s Name</span>\n' +
+            'grid.getSelectedCellValue(<span style="color: #4070a0">&#39;firstname&#39;</span>);\n' +
+            '</pre></div>'
         },
         {
-          id        : 'getSelectedRowIndex',
-          title     : `getSelectedRowIndex()`,
-          doc       : null,
+          id        : 'getselectedrowindex',
+          title     : `getSelectedRowIndex`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getSelectedRowIndex',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode: `grid.getSelectedRowIndex();`,
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getSelectedRowIndex();\n' +
+            '</pre></div>'
         },
         {
-          id        : 'getSelectedRowIndexes',
-          title     : `getSelectedRowIndexes()`,
-          doc       : null,
+          id        : 'getselectedrowindexes',
+          title     : `getSelectedRowIndexes`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getSelectedRowIndexes',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode: `grid.getSelectedRowIndexes();`,
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getSelectedRowIndexes();\n' +
+            '</pre></div>'
         },
         {
-          id        : 'hideColumn',
-          title     : `hideColumn()`,
-          doc       : null,
+          id        : 'hidecolumn',
+          title     : `hideColumn`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#hideColumn',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode:
+            "// Syntax 1\n" +
+            "grid.hideColumn(&lt;dataField>);\n" +
+            "// example : hide Product\n" +
+            "grid.hideColumn('productname');\n\n" +
+            "// Syntax 2\n" +
+            "grid.hideColumn(&lt;Array-of-dataField>);\n" +
+            "// example : hide Name and Last Name\n" +
+            "grid.hideColumn(['firstname', 'lastname']);",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #60a0b0; font-style: italic">// Syntax 1</span>\n' +
+            'grid.hideColumn(<span style="color: #666666">&lt;</span>dataField<span style="color: #666666">&gt;</span>);\n' +
+            '<span style="color: #60a0b0; font-style: italic">// example : hide Product</span>\n' +
+            'grid.hideColumn(<span style="color: #4070a0">&#39;productname&#39;</span>);\n' +
+            '\n' +
+            '<span style="color: #60a0b0; font-style: italic">// Syntax 2</span>\n' +
+            'grid.hideColumn(<span style="color: #666666">&lt;</span><span style="color: #007020">Array</span><span style="color: #666666">-</span>of<span style="color: #666666">-</span>dataField<span style="color: #666666">&gt;</span>);\n' +
+            '<span style="color: #60a0b0; font-style: italic">// example : hide Name and Last Name</span>\n' +
+            'grid.hideColumn([<span style="color: #4070a0">&#39;firstname&#39;</span>, <span style="color: #4070a0">&#39;lastname&#39;</span>]);\n' +
+            '</pre></div>'
         },
         {
-          id        : 'showColumn',
-          title     : `showColumn()`,
-          doc       : null,
+          id        : 'showcolumn',
+          title     : `showColumn`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#showColumn',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode:
+            "// Syntax 1\n" +
+            "grid.showColumn(&lt;dataField>);\n" +
+            "// example : show Product\n" +
+            "grid.showColumn('productname');\n\n" +
+            "// Syntax 2\n" +
+            "grid.showColumn(&lt;Array-of-dataField>);\n" +
+            "// example : show Name and Last Name\n" +
+            "grid.showColumn(['firstname', 'lastname']);",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #60a0b0; font-style: italic">// Syntax 1</span>\n' +
+            'grid.showColumn(<span style="color: #666666">&lt;</span>dataField<span style="color: #666666">&gt;</span>);\n' +
+            '<span style="color: #60a0b0; font-style: italic">// example : show Product</span>\n' +
+            'grid.showColumn(<span style="color: #4070a0">&#39;productname&#39;</span>);\n' +
+            '\n' +
+            '<span style="color: #60a0b0; font-style: italic">// Syntax 2</span>\n' +
+            'grid.showColumn(<span style="color: #666666">&lt;</span><span style="color: #007020">Array</span><span style="color: #666666">-</span>of<span style="color: #666666">-</span>dataField<span style="color: #666666">&gt;</span>);\n' +
+            '<span style="color: #60a0b0; font-style: italic">// example : show Name and Last Name</span>\n' +
+            'grid.showColumn([<span style="color: #4070a0">&#39;firstname&#39;</span>, <span style="color: #4070a0">&#39;lastname&#39;</span>]);\n' +
+            '</pre></div>'
         },
         {
-          id        : 'updateCellValue',
-          title     : `updateCellValue()`,
-          doc       : null,
+          id        : 'updatecellvalue',
+          title     : `updateCellValue`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#updateCellValue',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode:
+            "grid.updateCellValue(&lt;rowBoundIndex>, &lt;dataField>, &lt;newValue>);\n" +
+            "// example : update Name of Row 2 to \"hello world\"\n" +
+            "grid.updateCellValue(1, 'firstname', 'hello world');",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.updateCellValue(<span style="color: #666666">&lt;</span>rowBoundIndex<span style="color: #666666">&gt;</span>, <span style="color: #666666">&lt;</span>dataField<span style="color: #666666">&gt;</span>, <span style="color: #666666">&lt;</span>newValue<span style="color: #666666">&gt;</span>);\n' +
+            '<span style="color: #60a0b0; font-style: italic">// example : update Name of Row 2 to &quot;hello world&quot;</span>\n' +
+            'grid.updateCellValue(<span style="color: #40a070">1</span>, <span style="color: #4070a0">&#39;firstname&#39;</span>, <span style="color: #4070a0">&#39;hello world&#39;</span>);\n' +
+            '</pre></div>'
         },
         {
-          id        : 'updateSelectedCellValue',
-          title     : `updateSelectedCellValue()`,
-          doc       : null,
+          id        : 'updateselectedcellvalue',
+          title     : `updateSelectedCellValue`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#updateSelectedCellValue',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode:
+            "grid.updateSelectedCellValue(&lt;dataField>, &lt;newValue>);\n" +
+            "// example : update selected row's Name to \"hello world\"\n" +
+            "grid.updateSelectedCellValue('firstname', 'hello world');",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.updateSelectedCellValue(<span style="color: #666666">&lt;</span>dataField<span style="color: #666666">&gt;</span>, <span style="color: #666666">&lt;</span>newValue<span style="color: #666666">&gt;</span>);\n' +
+            '<span style="color: #60a0b0; font-style: italic">// example : update selected row&#39;s Name to &quot;hello world&quot;</span>\n' +
+            'grid.updateSelectedCellValue(<span style="color: #4070a0">&#39;firstname&#39;</span>, <span style="color: #4070a0">&#39;hello world&#39;</span>);\n' +
+            '</pre></div>'
         },
         {
-          id        : 'getSourceUrl',
-          title     : `getSourceUrl()`,
-          doc       : null,
+          id        : 'getsourceurl',
+          title     : `getSourceUrl`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getSourceUrl',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode: `grid.getSourceUrl();`,
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getSourceUrl();\n' +
+            '</pre></div>'
         },
         {
-          id        : 'updateSourceUrl',
-          title     : `updateSourceUrl()`,
-          doc       : null,
+          id        : 'updatesourceurl',
+          title     : `updateSourceUrl`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#updateSourceUrl',
           desc      : null,
-          sourcecode: null,
-          colorcode: null
+          ratio     : '7,5',
+          sourcecode:
+            "grid.updateSourceUrl(&lt;newUrl>);\n" +
+            "// example : update source url to \"demo/customers-2.txt\"\n" +
+            "grid.updateSourceUrl('demo/customers-2.txt');",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.updateSourceUrl(<span style="color: #666666">&lt;</span>newUrl<span style="color: #666666">&gt;</span>);\n' +
+            '<span style="color: #60a0b0; font-style: italic">// example : update source url to &quot;demo/customers-2.txt&quot;</span>\n' +
+            'grid.updateSourceUrl(<span style="color: #4070a0">&#39;demo/customers-2.txt&#39;</span>);\n' +
+            '</pre></div>'
         },
-        // debounce
-        // getSearchParameters
-        // insertQueryString
-        // isEmptyString
-        // isNull
-        // isUndefined
-        // isUnset
-        // isValidKeyboardInput
-        // throttle
-        // transformObjectToString
-        // transformStringToObject
+      ],
+    },
+    {
+      // Append static methods
+      id    : 'statics',
+      title : 'Static Methods',
+      menu  : [
+        {
+          id        : 'debounce',
+          title     : `debounce`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.debounce',
+          desc      : 'Debounce function.',
+          static    : true,
+          sourcecode:
+            "const debounce_func = EDG.debounce(() => console.log('3 seconds passed without function being called again.'), 3000);\n" +
+            "debounce_func();",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">const</span> debounce_func <span style="color: #666666">=</span> EDG.debounce(() <span style="color: #666666">=&gt;</span> console.log(<span style="color: #4070a0">&#39;3 seconds passed without function being called again.&#39;</span>), <span style="color: #40a070">3000</span>);\n' +
+            'debounce_func();\n' +
+            '</pre></div>'
+        },
+        {
+          id        : 'getsearchparameters',
+          title     : `getSearchParameters`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.getSearchParameters',
+          desc      : 'Get query string of an URL.',
+          static    : true,
+          sourcecode:
+            "// get current browser tab query string\n" +
+            "EDG.getSearchParameters();\n" +
+            "// get given url query string\n" +
+            "EDG.getSearchParameters(\"url.php?a=1&b=2\");",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #60a0b0; font-style: italic">// get current browser tab query string</span>\n' +
+            'EDG.getSearchParameters();\n' +
+            '<span style="color: #60a0b0; font-style: italic">// get given url query string</span>\n' +
+            'EDG.getSearchParameters(<span style="color: #4070a0">&quot;url.php?a=1&amp;b=2&quot;</span>);\n' +
+            '</pre></div>'
+        },
+        {
+          id        : 'insertquerystring',
+          title     : `insertQueryString`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.insertQueryString',
+          desc      : 'Append query string to an URL.',
+          static    : true,
+          sourcecode: 'EDG.insertQueryString("url.php", { p1: 1, p2: 2 });',
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%">EDG.insertQueryString(<span style="color: #4070a0">&quot;url.php&quot;</span>, { p1<span style="color: #666666">:</span> <span style="color: #40a070">1</span>, p2<span style="color: #666666">:</span> <span style="color: #40a070">2</span> });\n' +
+            '</pre></td></tr></table></div>'
+        },
+        {
+          id        : 'isemptystring',
+          title     : `isEmptyString`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.isEmptyString',
+          desc      : 'Check input is an empty string.',
+          static    : true,
+          sourcecode:
+            "// return true\n" +
+            "EDG.isEmptyString('');\n" +
+            "// return false\n" +
+            "EDG.isEmptyString('string');\n" +
+            "EDG.isEmptyString(1);",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #60a0b0; font-style: italic">// return true</span>\n' +
+            'EDG.isEmptyString(<span style="color: #4070a0">&#39;&#39;</span>);\n' +
+            '<span style="color: #60a0b0; font-style: italic">// return false</span>\n' +
+            'EDG.isEmptyString(<span style="color: #4070a0">&#39;string&#39;</span>);\n' +
+            'EDG.isEmptyString(<span style="color: #40a070">1</span>);\n' +
+            '</pre></td></tr></table></div>'
+        },
+        {
+          id        : 'isnull',
+          title     : `isNull`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.isNull',
+          desc      : 'Check input is null.',
+          static    : true,
+          sourcecode:
+            "// return true\n" +
+            "EDG.isNull(null);\n" +
+            "EDG.isNull('null');\n" +
+            "// return false\n" +
+            "EDG.isNull('null', true/* identital equal */);\n" +
+            "EDG.isNull(1);\n" +
+            "EDG.isNull('string');",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #60a0b0; font-style: italic">// return true</span>\n' +
+            'EDG.isNull(<span style="color: #007020; font-weight: bold">null</span>);\n' +
+            'EDG.isNull(<span style="color: #4070a0">&#39;null&#39;</span>);\n' +
+            '<span style="color: #60a0b0; font-style: italic">// return false</span>\n' +
+            'EDG.isNull(<span style="color: #4070a0">&#39;null&#39;</span>, <span style="color: #007020; font-weight: bold">true</span><span style="color: #60a0b0; font-style: italic">/* identital equal */</span>);\n' +
+            'EDG.isNull(<span style="color: #40a070">1</span>);\n' +
+            'EDG.isNull(<span style="color: #4070a0">&#39;string&#39;</span>);\n' +
+            '</pre></td></tr></table></div>'
+        },
+        {
+          id        : 'isundefined',
+          title     : `isUndefined`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.isUndefined',
+          desc      : 'Check input is undefined.',
+          static    : true,
+          sourcecode:
+            "// return true\n" +
+            "EDG.isUndefined(undefined);\n" +
+            "EDG.isUndefined('undefined');\n" +
+            "// return false\n" +
+            "EDG.isUndefined('undefined', true/* identital equal */);\n" +
+            "EDG.isUndefined(1);\n" +
+            "EDG.isUndefined('string');",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #60a0b0; font-style: italic">// return true</span>\n' +
+            'EDG.isUndefined(<span style="color: #007020; font-weight: bold">undefined</span>);\n' +
+            'EDG.isUndefined(<span style="color: #4070a0">&#39;undefined&#39;</span>);\n' +
+            '<span style="color: #60a0b0; font-style: italic">// return false</span>\n' +
+            'EDG.isUndefined(<span style="color: #4070a0">&#39;undefined&#39;</span>, <span style="color: #007020; font-weight: bold">true</span><span style="color: #60a0b0; font-style: italic">/* identital equal */</span>);\n' +
+            'EDG.isUndefined(<span style="color: #40a070">1</span>);\n' +
+            'EDG.isUndefined(<span style="color: #4070a0">&#39;string&#39;</span>);\n' +
+            '</pre></td></tr></table></div>'
+        },
+        {
+          id        : 'isunset',
+          title     : `isUnset`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.isUnset',
+          desc      : 'Check input is unset.',
+          static    : true,
+          sourcecode:
+            "// return true\n" +
+            "EDG.isUnset(null);\n" +
+            "EDG.isUnset(undefined);\n" +
+            "EDG.isUnset('');\n" +
+            "// return false\n" +
+            "EDG.isUndefined('0');\n" +
+            "EDG.isUndefined(0);\n" +
+            "EDG.isUndefined({ a: 1 });",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #60a0b0; font-style: italic">// return true</span>\n' +
+            'EDG.isUnset(<span style="color: #007020; font-weight: bold">null</span>);\n' +
+            'EDG.isUnset(<span style="color: #007020; font-weight: bold">undefined</span>);\n' +
+            'EDG.isUnset(<span style="color: #4070a0">&#39;&#39;</span>);\n' +
+            '<span style="color: #60a0b0; font-style: italic">// return false</span>\n' +
+            'EDG.isUndefined(<span style="color: #4070a0">&#39;0&#39;</span>);\n' +
+            'EDG.isUndefined(<span style="color: #40a070">0</span>);\n' +
+            'EDG.isUndefined({ a<span style="color: #666666">:</span> <span style="color: #40a070">1</span> });\n' +
+            '</pre></td></tr></table></div>'
+        },
+        {
+          id        : 'isvalidkeyboardinput',
+          title     : `isValidKeyboardInput`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.isValidKeyboardInput',
+          desc      : 'Check whether is a valid keyboard input.',
+          static    : true,
+          sourcecode:
+            "$('input').keyup(e => {\n" +
+            "  if (EDG.isValidKeyboardInput(e)) {\n" +
+            "    // coding...\n" +
+            "  }\n" +
+            "});",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%">$(<span style="color: #4070a0">&#39;input&#39;</span>).keyup(e <span style="color: #666666">=&gt;</span> {\n' +
+            '  <span style="color: #007020; font-weight: bold">if</span> (EDG.isValidKeyboardInput(e)) {\n' +
+            '    <span style="color: #60a0b0; font-style: italic">// coding...</span>\n' +
+            '  }\n' +
+            '});\n' +
+            '</pre></td></tr></table></div>'
+        },
+        {
+          id        : 'throttle',
+          title     : `throttle`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.throttle',
+          desc      : 'Throttle function.',
+          static    : true,
+          sourcecode:
+            "const throttle_func = EDG.throttle(() => console.log('This function will execute at most once every 3 seconds.'), 3000);\n" +
+            "throttle_func();",
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">const</span> throttle_func <span style="color: #666666">=</span> EDG.throttle(() <span style="color: #666666">=&gt;</span> console.log(<span style="color: #4070a0">&#39;This function will execute at most once every 3 seconds.&#39;</span>), <span style="color: #40a070">3000</span>);\n' +
+            'throttle_func();\n' +
+            '</pre></td></tr></table></div>'
+        },
+        {
+          id        : 'transformobjecttostring',
+          title     : `transformObjectToString`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.transformObjectToString',
+          desc      : 'Transform Object to String.',
+          static    : true,
+          sourcecode: 'EDG.transformObjectToString({ a: 1, b: 2 });',
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%">EDG.transformObjectToString({ a<span style="color: #666666">:</span> <span style="color: #40a070">1</span>, b<span style="color: #666666">:</span> <span style="color: #40a070">2</span> });\n' +
+            '</pre></td></tr></table></div>'
+        },
+        {
+          id        : 'transformstringtoobject',
+          title     : `transformStringToObject`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.transformStringToObject',
+          desc      : 'Transform String to Object.',
+          static    : true,
+          sourcecode: 'EDG.transformStringToObject("a=1&b=2");',
+          colorcode :
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">EDG<span style="color: #666666">.</span>transformStringToObject(<span style="color: #4070a0">&quot;a=1&amp;b=2&quot;</span>);\n' +
+            '</pre></div>'
+        },
       ],
     },
     // {
@@ -1519,7 +1946,7 @@ style : friendly
     //       doc       : null,
     //       desc      : null,
     //       sourcecode: null,
-    //       colorcode: null
+    //       colorcode : null
     //     },
     //   ],
     // },
@@ -1583,7 +2010,7 @@ style : friendly
   }
 
   const source = {
-    localdata: data,
+    // localdata: data,
     localdata: JSON.parse(JSON.stringify(data)),
     datatype: "array",
     datafields: [
@@ -1602,13 +2029,13 @@ style : friendly
   const dateFormat = 'yyyy-MM-dd';
   // const dateFormat = 'd';
   const columns = [
-    { text: 'Name', datafield: 'firstname', width: 100, editable: false, columngroup: 'buyer' },
-    { text: 'Last Name', datafield: 'lastname', width: 100, editable: false, columngroup: 'buyer' },
-    { text: 'Product', datafield: 'productname', minWidth: 200, editable: false },
-    { text: 'Sales Date', datafield: 'salesdate', width: 100, align: 'center', cellsalign: 'center', cellsformat: dateFormat, editable: false },
-    { text: 'Quantity', datafield: 'quantity', width: 80, align: 'right', cellsalign: 'right', editable: false },
-    { text: 'Unit Price', datafield: 'price', width: 90, align: 'right', cellsalign: 'right', cellsformat: 'c2', editable: false },
-    { text: 'Total', datafield: 'total', width: 90, align: 'right', cellsalign: 'right', cellsformat: 'c2', editable: false },
+    { text: 'Name', datafield: 'firstname', width: 100, columngroup: 'buyer' },
+    { text: 'Last Name', datafield: 'lastname', width: 100, columngroup: 'buyer' },
+    { text: 'Product', datafield: 'productname', minWidth: 200 },
+    { text: 'Sales Date', datafield: 'salesdate', width: 100, align: 'center', cellsalign: 'center', cellsformat: dateFormat, columntype: 'datetimeinput' },
+    { text: 'Quantity', datafield: 'quantity', width: 80, align: 'right', cellsalign: 'right', columntype: 'numberinput' },
+    { text: 'Unit Price', datafield: 'price', width: 90, align: 'right', cellsalign: 'right', cellsformat: 'c2', columntype: 'numberinput' },
+    { text: 'Total', datafield: 'total', width: 90, align: 'right', cellsalign: 'right', cellsformat: 'c2', columntype: 'numberinput' },
     { text: 'Check', datafield: 'selected', width: 50, columntype: 'checkbox' },
   ];
 
@@ -1718,7 +2145,7 @@ style : friendly
     dataSource          : JSON.parse(JSON.stringify(source)),
   });
 
-  // Component : Reload
+  // Components : Reload
   const edg_reloadbutton = new EnhanceDataGrid({
     id          : '#edg_reloadbutton',
     buttonTheme : 'material-purple',
@@ -1736,7 +2163,7 @@ style : friendly
     const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 
     // if any scroll is attempted, set this to the previous value
-    window.onscroll = function () {
+    window.onscroll = function() {
       window.scrollTo(scrollLeft, scrollTop);
     };
 
@@ -1744,10 +2171,10 @@ style : friendly
   }
 
   function enableScroll() {
-    window.onscroll = function () { };
+    window.onscroll = function() { };
   }
 
-  // Component : Add
+  // Components : Add
   const edg_addbutton = new EnhanceDataGrid({
     id          : '#edg_addbutton',
     buttonTheme : 'material-purple',
@@ -1783,7 +2210,7 @@ style : friendly
     ]
   });
 
-  // Component : Edit
+  // Components : Edit
   const edg_editbutton = new EnhanceDataGrid({
     id          : '#edg_editbutton',
     buttonTheme : 'material-purple',
@@ -1836,7 +2263,7 @@ style : friendly
     ]
   });
 
-  // Component : Delete
+  // Components : Delete
   const edg_deletebutton = new EnhanceDataGrid({
     id          : '#edg_deletebutton',
     buttonTheme : 'material-purple',
@@ -1866,19 +2293,24 @@ style : friendly
         check: function() {
           const passed = edg_deletebutton.getSelectedRowData().id % 2 == 0;
 
-          if (passed)
+          if (passed) {
             window.alert('Checking passed, continue delete progress.');
-          else
-            $.alert({
-              columnClass       : 'medium',
-              animation         : 'zoom',
-              closeAnimation    : 'zoom',
-              animateFromElement: false,
-              backgroundDismiss : true,
-              escapeKey         : true,
-              title             : '',
-              content           :'Odd row return <span style="color:red;">false</span>, click on even row to return <span style="color:blue;">true</span>.',
-            });
+          } else {
+            if ($.alert) {
+              $.alert({
+                columnClass       : 'medium',
+                animation         : 'zoom',
+                closeAnimation    : 'zoom',
+                animateFromElement: false,
+                backgroundDismiss : true,
+                escapeKey         : true,
+                title             : '',
+                content           :'Odd row return <span style="color:red;">false</span>, click on even row to return <span style="color:blue;">true</span>.',
+              });
+            } else {
+              window.alert('Odd row return false, click on even row to return true.');
+            }
+          }
 
           return passed
             ? true
@@ -1908,7 +2340,7 @@ style : friendly
     ]
   });
 
-  // Component : Print
+  // Components : Print
   const edg_printbutton = new EnhanceDataGrid({
     id          : '#edg_printbutton',
     buttonTheme : 'material-purple',
@@ -1924,7 +2356,7 @@ style : friendly
     ]
   });
 
-  // Component : Excel
+  // Components : Excel
   const edg_excelbutton = new EnhanceDataGrid({
     id          : '#edg_excelbutton',
     buttonTheme : 'material-purple',
@@ -1939,7 +2371,7 @@ style : friendly
     ]
   });
 
-  // Component : CSV
+  // Components : CSV
   const edg_csvbutton = new EnhanceDataGrid({
     id          : '#edg_csvbutton',
     buttonTheme : 'material-purple',
@@ -1954,7 +2386,7 @@ style : friendly
     ]
   });
 
-  // Component : Custom Button
+  // Components : Custom Button
   const edg_custombtnbutton = new EnhanceDataGrid({
     id          : '#edg_custombtnbutton',
     buttonTheme : 'material-purple',
@@ -1963,17 +2395,18 @@ style : friendly
     dataSource  : JSON.parse(JSON.stringify(source)),
     tbElement   : [
       {
-        button: 'custombutton',
-        icon  : 'fa-solid fa-earth',
-        text  : 'Hello World !',
-        click : function() {
+        button    : 'custombutton',
+        icon      : 'fa-solid fa-earth',
+        iconColor : 'yellow',
+        text      : 'Hello World !',
+        click: function() {
           window.alert('Hello World !');
         },
       },
     ]
   });
 
-  // Component : Custom Node
+  // Components : Custom Node
   const edg_custombutton = new EnhanceDataGrid({
     id          : '#edg_custombutton',
     altrows     : true,
@@ -1987,7 +2420,7 @@ style : friendly
     ]
   });
 
-  // Component : Divider
+  // Components : Divider
   const edg_divider = new EnhanceDataGrid({
     id          : '#edg_divider',
     buttonTheme : 'material-purple',
@@ -2005,7 +2438,7 @@ style : friendly
     ]
   });
 
-  // Component : Divider
+  // Components : Divider
   const edg_separator = new EnhanceDataGrid({
     id          : '#edg_separator',
     buttonTheme : 'material-purple',
@@ -2023,11 +2456,10 @@ style : friendly
     ]
   });
 
-  // Component : json source
+  // Data Sources : json source
   const edg_json_source = new EnhanceDataGrid({
     id        : '#edg_json_source',
     altrows   : true,
-    columns   : JSON.parse(JSON.stringify(columns)),
     columns   : [
       { text: 'Company Name', datafield: 'CompanyName', width: 250 },
       { text: 'Contact Name', datafield: 'ContactName', width: 150 },
@@ -2048,7 +2480,7 @@ style : friendly
     },
   });
 
-  // Component : data source
+  // Data Sources : data source
   const edg_data_source = new EnhanceDataGrid({
     id        : '#edg_data_source',
     altrows   : true,
@@ -2075,7 +2507,7 @@ style : friendly
     },
   });
 
-  // Feature : Row Index
+  // Features : Row Index
   const edg_rowindex = new EnhanceDataGrid({
     id            : '#edg_rowindex',
     altrows       : true,
@@ -2085,7 +2517,7 @@ style : friendly
     dataSource    : JSON.parse(JSON.stringify(source)),
   });
 
-  // Feature : Centered Columns
+  // Features : Centered Columns
   const edg_centeredcolumns = new EnhanceDataGrid({
     id              : '#edg_centeredcolumns',
     altrows         : true,
@@ -2097,7 +2529,7 @@ style : friendly
     ],
   });
 
-  // Feature : Centered Columns
+  // Features : Bootstrap Modal
   const edg_usebootstrap = new EnhanceDataGrid({
     id          : '#edg_usebootstrap',
     buttonTheme : 'material-purple',
@@ -2110,6 +2542,651 @@ style : friendly
       { button: 'edit' },
       { button: 'print' },
     ]
+  });
+
+  // Methods : clearSelection()
+  const edg_clearselection = new EnhanceDataGrid({
+    id        : '#edg_clearselection',
+    altrows   : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_clearselection_box2 = $('#edg_clearselection_box2');
+
+  edg_clearselection_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid mb-3">
+      <button id="edg_clearselection_button" type="button" class="btn btn-outline-secondary">Clear Selection</button>
+    </div>
+    <div id="edg_clearselection_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      No selection...
+    </div>
+  </div>`));
+
+  const edg_clearselection_button = $('#edg_clearselection_button');
+  const edg_clearselection_result = $('#edg_clearselection_result');
+
+  edg_clearselection_button.on('click', function(e) {
+    edg_clearselection.clearSelection();
+    edg_clearselection_result.html('Selection cleared...');
+  });
+
+  edg_clearselection.on('rowselect', function(e) {
+    const args = e.args;
+    const rowData = args.row;
+    const result = JSON.stringify(rowData);
+
+    edg_clearselection_result.html(result);
+  });
+
+  // Methods : refresh()
+  const edg_refresh = new EnhanceDataGrid({
+    id        : '#edg_refresh',
+    altrows   : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_refresh_box2 = $('#edg_refresh_box2');
+
+  edg_refresh_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid mb-3">
+      <button id="edg_refresh_button" type="button" class="btn btn-outline-secondary">Refresh</button>
+    </div>
+    <div id="edg_refresh_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      No selection...
+    </div>
+  </div>`));
+
+  const edg_refresh_button = $('#edg_refresh_button');
+  const edg_refresh_result = $('#edg_refresh_result');
+
+  edg_refresh_button.on('click', function(e) {
+    edg_refresh.refresh();
+    edg_refresh_result.html('Grid refreshed...');
+  });
+
+  edg_refresh.on('rowselect', function(e) {
+    const args = e.args;
+    const rowData = args.row;
+    const result = JSON.stringify(rowData);
+
+    edg_refresh_result.html(result);
+  });
+
+  // Methods : updateBoundData()
+  const edg_updatebounddata = new EnhanceDataGrid({
+    id        : '#edg_updatebounddata',
+    altrows   : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_updatebounddata_box2 = $('#edg_updatebounddata_box2');
+
+  edg_updatebounddata_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid mb-3">
+      <button id="edg_updatebounddata_button" type="button" class="btn btn-outline-secondary">Update Bound Data</button>
+    </div>
+    <div id="edg_updatebounddata_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      Try sort any column and then select a row...
+    </div>
+  </div>`));
+
+  const edg_updatebounddata_button = $('#edg_updatebounddata_button');
+  const edg_updatebounddata_result = $('#edg_updatebounddata_result');
+
+  edg_updatebounddata_button.on('click', function(e) {
+    edg_updatebounddata.updateBoundData();
+    edg_updatebounddata_result.html('Bound data updated...');
+  });
+
+  edg_updatebounddata.on('rowselect', function(e) {
+    const args = e.args;
+    const rowData = args.row;
+    const result = JSON.stringify(rowData);
+
+    edg_updatebounddata_result.html(result);
+  });
+
+  // Methods : on()
+  const edg_on = new EnhanceDataGrid({
+    id        : '#edg_on',
+    altrows   : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_on_box2 = $('#edg_on_box2');
+
+  edg_on_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="mb-3 border rounded p-1">
+      The '<i class="text-danger">rowselect</i>' event was registerd with Grid.
+      Try selecting a row to display the row data.
+    </div>
+    <div id="edg_on_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      Try select a row...
+    </div>
+  </div>`));
+
+  const edg_on_result = $('#edg_on_result');
+
+  edg_on.on('rowselect', function(e) {
+    const args = e.args;
+    const rowData = args.row;
+    const result = JSON.stringify(rowData);
+
+    edg_on_result.html(result);
+  });
+
+  // Methods : getAllDirty()
+  const edg_getalldirty = new EnhanceDataGrid({
+    id        : '#edg_getalldirty',
+    altrows   : true,
+    editable  : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_getalldirty_box2 = $('#edg_getalldirty_box2');
+
+  edg_getalldirty_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="mb-3 border rounded p-1">
+      Try editing the data in the grid; all dirty data will appear in the result box with the format<br />
+      { <span class="text-primary">row_id</span> : { <span class="text-success">dirty_data</span> } }.
+    </div>
+    <div id="edg_getalldirty_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      All changed data will be displayed here...
+    </div>
+  </div>`));
+
+  const edg_getalldirty_result = $('#edg_getalldirty_result');
+
+  edg_getalldirty.on('cellvaluechanged', function(e) {
+    const all_dirty = edg_getalldirty.getAllDirty();
+
+    edg_getalldirty_result.html(JSON.stringify(all_dirty));
+  });
+
+  // Methods : getDirty()
+  const edg_getdirty = new EnhanceDataGrid({
+    id        : '#edg_getdirty',
+    altrows   : true,
+    editable  : true,
+    columns   : [
+      { text: 'Is Valid ?', datafield: 'selected', width: 70, align: 'center', columntype: 'checkbox' },
+      { text: 'Name', datafield: 'firstname', width: 100, editable: false },
+      { text: 'Product', datafield: 'productname', minWidth: 200, editable: false },
+      { text: 'Unit Price', datafield: 'price', width: 90, align: 'right', cellsalign: 'right', cellsformat: 'c2', editable: false },
+    ],
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_getdirty_box2 = $('#edg_getdirty_box2');
+
+  edg_getdirty_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="mb-3 border rounded p-1">
+      The <b>getDirty</b>() method only works with the <i class="text-danger">checkedDatafield</i> property.
+      It is useful in situations where you want to keep track of only one column's data changes.<br />
+      Return result format { <span class="text-primary">row_id</span> : <span class="text-success">dirty_data</span> }.
+    </div>
+    <div id="edg_getdirty_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      All changed data will be displayed here...
+    </div>
+  </div>`));
+
+  const edg_getdirty_result = $('#edg_getdirty_result');
+
+  edg_getdirty.on('cellvaluechanged', function(e) {
+    const all_dirty = edg_getdirty.getDirty();
+
+    edg_getdirty_result.html(JSON.stringify(all_dirty));
+  });
+
+  // Methods : getCheckedItems()
+  const edg_getcheckeditems = new EnhanceDataGrid({
+    id        : '#edg_getcheckeditems',
+    altrows   : true,
+    editable  : true,
+    columns   : [
+      { text: 'Is Valid ?', datafield: 'selected', width: 70, align: 'center', columntype: 'checkbox' },
+      { text: 'Name', datafield: 'firstname', width: 100, editable: false },
+      { text: 'Product', datafield: 'productname', minWidth: 200, editable: false },
+      { text: 'Unit Price', datafield: 'price', width: 90, align: 'right', cellsalign: 'right', cellsformat: 'c2', editable: false },
+    ],
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_getcheckeditems_box2 = $('#edg_getcheckeditems_box2');
+
+  edg_getcheckeditems_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="mb-3 border rounded p-1">
+      The <b>getCheckedItems</b>() method has the same function as the <b>getDiry</b>() method, except that getCheckedItems only keep track of valid data,
+      and the return result is an Array of the row IDs of the valid data.<br />
+      Return result format [<span class="text-primary">row_id</span>].
+    </div>
+    <div id="edg_getcheckeditems_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      All changed data will be displayed here...
+    </div>
+  </div>`));
+
+  const edg_getcheckeditems_result = $('#edg_getcheckeditems_result');
+
+  edg_getcheckeditems.on('cellvaluechanged', function(e) {
+    const all_dirty = edg_getcheckeditems.getCheckedItems();
+
+    edg_getcheckeditems_result.html(JSON.stringify(all_dirty));
+  });
+
+  // Methods : getCellValue()
+  const edg_getcellvalue = new EnhanceDataGrid({
+    id        : '#edg_getcellvalue',
+    altrows   : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_getcellvalue_box2 = $('#edg_getcellvalue_box2');
+
+  edg_getcellvalue_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid mb-3">
+      <button id="edg_getcellvalue_button" type="button" class="btn btn-outline-secondary">getCellValue(1, 'firstname')</button>
+    </div>
+    <div id="edg_getcellvalue_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      Click the button to display the value of rowindex 1, datafield 'firstname' here...<br /><br />
+      It is exactly the same with jqxGrid's "getcellvalue" method.
+    </div>
+  </div>`));
+
+  const edg_getcellvalue_button = $('#edg_getcellvalue_button');
+  const edg_getcellvalue_result = $('#edg_getcellvalue_result');
+
+  edg_getcellvalue_button.on('click', function(e) {
+    edg_getcellvalue_result.html(edg_getcellvalue.getCellValue(1, 'firstname'));
+  });
+
+  // Methods : getRows()
+  const edg_getrows = new EnhanceDataGrid({
+    id        : '#edg_getrows',
+    altrows   : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_getrows_box2 = $('#edg_getrows_box2');
+
+  edg_getrows_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid mb-3">
+      <button id="edg_getrows_button" type="button" class="btn btn-outline-secondary">Get Rows</button>
+    </div>
+    <div id="edg_getrows_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      Click the button to display bound data here...<br /><br />
+      It is exactly the same with jqxGrid's "getrows" method.
+    </div>
+  </div>`));
+
+  const edg_getrows_button = $('#edg_getrows_button');
+  const edg_getrows_result = $('#edg_getrows_result');
+
+  edg_getrows_button.on('click', function(e) {
+    edg_getrows_result.html(JSON.stringify(edg_getrows.getRows()));
+  });
+
+  // Methods : getRowData()
+  const edg_getrowdata = new EnhanceDataGrid({
+    id        : '#edg_getrowdata',
+    altrows   : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_getrowdata_box2 = $('#edg_getrowdata_box2');
+
+  edg_getrowdata_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid mb-3">
+      <button id="edg_getrowdata_button" type="button" class="btn btn-outline-secondary">Get Row Data</button>
+    </div>
+    <div id="edg_getrowdata_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      Click the button to display data of rowindex 1 here...<br /><br />
+      It is exactly the same with jqxGrid's "getrowdata" method.
+    </div>
+  </div>`));
+
+  const edg_getrowdata_button = $('#edg_getrowdata_button');
+  const edg_getrowdata_result = $('#edg_getrowdata_result');
+
+  edg_getrowdata_button.on('click', function(e) {
+    edg_getrowdata_result.html(JSON.stringify(edg_getrowdata.getRowData(1)));
+  });
+
+  // Methods : getSelectedRowData()
+  const edg_getselectedrowdata = new EnhanceDataGrid({
+    id        : '#edg_getselectedrowdata',
+    altrows   : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_getselectedrowdata_box2 = $('#edg_getselectedrowdata_box2');
+
+  edg_getselectedrowdata_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid mb-3">
+      <button id="edg_getselectedrowdata_button" type="button" class="btn btn-outline-secondary">Get Selected Row Data</button>
+    </div>
+    <div id="edg_getselectedrowdata_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      Select a row and click the button to display the row data here...
+    </div>
+  </div>`));
+
+  const edg_getselectedrowdata_button = $('#edg_getselectedrowdata_button');
+  const edg_getselectedrowdata_result = $('#edg_getselectedrowdata_result');
+
+  edg_getselectedrowdata_button.on('click', function(e) {
+    edg_getselectedrowdata_result.html(JSON.stringify(edg_getselectedrowdata.getSelectedRowData()));
+  });
+
+  // Methods : getSelectedCellValue()
+  const edg_getselectedcellvalue = new EnhanceDataGrid({
+    id        : '#edg_getselectedcellvalue',
+    altrows   : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_getselectedcellvalue_box2 = $('#edg_getselectedcellvalue_box2');
+
+  edg_getselectedcellvalue_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid mb-3">
+      <button id="edg_getselectedcellvalue_button" type="button" class="btn btn-outline-secondary">Get Selected Cell Value</button>
+    </div>
+    <div id="edg_getselectedcellvalue_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      Select a row and click the button to display the Name here...
+    </div>
+  </div>`));
+
+  const edg_getselectedcellvalue_button = $('#edg_getselectedcellvalue_button');
+  const edg_getselectedcellvalue_result = $('#edg_getselectedcellvalue_result');
+
+  edg_getselectedcellvalue_button.on('click', function(e) {
+    edg_getselectedcellvalue_result.html(JSON.stringify(edg_getselectedcellvalue.getSelectedCellValue('firstname')));
+  });
+
+  // Methods : getSelectedRowIndex()
+  const edg_getselectedrowindex = new EnhanceDataGrid({
+    id        : '#edg_getselectedrowindex',
+    altrows   : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_getselectedrowindex_box2 = $('#edg_getselectedrowindex_box2');
+
+  edg_getselectedrowindex_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid mb-3">
+      <button id="edg_getselectedrowindex_button" type="button" class="btn btn-outline-secondary">Get Selected Row Index</button>
+    </div>
+    <div id="edg_getselectedrowindex_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      Select a row and click the button to display the rowindex here...<br /><br />
+      It is exactly the same with jqxGrid's "getselectedrowindex" method.
+    </div>
+  </div>`));
+
+  const edg_getselectedrowindex_button = $('#edg_getselectedrowindex_button');
+  const edg_getselectedrowindex_result = $('#edg_getselectedrowindex_result');
+
+  edg_getselectedrowindex_button.on('click', function(e) {
+    edg_getselectedrowindex_result.html(JSON.stringify(edg_getselectedrowindex.getSelectedRowIndex()));
+  });
+
+  // Methods : getSelectedRowIndexes()
+  const edg_getselectedrowindexes = new EnhanceDataGrid({
+    id        : '#edg_getselectedrowindexes',
+    altrows   : true,
+    selectionmode: 'multiplerows',
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_getselectedrowindexes_box2 = $('#edg_getselectedrowindexes_box2');
+
+  edg_getselectedrowindexes_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid mb-3">
+      <button id="edg_getselectedrowindexes_button" type="button" class="btn btn-outline-secondary">Get Selected Row Index</button>
+    </div>
+    <div id="edg_getselectedrowindexes_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      Select few rows and click the button to display the rowindexes here...<br /><br />
+      It is exactly the same with jqxGrid's "getselectedrowindexes" method.
+    </div>
+  </div>`));
+
+  const edg_getselectedrowindexes_button = $('#edg_getselectedrowindexes_button');
+  const edg_getselectedrowindexes_result = $('#edg_getselectedrowindexes_result');
+
+  edg_getselectedrowindexes_button.on('click', function(e) {
+    edg_getselectedrowindexes_result.html(JSON.stringify(edg_getselectedrowindexes.getSelectedRowIndexes()));
+  });
+
+  // Methods : hideColumn()
+  const edg_hidecolumn = new EnhanceDataGrid({
+    id        : '#edg_hidecolumn',
+    altrows   : true,
+    selectionmode: 'multiplerows',
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_hidecolumn_box2 = $('#edg_hidecolumn_box2');
+
+  edg_hidecolumn_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid gap-2">
+      <button id="edg_hidecolumn_button1" type="button" class="btn btn-outline-secondary">Hide Product</button>
+      <button id="edg_hidecolumn_button2" type="button" class="btn btn-outline-secondary">Hide Name and Last Name</button>
+      <button id="edg_hidecolumn_button3" type="button" class="btn btn-outline-secondary">Show Hidden Columns</button>
+    </div>
+  </div>`));
+
+  const edg_hidecolumn_button1 = $('#edg_hidecolumn_button1');
+  const edg_hidecolumn_button2 = $('#edg_hidecolumn_button2');
+  const edg_hidecolumn_button3 = $('#edg_hidecolumn_button3');
+
+  edg_hidecolumn_button1.on('click', function(e) {
+    edg_hidecolumn.hideColumn('productname');
+  });
+
+  edg_hidecolumn_button2.on('click', function(e) {
+    edg_hidecolumn.hideColumn(['firstname', 'lastname']);
+  });
+
+  edg_hidecolumn_button3.on('click', function(e) {
+    edg_hidecolumn.showColumn(['productname', 'firstname', 'lastname']);
+  });
+
+  // Methods : showColumn()
+  const edg_showcolumn = new EnhanceDataGrid({
+    id        : '#edg_showcolumn',
+    altrows   : true,
+    selectionmode: 'multiplerows',
+    columns   : [
+      { text: 'Name', datafield: 'firstname', width: 100, columngroup: 'buyer', hidden: true },
+      { text: 'Last Name', datafield: 'lastname', width: 100, columngroup: 'buyer', hidden: true },
+      { text: 'Product', datafield: 'productname', minWidth: 200, hidden: true },
+      { text: 'Sales Date', datafield: 'salesdate', width: 100, align: 'center', cellsalign: 'center', cellsformat: dateFormat, columntype: 'datetimeinput' },
+      { text: 'Quantity', datafield: 'quantity', width: 80, align: 'right', cellsalign: 'right', columntype: 'numberinput' },
+      { text: 'Unit Price', datafield: 'price', width: 90, align: 'right', cellsalign: 'right', cellsformat: 'c2', columntype: 'numberinput' },
+      { text: 'Total', datafield: 'total', width: 90, align: 'right', cellsalign: 'right', cellsformat: 'c2', columntype: 'numberinput' },
+      { text: 'Check', datafield: 'selected', width: 50, columntype: 'checkbox' },
+    ],
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_showcolumn_box2 = $('#edg_showcolumn_box2');
+
+  edg_showcolumn_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid gap-2">
+      <button id="edg_showcolumn_button1" type="button" class="btn btn-outline-secondary">Show Product</button>
+      <button id="edg_showcolumn_button2" type="button" class="btn btn-outline-secondary">Show Name and Last Name</button>
+      <button id="edg_showcolumn_button3" type="button" class="btn btn-outline-secondary">Hide Product, Name, Last Name</button>
+    </div>
+  </div>`));
+
+  const edg_showcolumn_button1 = $('#edg_showcolumn_button1');
+  const edg_showcolumn_button2 = $('#edg_showcolumn_button2');
+  const edg_showcolumn_button3 = $('#edg_showcolumn_button3');
+
+  edg_showcolumn_button1.on('click', function(e) {
+    edg_showcolumn.showColumn('productname');
+  });
+
+  edg_showcolumn_button2.on('click', function(e) {
+    edg_showcolumn.showColumn(['firstname', 'lastname']);
+  });
+
+  edg_showcolumn_button3.on('click', function(e) {
+    edg_showcolumn.hideColumn(['productname', 'firstname', 'lastname']);
+  });
+
+  // Methods : updateCellValue()
+  const edg_updatecellvalue = new EnhanceDataGrid({
+    id        : '#edg_updatecellvalue',
+    altrows   : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_updatecellvalue_box2 = $('#edg_updatecellvalue_box2');
+
+  edg_updatecellvalue_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid mb-3">
+      <button id="edg_updatecellvalue_button" type="button" class="btn btn-outline-secondary">Update Cell Value</button>
+    </div>
+    <div id="edg_updatecellvalue_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      Click the button to set the Name of Row 2 to "hello world"...<br /><br />
+      It is exactly the same with jqxGrid's "setcellvalue" method.
+    </div>
+  </div>`));
+
+  const edg_updatecellvalue_button = $('#edg_updatecellvalue_button');
+
+  edg_updatecellvalue_button.on('click', function(e) {
+    edg_updatecellvalue.updateCellValue(1, 'firstname', 'hello world');
+  });
+
+  // Methods : updateSelectedCellValue()
+  const edg_updateselectedcellvalue = new EnhanceDataGrid({
+    id        : '#edg_updateselectedcellvalue',
+    altrows   : true,
+    columns   : JSON.parse(JSON.stringify(columns)),
+    dataSource: JSON.parse(JSON.stringify(source)),
+  });
+
+  const edg_updateselectedcellvalue_box2 = $('#edg_updateselectedcellvalue_box2');
+
+  edg_updateselectedcellvalue_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid mb-3">
+      <button id="edg_updateselectedcellvalue_button" type="button" class="btn btn-outline-secondary">Update Selected Cell Value</button>
+    </div>
+    <div id="edg_updateselectedcellvalue_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      Select a row and click the button to set the Name of Row to "hello world"...<br /><br />
+      It is exactly the same with jqxGrid's "setcellvalue" method.
+    </div>
+  </div>`));
+
+  const edg_updateselectedcellvalue_button = $('#edg_updateselectedcellvalue_button');
+
+  edg_updateselectedcellvalue_button.on('click', function(e) {
+    edg_updateselectedcellvalue.updateSelectedCellValue('firstname', 'hello world');
+  });
+
+  // Methods : getSourceUrl()
+  const edg_getsourceurl = new EnhanceDataGrid({
+    id        : '#edg_getsourceurl',
+    altrows   : true,
+    columns   : [
+      { text: 'Company Name', datafield: 'CompanyName', width: 250 },
+      { text: 'Contact Name', datafield: 'ContactName', width: 150 },
+      { text: 'Contact Title', datafield: 'ContactTitle', width: 180 },
+      { text: 'City', datafield: 'City', width: 120 },
+      { text: 'Country', datafield: 'Country' },
+    ],
+    jsonSource: {
+      url: 'demo/customers.txt',
+      datafields: [
+        { name: 'CompanyName', type: 'string' },
+        { name: 'ContactName', type: 'string' },
+        { name: 'ContactTitle', type: 'string' },
+        { name: 'Address', type: 'string' },
+        { name: 'City', type: 'string' },
+        { name: 'Country', type: 'string' },
+      ]
+    },
+  });
+
+  const edg_getsourceurl_box2 = $('#edg_getsourceurl_box2');
+
+  edg_getsourceurl_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid mb-3">
+      <button id="edg_getsourceurl_button" type="button" class="btn btn-outline-secondary">Get Source URL</button>
+    </div>
+    <div id="edg_getsourceurl_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      Click the button to display the source url here...
+    </div>
+  </div>`));
+
+  const edg_getsourceurl_button = $('#edg_getsourceurl_button');
+  const edg_getsourceurl_result = $('#edg_getsourceurl_result');
+
+  edg_getsourceurl_button.on('click', function(e) {
+    edg_getsourceurl_result.html(edg_getsourceurl.getSourceUrl());
+  });
+
+  // Methods : updateSourceUrl()
+  const edg_updatesourceurl = new EnhanceDataGrid({
+    id        : '#edg_updatesourceurl',
+    altrows   : true,
+    columns   : [
+      { text: 'Company Name', datafield: 'CompanyName', width: 250 },
+      { text: 'Contact Name', datafield: 'ContactName', width: 150 },
+      { text: 'Contact Title', datafield: 'ContactTitle', width: 180 },
+      { text: 'City', datafield: 'City', width: 120 },
+      { text: 'Country', datafield: 'Country' },
+    ],
+    jsonSource: {
+      url: 'demo/customers.txt',
+      datafields: [
+        { name: 'CompanyName', type: 'string' },
+        { name: 'ContactName', type: 'string' },
+        { name: 'ContactTitle', type: 'string' },
+        { name: 'Address', type: 'string' },
+        { name: 'City', type: 'string' },
+        { name: 'Country', type: 'string' },
+      ]
+    },
+  });
+
+  const edg_updatesourceurl_box2 = $('#edg_updatesourceurl_box2');
+
+  edg_updatesourceurl_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+    <div class="d-grid gap-2 mb-3">
+      <button id="edg_updatesourceurl_button1" type="button" class="btn btn-outline-secondary">Update To New URL</button>
+      <button id="edg_updatesourceurl_button2" type="button" class="btn btn-outline-secondary">Update To Original Source URL</button>
+    </div>
+    <div id="edg_updatesourceurl_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      Click the button to display the source url here...
+    </div>
+  </div>`));
+
+  const edg_updatesourceurl_button1 = $('#edg_updatesourceurl_button1');
+  const edg_updatesourceurl_button2 = $('#edg_updatesourceurl_button2');
+  const edg_updatesourceurl_result = $('#edg_updatesourceurl_result');
+
+  edg_updatesourceurl_button1.on('click', function(e) {
+    edg_updatesourceurl.updateSourceUrl('demo/customers-2.txt');
+    edg_updatesourceurl_result.html('Grid source URL updated to <i class="text-danger">demo/customers-2.txt</i>');
+  });
+
+  edg_updatesourceurl_button2.on('click', function(e) {
+    edg_updatesourceurl.updateSourceUrl('demo/customers.txt');
+    edg_updatesourceurl_result.html('Grid source URL updated to <i class="text-danger">demo/customers.txt</i>');
   });
 
   // ===================================================================================================================

@@ -1,6 +1,6 @@
-# [EnhanceDataGrid.js](https://www.rightpristine.com/zeikman/EnhanceDataGrid/) (Beta v0.2.0)
+# [EnhanceDataGrid.js](https://www.rightpristine.com/zeikman/EnhanceDataGrid/) (Beta v0.3.0)
 
-EnhanceDataGrid is a library that extend [jQWidgets](https://www.jqwidgets.com/)' [jqxGrid](https://www.jqwidgets.com/jquery-widgets-demo/demos/jqxgrid/index.htm) widget and provides a lot of useful built-in methods and functionalities to deal with data retriving, filtering, manipulating, etc.
+EnhanceDataGrid is a library that extends [jQWidgets](https://www.jqwidgets.com/)' [jqxGrid](https://www.jqwidgets.com/jquery-widgets-demo/demos/jqxgrid/index.htm) widget and provides a lot of useful built-in methods and functionalities to deal with data retrieving, updateing, filtering, finding, etc.
 
 ## Get Started
 
@@ -59,7 +59,6 @@ const grid = new EnhanceDataGrid({
   id                  : '#grid_id',
   jsonSource          : source_json_object,
   dataSource          : source_url_object,
-  dataAdapter         : new $.jqx.dataAdapter(source_url_object), // same as jqxGrid's "source" property
   checkedDatafield    : 'checked',
   useBootstrap        : true,
   searchInput         : true,
@@ -79,10 +78,10 @@ const grid = new EnhanceDataGrid({
 <table>
   <thead>
     <tr>
-      <th>Properties</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Default</th>
+      <th style="text-align: left;">Properties</th>
+      <th style="text-align: left;">Type</th>
+      <th style="text-align: left;">Description</th>
+      <th style="text-align: left;">Default</th>
     </tr>
   </thead>
   <tbody>
@@ -101,15 +100,16 @@ const grid = new EnhanceDataGrid({
     <tr>
       <td>dataSource</td>
       <td>String</td>
-      <td>Grid's data source, needed when dataAdapter not provided.</td>
+      <td>Grid's data source object.</td>
+      <!-- <td>Grid's data source, needed when dataAdapter not provided.</td> -->
       <td></td>
     </tr>
-    <tr>
+    <!-- <tr>
       <td>dataAdapter</td>
       <td>Object</td>
       <td>Grid's data adapter, needed when dataSource not provided.</td>
       <td></td>
-    </tr>
+    </tr> -->
     <!-- <tr>
       <td>dateFormat</td>
       <td>String</td>
@@ -209,9 +209,10 @@ const grid = new EnhanceDataGrid({
     <tr>
       <td>tbElement</td>
       <td>Object[]</td>
-      <td>Grid's toolbar built-in component.
-        <br />Button component: 'reload', 'add', 'edit', 'delete', 'print', 'excel', 'csv', 'custombutton', 'custom'
-        <br />Other component: 'divider', 'separator'
+      <td>
+        Grid's toolbar built-in component.<br />
+        <br />Button component: 'reload', 'add', 'edit', 'delete', 'print', 'excel', 'csv', 'custombutton', 'custom'.<br />
+        <br />Other component: 'divider', 'separator'.
       </td>
       <td>[ ]</td>
     </tr>
@@ -223,8 +224,8 @@ const grid = new EnhanceDataGrid({
 <table>
   <thead>
     <tr>
-      <th>Method</th>
-      <th>Description</th>
+      <th style="text-align: left;">Method</th>
+      <th style="text-align: left;">Description</th>
     </tr>
   </thead>
   <tbody>
@@ -316,8 +317,8 @@ const grid = new EnhanceDataGrid({
 <table>
   <thead>
     <tr>
-      <th>Method</th>
-      <th>Description</th>
+      <th style="text-align: left;">Static Method</th>
+      <th style="text-align: left;">Description</th>
     </tr>
   </thead>
   <tbody>

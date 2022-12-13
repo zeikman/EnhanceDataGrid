@@ -524,7 +524,6 @@ class EnhanceDataGrid {
   /** @private */
   #_props = {
     // same with jqxGrid properties
-    theme               : '',
     width               : '100%',
     height              : '100%',
     sortable            : true,
@@ -532,14 +531,12 @@ class EnhanceDataGrid {
     filtermode          : 'excel',
     enabletooltips      : true,
     showaggregates      : true,
-    // showstatusbar       : false, // true,  // TODO: update to false and detect showRowIndex
     // EnhanceDataGrid default properties
     autoFilter          : false,
     autoFind            : false,
     autoDelayTiming     : 300, // milisecond
     bootstrap           : false,
     buttonTheme         : '',
-    // buttonTheme         : 'material-purple',
     centeredColumns     : false,
     checkedDatafield    : 'selected',
     dataAdapter         : '', // new $.jqx.dataAdapter(''),
@@ -621,7 +618,7 @@ class EnhanceDataGrid {
   }
 
   /** @private */
-  #_initJqxgrid(syntax) {
+  #_initJqxGrid(syntax) {
     this.#_syntax = syntax;
 
     this.#_extractZProps();
@@ -722,7 +719,7 @@ class EnhanceDataGrid {
     } else {
       return console.error(`[EnhanceDataGrid] Error: DOM element '${gridId}' not found !`);
     }
-  } // end of #_initJqxgrid
+  } // end of #_initJqxGrid
 
   /** @private */
   #_initDirtyFlagEvent() {
@@ -1410,19 +1407,20 @@ class EnhanceDataGrid {
 
             // user-defined checking function, returns True|False
             if (proceed) {
-              const data      = self.getSelectedRowData();
-              const data_id   = data.id;
-              const _params   = self.#_getGridButtonProps(tbElement, button_id, 'param');
-              const _success  = self.#_getGridButtonProps(tbElement, button_id, 'success');
-              const _fail     = self.#_getGridButtonProps(tbElement, button_id, 'fail');
-              let _url        = self.#_getGridButtonProps(tbElement, button_id, 'url');
-              let _title      = self.#_getGridButtonProps(tbElement, button_id, 'title');
-              let _message    = self.#_getGridButtonProps(tbElement, button_id, 'message');
-              let _debug      = self.#_getGridButtonProps(tbElement, button_id, 'debug');
+              const data        = self.getSelectedRowData();
+              const data_id     = data.id;
+              const _params     = self.#_getGridButtonProps(tbElement, button_id, 'param');
+              const _postparams = self.#_getGridButtonProps(tbElement, button_id, 'postparam');
+              const _success    = self.#_getGridButtonProps(tbElement, button_id, 'success');
+              const _fail       = self.#_getGridButtonProps(tbElement, button_id, 'fail');
+              let _url          = self.#_getGridButtonProps(tbElement, button_id, 'url');
+              // let _title        = self.#_getGridButtonProps(tbElement, button_id, 'title');
+              let _message      = self.#_getGridButtonProps(tbElement, button_id, 'message');
+              let _debug        = self.#_getGridButtonProps(tbElement, button_id, 'debug');
 
               // TODO: think about usage of title in 'delete' button
               // _title = (typeof _title === 'undefined' || _title === '') ? 'Delete Record' : _title;
-              _title = 'Delete Record';
+              const _title = 'Delete Record';
               _message = (typeof _message === 'undefined' || _message === '') ? 'Are you sure to delete selected record ?' : _message;
 
               if (typeof _url === 'undefined' || _url === undefined || typeof _url === 'null' || _url === null) {
@@ -1434,90 +1432,172 @@ class EnhanceDataGrid {
                 return false;
               }
 
-              $.confirm({
-                useBootstrap      : zProps.useBootstrap,
-                columnClass       : 'medium',
-                animation         : 'zoom',
-                closeAnimation    : 'zoom',
-                animateFromElement: false,
-                backgroundDismiss : true,
-                escapeKey         : true,
-                title             : _title,
-                content           : _message,
-                buttons: {
-                  confirm: {
-                    btnClass: 'btn-danger',
-                    action: () => {
-                      // NOTE: user-defined operation
-                      if (typeof _url === 'function') {
-                        if (data_id)
-                          _url(data, data_id);
-                        else
-                          _url(data);
-                      }
+              if ($.confirm) {
+                $.confirm({
+                  useBootstrap      : zProps.useBootstrap,
+                  columnClass       : 'medium',
+                  animation         : 'zoom',
+                  closeAnimation    : 'zoom',
+                  animateFromElement: false,
+                  backgroundDismiss : true,
+                  escapeKey         : true,
+                  title             : _title,
+                  content           : _message,
+                  buttons: {
+                    confirm: {
+                      btnClass: 'btn-danger',
+                      action: () => {
+                        // NOTE: user-defined operation
+                        if (typeof _url === 'function') {
+                          if (data_id)
+                            _url(data, data_id);
+                          else
+                            _url(data);
+                        }
 
-                      // NOTE: default delete operation, expected url is {String}
-                      if (typeof _url === 'string') {
-                        if (data_id) {
-                          // insert data ID
-                          const _post = { id: data_id };
+                        // NOTE: default delete operation, expected url is {String}
+                        if (typeof _url === 'string') {
+                          if (data_id) {
+                            // insert data ID
+                            let _post = { id: data_id };
 
-                          // TODO: should _post append to _url ???
-                          // _url = EnhanceDataGrid.insertQueryString(_url, _post);
+                            // TODO: need to show example in demo, 13 dec 2022
+                            // combine extra parameters for _post
+                            if (_postparams && typeof _postparams === 'object')
+                              _post = EnhanceDataGrid.insertQueryString(_post, _postparams);
 
-                          // TODO: combine extra params to _url_? or _post_?
-                          // combine extra parameters
-                          if (_params && typeof _params === 'object')
-                            _url = EnhanceDataGrid.insertQueryString(_url, _params);
+                            if (_postparams && typeof _postparams === 'function')
+                              _post = EnhanceDataGrid.insertQueryString(_post, _postparams());
 
-                          if (_params && typeof _params === 'function')
-                            _url = EnhanceDataGrid.insertQueryString(_url, _params());
+                            // TODO: should _post append to _url ???
+                            // SOLUTION: no, _post decided not to append to _url, both should isolate, 13 dec 2022
+                            // _url = EnhanceDataGrid.insertQueryString(_url, _post);
 
-                          if (_debug === true || _debug === 'true') {
-                            console.log(`%c$.post() to '${_url}' with $_POST ${JSON.stringify(_post)}`, 'color: red; font-weight: bold;');
+                            // combine extra parameters for _url
+                            if (_params && typeof _params === 'object')
+                              _url = EnhanceDataGrid.insertQueryString(_url, _params);
 
-                            return true;
-                          }
+                            if (_params && typeof _params === 'function')
+                              _url = EnhanceDataGrid.insertQueryString(_url, _params());
 
-                          $.post(_url, _post)
-                            .done(resp => {
-                              if (_success && typeof _success === 'function')
-                                _success(resp);
-                              else
-                                self.refresh();
-                            })
-                            .fail(resp => {
-                              if (_fail && typeof _fail === 'function')
-                                _fail(resp);
-                              else {
-                                self.#_alert({ title: 'Delete Failed', content: resp, });
-                              }
+                            if (_debug === true || _debug === 'true') {
+                              console.log(`%c$.post() to '${_url}' with $_POST ${JSON.stringify(_post)}`, 'color: red; font-weight: bold;');
+
+                              return true;
+                            }
+
+                            $.post(_url, _post)
+                              .done(resp => {
+                                if (_success && typeof _success === 'function')
+                                  _success(resp);
+                                else
+                                  self.refresh();
+                              })
+                              .fail(resp => {
+                                if (_fail && typeof _fail === 'function')
+                                  _fail(resp);
+                                else {
+                                  self.#_alert({ title: 'Delete Failed', content: resp, });
+                                }
+                              });
+                              // .always(resp => {
+                              //   alert("finished");
+                              // });
+                          } else {
+                            self.#_alert({
+                              title   : controlledMessage.no_data_id.title,
+                              content : controlledMessage.no_data_id.message,
                             });
-                            // .always(resp => {
-                            //   alert("finished");
-                            // });
-                        } else {
-                          self.#_alert({
-                            title   : controlledMessage.no_data_id.title,
-                            content : controlledMessage.no_data_id.message,
-                          });
 
-                          return false;
+                            return false;
+                          }
                         }
                       }
+                    },
+                    cancel: () => {},
+                    // somethingElse: {
+                    //   text     : 'Something else',
+                    //   btnClass : 'btn-blue',
+                    //   keys     : ['enter', 'shift'],
+                    //   action   : () => {
+                    //     $.alert('Something else?');
+                    //   }
+                    // }
+                  }
+                });
+
+                return;
+              } else {
+                const confirm = window.confirm(_message);
+
+                if (confirm) {
+                  // NOTE: user-defined operation
+                  if (typeof _url === 'function') {
+                    if (data_id)
+                      _url(data, data_id);
+                    else
+                      _url(data);
+                  }
+
+                  // NOTE: default delete operation, expected url is {String}
+                  if (typeof _url === 'string') {
+                    if (data_id) {
+                      // insert data ID
+                      const _post = { id: data_id };
+
+                      // TODO: need to show example in demo, 13 dec 2022
+                      // combine extra parameters for _post
+                      if (_postparams && typeof _postparams === 'object')
+                        _post = EnhanceDataGrid.insertQueryString(_post, _postparams);
+
+                      if (_postparams && typeof _postparams === 'function')
+                        _post = EnhanceDataGrid.insertQueryString(_post, _postparams());
+
+                      // TODO: should _post append to _url ???
+                      // SOLUTION: no, _post decided not to append to _url, both should isolate, 13 dec 2022
+                      // _url = EnhanceDataGrid.insertQueryString(_url, _post);
+
+                      // combine extra parameters
+                      if (_params && typeof _params === 'object')
+                        _url = EnhanceDataGrid.insertQueryString(_url, _params);
+
+                      if (_params && typeof _params === 'function')
+                        _url = EnhanceDataGrid.insertQueryString(_url, _params());
+
+                      if (_debug === true || _debug === 'true') {
+                        console.log(`%c$.post() to '${_url}' with $_POST ${JSON.stringify(_post)}`, 'color: red; font-weight: bold;');
+
+                        return true;
+                      }
+
+                      $.post(_url, _post)
+                        .done(resp => {
+                          if (_success && typeof _success === 'function')
+                            _success(resp);
+                          else
+                            self.refresh();
+                        })
+                        .fail(resp => {
+                          if (_fail && typeof _fail === 'function')
+                            _fail(resp);
+                          else {
+                            self.#_alert({ title: 'Delete Failed', content: resp, });
+                          }
+                        });
+                      // .always(resp => {
+                      //   alert("finished");
+                      // });
+                    } else {
+                      self.#_alert({
+                        title: controlledMessage.no_data_id.title,
+                        content: controlledMessage.no_data_id.message,
+                      });
+
+                      return false;
                     }
-                  },
-                  cancel: () => {},
-                  // somethingElse: {
-                  //   text     : 'Something else',
-                  //   btnClass : 'btn-blue',
-                  //   keys     : ['enter', 'shift'],
-                  //   action   : () => {
-                  //     $.alert('Something else?');
-                  //   }
-                  // }
+                  }
                 }
-              });
+              }
             }
 
             $(this).keyup();
@@ -2108,6 +2188,7 @@ class EnhanceDataGrid {
             case 'admin'          : obj = v.admin; break;
             case 'visible'        : obj = v.visible; break;
             case 'param'          : obj = v.param; break;
+            case 'postparam'      : obj = v.postparam; break;
             case 'keyword'        : obj = v.keyword; break;
             case 'column'         : obj = v.column; break;
             case 'columnprefix'   : obj = v.columnprefix; break;
@@ -2359,7 +2440,7 @@ class EnhanceDataGrid {
    * @param {String}          prop.jqxGridProperties.filtermode='excel'   - The property specifies the type of rendering of the Filter Menu.
    * @param {Boolean}         prop.jqxGridProperties.enabletooltips=true  - Enable/Disable the grid tooltips.
    * @param {Boolean}         prop.jqxGridProperties.showaggregates=true  - Show/Hide the aggregates in the grid's statusbar.
-   * @!param {Boolean}         prop.jqxGridProperties.showstatusbar=true   - Show/Hide the grid's statusbar.
+   * @!param {Boolean}         prop.jqxGridProperties.showstatusbar=true  - Show/Hide the grid's statusbar.
    *
    * @param {Object}          prop                                - EnhanceDataGrid object properties, sets [prop]{@link EnhanceDataGrid#prop}.
    * @param {String}          prop.id                             - Grid's ID.
@@ -2384,8 +2465,8 @@ class EnhanceDataGrid {
    * @param {Number}          [prop.autoDelayTiming=300]          - Timing delay for autoFilter/autoFind (in miliseconds).
    * @param {Object[]}        [prop.tbElement=[ ]]                - Grid's toolbar built-in component, see "<code>tbElement.</code>" parameter for component properties.
    *
-   * @!param {Object}          tbElement                         - Built-in components, "prop.tbElement" object properties.
-   * @param {String}          tbElement.button                  - Available button components : (<i style="color: gray;">width default behaviour and icon</i>)
+   * @!param {Object}          tbElement                           - Built-in components, "prop.tbElement" object properties.
+   * @param {String}          tbElement.button                    - Available button components : (<i style="color: gray;">width default behaviour and icon</i>)
    * <table class="table table-bordered table-condensed table-striped">
    *   <tr>
    *     <td><b><i>reload</i></b></td>
@@ -2463,6 +2544,7 @@ class EnhanceDataGrid {
    *                                                              <br />&emsp;<i style="color:red;">NOTE: </i><i><b>'selected_row_data_id'</b> will available automatically when <b>'id'</b> field detected in data object</i>
    * @param {Function}        [tbElement.check]                 - Checking function before implement default behaviours of buttons, only applicable to <b>'add'</b>, <b>'edit'</b>, <b>'delete'</b> buttons. Return False to stop button's default behaviours.
    * @param {Object|Function} [tbElement.param]                 - Function to append dynamic arguments into <code>url</code> property, only functional when <code>url</code> provided is in <b>String form</b>.
+   * @param {Object|Function} [tbElement.postparam]             - Function to append dynamic arguments into <code>POST AJX</code>, only applicable to <b>'delete'</b> button.
    * @param {Function}        [tbElement.success]               - Callback function if delete action successed, only applicable to <b>'delete'</b> button.
    * @param {Function}        [tbElement.fail]                  - Callback function if delete action failed, only applicable to <b>'delete'</b> button.
    * @!param print action's location, only applicable to <b>'print'</b> button.
@@ -2602,7 +2684,7 @@ class EnhanceDataGrid {
 
     this.#_props = { ...this.#_props, ...args };
 
-    this.#_initJqxgrid(syntax);
+    this.#_initJqxGrid(syntax);
   } // end of constructor
 
   /**
@@ -2934,9 +3016,7 @@ class EnhanceDataGrid {
    *   ...
    * });
    */
-  // TODO: enhance to provide turning off 'off' event-listener ??
   on(event, callback) {
-    this.jqxGrid.off(event);
     this.jqxGrid.on(event, callback);
   } // end of on
 
