@@ -1,9 +1,10 @@
 // jsdoc theme - https://cancerberosgx.github.io/jsdoc-templates-demo/demo/
 // minami JSDoc theme for LOKE - https://yarnpkg.com/package/loke-jsdoc-theme
 // v2.1.0 - https://www.jsdelivr.com/package/npm/loke-jsdoc-theme
+// minify - https://www.elegantthemes.com/blog/tips-tricks/how-to-minify-your-websites-css-html-javascript
 
 // NOTE: Develop with following libraries ========== ========== ========== ========== ========== ========== ========== ==========
-{/*
+/*
   <!-- jQuery v1.11.1 -->
   <script type="text/javascript" src="jqwidgets-ver14.0.0/scripts/jquery-1.11.1.min.js"></script>
 
@@ -56,7 +57,7 @@
   <!-- EnhanceDataGrid -->
   <link rel="stylesheet" href="jQWidgets/EnhanceDataGrid.css" type="text/css" />
   <script type="text/javascript" src="jQWidgets/EnhanceDataGrid.js"></script>
-*/}
+*/
 
 // NOTE: expand jQuery functions ========== ========== ========== ========== ========== ========== ========== ==========
 // clear hidden input value
