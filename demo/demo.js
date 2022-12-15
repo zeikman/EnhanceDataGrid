@@ -88,207 +88,26 @@ EDG = EnhanceDataGrid;
 
   // Generate content DOM
 
-  function generate_aside_content(opt) {
-    const id = opt.id;
-    const title = opt.title;
-    const menu = opt.menu;
-    const ul = $(`<ul class="list-unstyled ps-3 collapse" id="${id}-collapse" />`);
-
-    menu.forEach(el => {
-      const li = $(`<li><a class="d-inline-flex align-items-center rounded text-decoration-none" href="#${el.id}">${el.title}</a></li>`);
-      ul.append(li);
-    });
-
-    const section = $(`<li class="my-2">
-      <button class="btn d-inline-flex align-items-center collapsed border-0" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#${id}-collapse" aria-controls="${id}-collapse">${title}</button>
-    </li>`);
-
-    return section.append(ul);
+  function show_loading(id) {
+    $(`#${id}_text_waiting`).hide();
+    $(`#${id}_text_loading`).removeClass('d-none');
   }
 
-  function generate_main_content(opt) {
-    const id = opt.id;
-    const title = opt.title;
-    const menu = opt.menu;
-    const sectionId = id.slice(0, id.length - 1);
-    // console.log(id);
-    // console.log(title);
-    // console.log(menu);
-    // console.log(sectionId);
-
-    const section = $(`<section id="${sectionId}">
-      <h2 class="sticky-xl-top fw-bold pt-3 pt-xl-5 pb-2 pb-xl-3">${title}</h2>
-    </section>`);
-
-    menu.forEach(el => {
-
-      /*/
-      // in jqxTabs
-      const article = $(`<article class="my-3" id="${el.id}">
-        <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
-          <h3>${el.title.replace(' (', '<br>(')}</h3>
-          <a class="d-flex align-items-center" href="${doc}">Documentation</a>
-        </div>
-
-        <div class="position-relative grid-container">
-          <div class="position-absolute w-100">
-            <div class="tab-container">
-              <ul>
-                <li>Demo</li>
-                <li>View Source</li>
-              </ul>
-              <div class="p-1">
-                <div id="edg_${el.id}"></div>
-              </div>
-              <div>
-                Source Code
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>`);
-      /*/
-      // in bootstrap card
-      let article_class = 'my-3';
-
-      if (el.is_last == 1)
-        article_class += ' mb-5 pb-5';
-
-      let body = `<div id="edg_${el.id}"></div>`;
-
-      if (el.ratio) {
-        const ratio = el.ratio.split(',');
-        const flex_body = $(`<div class="d-flex flex-row h-100"></div>`);
-
-        ratio.forEach((rate, index) => {
-          const numb = index + 1;
-          let box = $(`<div id="edg_${el.id}_box${numb}" class="col-${rate} _border"></div>`);
-
-          // first box is always the EDG demo
-          if (index == 0)
-            box = $(`<div id="edg_${el.id}_box${numb}" class="col-${rate} _border">
-              <div id="edg_${el.id}"></div>
-            </div>`);
-
-          flex_body.append(box);
-        });
-
-        body = flex_body[0].outerHTML;
-      }
-
-      let desc = '';
-
-      if (el.desc)
-        desc = `<div class="card-header">${el.desc}</div>`;
-
-      let sourcecode = '';
-
-      if (el.sourcecode)
-        sourcecode =
-          `<div class="card-footer text-muted">
-            <pre class="m-0">${el.sourcecode}</pre>
-          </div>`;
-
-      if (el.colorcode)
-        sourcecode =
-          `<div class="card-footer text-muted overflow-hidden p-0">
-            ${el.colorcode}
-          </div>`;
-
-      let doc = el.doc;
-
-      if (!doc)
-        doc = 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html';
-
-      let article = $(`<article class="${article_class}" id="${el.id}">
-        <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
-          <h3>${el.title.replace(' (', '<br>(')}</h3>
-          <a class="d-flex align-items-center" target="_blank" href="${doc}">Documentation</a>
-        </div>
-
-        <div class="position-relative">
-          <div class="card">
-            ${desc}
-            <div class="card-body grid-container">
-              ${body}
-            </div>
-            ${sourcecode}
-          </div>
-        </div>
-      </article>`);
-
-      if (el.static) {
-        if (el.desc)
-          desc = `<div class="card-body">${el.desc}</div>`;
-
-        article = $(`<article class="${article_class}" id="${el.id}">
-          <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
-            <h3>${el.title.replace(' (', '<br>(')}</h3>
-            <a class="d-flex align-items-center" target="_blank" href="${doc}">Documentation</a>
-          </div>
-
-          <div class="position-relative">
-            <div class="card">
-              ${desc}
-              ${sourcecode}
-            </div>
-          </div>
-        </article>`);
-      }
-      //*/
-
-      section.append(article);
-
-      // if (el.id == 'defaultfunc') {
-      //   console.log(el.sourcecode);
-      //   window.eval(el.sourcecode);
-      // }
-    });
-
-    return section;
+  function next_funct(id, index, function_list, object_list) {
+    index++;
+    setTimeout(() => function_list[index] && function_list[index].call(object_list[index], index, function_list, object_list), 0);
+    $(`#${id}_loading`).addClass('d-none');
+    console.log(`${id} done`);
+    $('.edg-status').html(`page status : ${id} done`);
   }
 
-  function init_edg(opt, func_list) {
-    const id = opt.id;
-    const title = opt.title;
-    const menu = opt.menu;
-    const sectionId = id.slice(0, id.length - 1);
-    // console.log(id);
-    // console.log(title);
-    // console.log(menu);
-    // console.log(sectionId);
-
-    const test_run_function = [
-      // 'enterfilter',
-      // 'enterfind',
-    ];
-    let runs = true;
-
-    menu.forEach(el => {
-      /*  */
-      // runs = test_run_function.indexOf(el.id) > -1;
-
-      // if (typeof el.init === 'function' && runs)
-      //   el.init();
-
-      /*  */
-      // list.push(el.init);
-
-      /*  */
-      const index = Object.keys(func_list).length + 1;
-      // console.log(index);
-      func_list[index] = el.init;
-    });
-
-    return func_list;
+  function last_init() {
+    // NOTE: last init()
+    console.log('page ready');
+    $('.edg-status').html(`page ready`);
+    $('.btn-outline-secondary.disabled').removeClass('disabled');
+    setTimeout(() => $('.edg-status').html(``), 1000);
   }
-
-  const toc = $('#toc');
-  const toc_aside = toc.children(0);
-  // toc_aside.empty();
-
-  const main_body = $('.bd-cheatsheet')
-  // main_body.empty();
 
   // Append default functionality
   const default_functionality_content = $(`<li><a class="d-inline-flex align-items-center rounded text-decoration-none" href="#defaultfunctionality">Default Functionality</a></li>`);
@@ -374,11 +193,18 @@ EDG = EnhanceDataGrid;
           id        : 'enterfilter',
           title     : `Filter ( Enter )`,
           doc       : null,
-          init      : function(index, function_list) {
-            // Search Input : Filter Data
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
             $('#edg_enterfilter').on('bindingcomplete', function() {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_enterfilter = new EnhanceDataGrid({
@@ -396,15 +222,6 @@ EDG = EnhanceDataGrid;
             Filter mode filters out unmatched data in the desire column.
             Simply sort the desire column, key in the keyword in the search input, then press ENTER.
             Press ESC to clear the filter.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id          : '#edg_enterfilter',\n" +
-            "  buttonTheme : 'material-purple',\n" +
-            "  altrows     : true,\n" +
-            "  <i class='text-danger'>searchInput : true</i>,\n" +
-            "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource  : source,\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
             '2\n' +
@@ -427,11 +244,18 @@ EDG = EnhanceDataGrid;
           id        : 'enterfind',
           title     : `Find ( Ctrl+Enter )`,
           doc       : null,
-          init      : function(index, function_list) {
-            // Search Input : Find Data
-            $('#edg_enterfind').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_enterfind').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_enterfind = new EnhanceDataGrid({
@@ -452,19 +276,6 @@ EDG = EnhanceDataGrid;
           desc      : `If you prefer 'Find' data instead of 'Filter' data, setup grid in Find mode using property <i class="text-danger">showFindButton : true</i>.
             The (Ctrl + Enter) keyboard shortcut feature is included with Find mode and can be enabled by setup the property <i class="text-danger">enterFind : true</i>.
             The example below shows a grid in pure Find mode. `,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id              : '#edg_enterfind',\n" +
-            "  buttonTheme     : 'material-purple',\n" +
-            "  altrows         : true,\n" +
-            "  <i class='text-danger'>searchInput     : true</i>,\n" +
-            "  <i class='text-danger'>showFindButton  : true</i>,\n" +
-            "  <i class='text-danger'>enterFind       : true</i>,\n" +
-            "  <i class='text-danger'>showFilterButton: false</i>,\n" +
-            "  <i class='text-danger'>enterFilter     : false</i>,\n" +
-            "  columns         : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource      : source,\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -495,11 +306,18 @@ EDG = EnhanceDataGrid;
           id        : 'enterfilterfind',
           title     : `Find & Fitler`,
           doc       : null,
-          init      : function(index, function_list) {
-            // Search Input : Find/Filter Data
-            $('#edg_enterfilterfind').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_enterfilterfind').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_enterfilterfind = new EnhanceDataGrid({
@@ -516,17 +334,6 @@ EDG = EnhanceDataGrid;
             return true;
           },
           desc      : `Filter and Find modes can be enabled at the same time.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id            : '#edg_enterfilterfind',\n" +
-            "  buttonTheme   : 'material-purple',\n" +
-            "  altrows       : true,\n" +
-            "  <i class='text-danger'>searchInput   : true</i>,\n" +
-            "  <i class='text-danger'>showFindButton: true</i>,\n" +
-            "  <i class='text-danger'>enterFind     : true</i>,\n" +
-            "  columns       : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource    : source,\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -553,11 +360,18 @@ EDG = EnhanceDataGrid;
           id        : 'autofilter',
           title     : `Auto Fitler`,
           doc       : null,
-          init      : function(index, function_list) {
-            // Search Input : Auto Filter Data
-            $('#edg_autofilter').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_autofilter').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_autofilter = new EnhanceDataGrid({
@@ -573,16 +387,6 @@ EDG = EnhanceDataGrid;
             return true;
           },
           desc      : `Auto Filter enables automatic data filtering after user input.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id          : '#edg_autofilter',\n" +
-            "  buttonTheme : 'material-purple',\n" +
-            "  altrows     : true,\n" +
-            "  searchInput : true,\n" +
-            "  autoFilter  : true,\n" +
-            "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource  : source,\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
             '2\n' +
@@ -607,11 +411,18 @@ EDG = EnhanceDataGrid;
           id        : 'autofind',
           title     : `Auto Find`,
           doc       : null,
-          init      : function(index, function_list) {
-            // Search Input : Auto Find Data
-            $('#edg_autofind').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_autofind').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_autofind = new EnhanceDataGrid({
@@ -627,16 +438,6 @@ EDG = EnhanceDataGrid;
             return true;
           },
           desc      : `Auto Find enables automatic data finding after user input.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id          : '#edg_autofind',\n" +
-            "  buttonTheme : 'material-purple',\n" +
-            "  altrows     : true,\n" +
-            "  searchInput : true,\n" +
-            "  autoFind    : true,\n" +
-            "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource  : source,\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
             '2\n' +
@@ -661,11 +462,18 @@ EDG = EnhanceDataGrid;
           id        : 'autodelaytiming',
           title     : `Auto Delay Timing`,
           doc       : null,
-          init      : function(index, function_list) {
-            // Search Input : Auto Delay Timing
-            $('#edg_autodelaytiming').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_autodelaytiming').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_autodelaytiming = new EnhanceDataGrid({
@@ -683,17 +491,6 @@ EDG = EnhanceDataGrid;
           },
           desc      : `Auto Filter/Find performs data filtering/finding after certain amount of time after user input.
             The delay timing can be altered by setting the property <i class="text-danger">autoDelayTiming</i>.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id              : '#edg_autodelaytiming',\n" +
-            "  buttonTheme     : 'material-purple',\n" +
-            "  altrows         : true,\n" +
-            "  searchInput     : true,\n" +
-            "  autoFilter      : true,\n" +
-            "  autoDelayTiming : 500,\n" +
-            "  columns         : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource      : source,\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -720,11 +517,18 @@ EDG = EnhanceDataGrid;
           id        : 'filterrow',
           title     : `Filter Row`,
           doc       : null,
-          init      : function(index, function_list) {
-            // Search Input : Filter Row
-            $('#edg_filterrow').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_filterrow').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_filterrow = new EnhanceDataGrid({
@@ -743,17 +547,6 @@ EDG = EnhanceDataGrid;
           desc      : `The Search Input comes with a Filter Row show/hide control button.
             Property <i class="text-danger">showFilterRowButton</i> controls the Filter Row button's visibility.
             The example below enables the Filter Row and hides the Filter Row control button.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id                  : '#edg_filterrow',\n" +
-            "  buttonTheme         : 'material-purple',\n" +
-            "  altrows             : true,\n" +
-            "  searchInput         : true,\n" +
-            "  showfilterrow       : true,\n" +
-            "  showFilterRowButton : false,\n" +
-            "  columns             : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource          : source,\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -787,11 +580,18 @@ EDG = EnhanceDataGrid;
           id        : 'reloadbutton',
           title     : 'Reload Button',
           doc       : null,
-          init      : function(index, function_list) {
-            // Components : Reload
-            $('#edg_reloadbutton').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_reloadbutton').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_reloadbutton = new EnhanceDataGrid({
@@ -809,17 +609,6 @@ EDG = EnhanceDataGrid;
           },
           desc      : `The Reload button will update the bound data, refresh the grid, and clear all row selections.
             If the data source is binding to an URL, it will trigger the AJAX request to re-get the bound data.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id          : '#edg_reloadbutton',\n" +
-            "  buttonTheme : 'material-purple',\n" +
-            "  searchInput : true,\n" +
-            "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource  : source,\n" +
-            "  tbElement   : [\n" +
-            "    { button: 'reload' },\n" +
-            "  ]\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -846,28 +635,35 @@ EDG = EnhanceDataGrid;
           id        : 'addbutton',
           title     : 'Add Button',
           doc       : null,
-          init      : function(index, function_list) {
-            function disableScroll() {
-              // Get the current page scroll position
-              const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-              const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+          init      : function(index, function_list, object_list) {
+            // function disableScroll() {
+            //   // Get the current page scroll position
+            //   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            //   const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 
-              // if any scroll is attempted, set this to the previous value
-              window.onscroll = function() {
-                window.scrollTo(scrollLeft, scrollTop);
-              };
+            //   // if any scroll is attempted, set this to the previous value
+            //   window.onscroll = function() {
+            //     window.scrollTo(scrollLeft, scrollTop);
+            //   };
 
-              console.log('run me')
-            }
+            //   console.log('run me')
+            // }
 
-            function enableScroll() {
-              window.onscroll = function() { };
-            }
+            // function enableScroll() {
+            //   window.onscroll = function() { };
+            // }
 
-            // Components : Add
-            $('#edg_addbutton').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_addbutton').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_addbutton = new EnhanceDataGrid({
@@ -914,7 +710,6 @@ EDG = EnhanceDataGrid;
               <li>Setting the <i class="text-danger">modal</i> property with an ID will auto-open related Bootstrap Modal.</li>
               <li>Setting the <i class="text-danger">form</i> property with an ID will auto-clear all the relevant inputs within the form tag.</li>
             </ul>`,
-          sourcecode: '',
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -969,11 +764,18 @@ EDG = EnhanceDataGrid;
           id        : 'editbutton',
           title     : 'Edit Button',
           doc       : null,
-          init      : function(index, function_list) {
-            // Components : Edit
-            $('#edg_editbutton').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_editbutton').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_editbutton = new EnhanceDataGrid({
@@ -1100,11 +902,18 @@ EDG = EnhanceDataGrid;
           id        : 'deletebutton',
           title     : 'Delete Button',
           doc       : null,
-          init      : function(index, function_list) {
-            // Components : Delete
-            $('#edg_deletebutton').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_deletebutton').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_deletebutton = new EnhanceDataGrid({
@@ -1193,7 +1002,6 @@ EDG = EnhanceDataGrid;
               <li>Setting the <i class="text-danger">param</i> property in an Object will have it appended as static query string to the POST AJAX.</li>
               <li>If you would like to append some dynamic query string, setthe param property with a <i class="text-primary">Function</i> and return with an Object.</li>
             </ul>`,
-          sourcecode: '',
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -1274,11 +1082,18 @@ EDG = EnhanceDataGrid;
           id        : 'printbutton',
           title     : 'Print Button',
           doc       : null,
-          init      : function(index, function_list) {
-            // Components : Print
-            $('#edg_printbutton').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_printbutton').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_printbutton = new EnhanceDataGrid({
@@ -1299,21 +1114,6 @@ EDG = EnhanceDataGrid;
             return true;
           },
           desc: `The Print button open URL in new window tab.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id          : '#edg_printbutton',\n" +
-            "  buttonTheme : 'material-purple',\n" +
-            "  altrows     : true,\n" +
-            "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource  : source,\n" +
-            "  tbElement   : [\n" +
-            "    {\n" +
-            "      button: 'print',\n" +
-            "      text  : 'Documentation',\n" +
-            "      url   : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/doc/EnhanceDataGrid.html'\n" +
-            "    },\n" +
-            "  ]\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -1348,11 +1148,18 @@ EDG = EnhanceDataGrid;
           id        : 'excelbutton',
           title     : 'Excel Button',
           doc       : null,
-          init      : function(index, function_list) {
-            // Components : Excel
-            $('#edg_excelbutton').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_excelbutton').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_excelbutton = new EnhanceDataGrid({
@@ -1372,20 +1179,20 @@ EDG = EnhanceDataGrid;
             return true;
           },
           desc      : `The Excel button exports the bound data to an Excel file.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id          : '#edg_excelbutton',\n" +
-            "  buttonTheme : 'material-purple',\n" +
-            "  altrows     : true,\n" +
-            "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource  : source,\n" +
-            "  tbElement   : [\n" +
-            "    {\n" +
-            "      button  : 'excel',\n" +
-            "      filename: 'My_Excel_File',\n" +
-            "    },\n" +
-            "  ]\n" +
-            "});",
+          // sourcecode:
+          //   "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
+          //   "  id          : '#edg_excelbutton',\n" +
+          //   "  buttonTheme : 'material-purple',\n" +
+          //   "  altrows     : true,\n" +
+          //   "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
+          //   "  dataSource  : source,\n" +
+          //   "  tbElement   : [\n" +
+          //   "    {\n" +
+          //   "      button  : 'excel',\n" +
+          //   "      filename: 'My_Excel_File',\n" +
+          //   "    },\n" +
+          //   "  ]\n" +
+          //   "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -1418,11 +1225,18 @@ EDG = EnhanceDataGrid;
           id        : 'csvbutton',
           title     : 'CSV Button',
           doc       : null,
-          init      : function(index, function_list) {
-            // Components : CSV
-            $('#edg_csvbutton').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_csvbutton').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_csvbutton = new EnhanceDataGrid({
@@ -1442,20 +1256,6 @@ EDG = EnhanceDataGrid;
             return true;
           },
           desc      : `The CSV button exports the bound data to a CSV file.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id          : '#edg_csvbutton',\n" +
-            "  buttonTheme : 'material-purple',\n" +
-            "  altrows     : true,\n" +
-            "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource  : source,\n" +
-            "  tbElement   : [\n" +
-            "    {\n" +
-            "      button  : 'csv',\n" +
-            "      filename: 'My_CSV_File',\n" +
-            "    },\n" +
-            "  ]\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -1488,11 +1288,18 @@ EDG = EnhanceDataGrid;
           id        : 'custombtnbutton',
           title     : 'Custom Button',
           doc       : null,
-          init      : function(index, function_list) {
-            // Components : Custom Button
-            $('#edg_custombtnbutton').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_custombtnbutton').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_custombtnbutton = new EnhanceDataGrid({
@@ -1517,24 +1324,6 @@ EDG = EnhanceDataGrid;
             return true;
           },
           desc      : `You can use the CustomButton button to create your customised button.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id          : '#edg_custombtnbutton',\n" +
-            "  buttonTheme : 'material-purple',\n" +
-            "  altrows     : true,\n" +
-            "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource  : source,\n" +
-            "  tbElement   : [\n" +
-            "    {\n" +
-            "      button: 'custombutton',\n" +
-            "      icon  : 'fa-solid fa-earth',\n" +
-            "      text  : 'Hello World !',\n" +
-            "      click : function() {\n" +
-            "        window.alert('Hello World !');\n" +
-            "      },\n" +
-            "    },\n" +
-            "  ]\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -1577,11 +1366,18 @@ EDG = EnhanceDataGrid;
           id        : 'custombutton',
           title     : 'Custom Node',
           doc       : null,
-          init      : function(index, function_list) {
-            // Components : Custom Node
-            $('#edg_custombutton').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_custombutton').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_custombutton = new EnhanceDataGrid({
@@ -1600,19 +1396,6 @@ EDG = EnhanceDataGrid;
             return true;
           },
           desc      : `You can use the Custom button to create your own element.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id          : '#edg_custombutton',\n" +
-            "  altrows     : true,\n" +
-            "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource  : source,\n" +
-            "  tbElement   : [\n" +
-            "    {\n" +
-            "      button    : 'custom',\n" +
-            "      buttonNode: $('&lt;i class=\"text-primary\">Welcome to EnhanceDataGrid.js !</i>')\n" +
-            "    },\n" +
-            "  ]\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -1643,11 +1426,18 @@ EDG = EnhanceDataGrid;
           id        : 'divider',
           title     : 'Divider',
           doc       : null,
-          init      : function(index, function_list) {
-            // Components : Divider
-            $('#edg_divider').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_divider').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_divider = new EnhanceDataGrid({
@@ -1670,23 +1460,6 @@ EDG = EnhanceDataGrid;
             return true;
           },
           desc      : `Divider is used to expand the space between two elements.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id          : '#edg_divider',\n" +
-            "  buttonTheme : 'material-purple',\n" +
-            "  altrows     : true,\n" +
-            "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource  : source,\n" +
-            "  tbElement   : [\n" +
-            "    { button : 'reload' },\n" +
-            "    { button : 'divider' },\n" +
-            "    {\n" +
-            "      button: 'print',\n" +
-            "      text  : 'Documentation',\n" +
-            "      url   : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/doc/EnhanceDataGrid.html'\n" +
-            "    },\n" +
-            "  ]\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -1725,11 +1498,18 @@ EDG = EnhanceDataGrid;
           id        : 'separator',
           title     : 'Separator',
           doc       : null,
-          init      : function(index, function_list) {
-            // Components : Separator
-            $('#edg_separator').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_separator').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_separator = new EnhanceDataGrid({
@@ -1752,23 +1532,6 @@ EDG = EnhanceDataGrid;
             return true;
           },
           desc      : 'Separator create a gap between two elements.',
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id          : '#edg_separator',\n" +
-            "  buttonTheme : 'material-purple',\n" +
-            "  altrows     : true,\n" +
-            "  columns     : JSON.parse(JSON.stringify(columns)),\n" +
-            "  dataSource  : source,\n" +
-            "  tbElement   : [\n" +
-            "    { button : 'reload' },\n" +
-            "    { button : 'separator' },\n" +
-            "    {\n" +
-            "      button: 'custombutton',\n" +
-            "      icon  : 'none',\n" +
-            "      text  : 'Oh no... Do not leave me T_T',\n" +
-            "    },\n" +
-            "  ]\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -1823,11 +1586,18 @@ EDG = EnhanceDataGrid;
           id        : 'json_source',
           title     : 'JSON Source',
           doc       : null,
-          init      : function(index, function_list) {
-            // Data Sources : json source
-            $('#edg_json_source').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_json_source').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_json_source = new EnhanceDataGrid({
@@ -1858,30 +1628,6 @@ EDG = EnhanceDataGrid;
           desc      : `Property <i class="text-danger">jsonSource</i> is the simplest data source declaration.
             It is the same as the <i class="text-danger">dataSource</i> property with preset options : { datatype: 'json', id: 'id', cache: false }.
             You just need to specify the object property <i class="text-danger">url</i> and <i class="text-danger">datafields</i>.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id: '#edg_jsonsource',\n" +
-            "  altrows: true,\n" +
-            "  columns: JSON.parse(JSON.stringify(columns)),\n" +
-            "  columns: [\n" +
-            "    { text: 'Company Name', datafield: 'CompanyName', width: 250 },\n" +
-            "    { text: 'Contact Name', datafield: 'ContactName', width: 150 },\n" +
-            "    { text: 'Contact Title', datafield: 'ContactTitle', width: 180 },\n" +
-            "    { text: 'City', datafield: 'City', width: 120 },\n" +
-            "    { text: 'Country', datafield: 'Country' },\n" +
-            "  ],\n" +
-            "  jsonSource: {\n" +
-            "    url: 'demo/customers.txt',\n" +
-            "    datafields: [\n" +
-            "      { name: 'CompanyName', type: 'string' },\n" +
-            "      { name: 'ContactName', type: 'string' },\n" +
-            "      { name: 'ContactTitle', type: 'string' },\n" +
-            "      { name: 'Address', type: 'string' },\n" +
-            "      { name: 'City', type: 'string' },\n" +
-            "      { name: 'Country', type: 'string' },\n" +
-            "    ]\n" +
-            "  },\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -1932,11 +1678,18 @@ EDG = EnhanceDataGrid;
           id        : 'data_source',
           title     : 'DataSource',
           doc       : null,
-          init      : function(index, function_list) {
-            // Data Sources : data source
-            $('#edg_data_source').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_data_source').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_data_source = new EnhanceDataGrid({
@@ -1969,32 +1722,6 @@ EDG = EnhanceDataGrid;
           },
           desc      : `Property <i class="text-danger">dataSource</i> is the basic data source declaration for EnhanceDataGrid.
             It will be automatically passed into the jqxGrid's <i class="text-danger">source</i> property as the option object of <i class="text-primary">new</i> <i class="text-black">$.jqx.dataAdapter(<b>dataSource</b>)</i>.`,
-          sourcecode:
-            "<span class='text-primary'>new</span> <span class='text-black'>EnhanceDataGrid</span>({\n" +
-            "  id: '#edg_datasource',\n" +
-            "  altrows: true,\n" +
-            "  columns: JSON.parse(JSON.stringify(columns)),\n" +
-            "  columns: [\n" +
-            "    { text: 'Company Name', datafield: 'CompanyName', width: 250 },\n" +
-            "    { text: 'Contact Name', datafield: 'ContactName', width: 150 },\n" +
-            "    { text: 'Contact Title', datafield: 'ContactTitle', width: 180 },\n" +
-            "    { text: 'City', datafield: 'City', width: 120 },\n" +
-            "    { text: 'Country', datafield: 'Country' },\n" +
-            "  ],\n" +
-            "  dataSource: {\n" +
-            "    datatype: 'json',\n" +
-            "    id: 'CustomerID',\n" +
-            "    url: 'demo/customers.txt',\n" +
-            "    datafields: [\n" +
-            "      { name: 'CompanyName', type: 'string' },\n" +
-            "      { name: 'ContactName', type: 'string' },\n" +
-            "      { name: 'ContactTitle', type: 'string' },\n" +
-            "      { name: 'Address', type: 'string' },\n" +
-            "      { name: 'City', type: 'string' },\n" +
-            "      { name: 'Country', type: 'string' },\n" +
-            "    ]\n" +
-            "  },\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -2063,11 +1790,18 @@ EDG = EnhanceDataGrid;
           id        : 'rowindex',
           title     : `Row Index`,
           doc       : null,
-          init      : function(index, function_list) {
-            // Features : Row Index
-            $('#edg_rowindex').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_rowindex').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_rowindex = new EnhanceDataGrid({
@@ -2084,7 +1818,6 @@ EDG = EnhanceDataGrid;
           desc      : `By default, EnhanceDataGrid displays the row number along with the aggregate Row Total.
             You can simply hide the aggregate Row by setting jqxGrid's property <i class="text-danger">showstatusbar: false</i>.
             The <i class="text-danger">rowIndexWidth</i> property allows you to change the width of the row number column.`,
-          sourcecode: null,
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%">1\n' +
             '2\n' +
@@ -2107,11 +1840,18 @@ EDG = EnhanceDataGrid;
           id        : 'centeredcolumns',
           title     : `Centered Columns`,
           doc       : null,
-          init      : function(index, function_list) {
-            // Features : Centered Columns
-            $('#edg_centeredcolumns').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_centeredcolumns').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_centeredcolumns = new EnhanceDataGrid({
@@ -2128,7 +1868,6 @@ EDG = EnhanceDataGrid;
             return true;
           },
           desc      : `By setting <i class="text-danger">centeredColumns: true</i>, you can centre all columns at once. (All columns and column groups)`,
-          sourcecode: null,
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -2155,11 +1894,18 @@ EDG = EnhanceDataGrid;
           id        : 'usebootstrap',
           title     : `Bootstrap Modal`,
           doc       : null,
-          init      : function(index, function_list) {
-            // Features : Bootstrap Modal
-            $('#edg_usebootstrap').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_usebootstrap').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_usebootstrap = new EnhanceDataGrid({
@@ -2179,7 +1925,6 @@ EDG = EnhanceDataGrid;
             return true;
           },
           desc      : `Property <i class="text-danger">useBootstrap: true</i> will change the EnhanceDataGrid meseage to using Bootstrap Modal, if Bootstrap default variable is found.`,
-          sourcecode: '',
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"> 1\n' +
             ' 2\n' +
@@ -2227,11 +1972,18 @@ EDG = EnhanceDataGrid;
           id        : 'clearselection',
           title     : `clearSelection`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#clearSelection',
-          init      : function(index, function_list) {
-            // Methods : clearSelection()
-            $('#edg_clearselection').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_clearselection').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_clearselection = new EnhanceDataGrid({
@@ -2241,28 +1993,24 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_clearselection_box2 = $('#edg_clearselection_box2');
-
-            edg_clearselection_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_clearselection_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid mb-3">
-                <button id="edg_clearselection_button" type="button" class="btn btn-outline-secondary">Clear Selection</button>
+                <button id="edg_clearselection_button" type="button" class="btn btn-outline-secondary disabled">Clear Selection</button>
               </div>
               <div id="edg_clearselection_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
                 No selection...
               </div>
             </div>`));
 
-            const edg_clearselection_button = $('#edg_clearselection_button');
             const edg_clearselection_result = $('#edg_clearselection_result');
 
-            edg_clearselection_button.on('click', function(e) {
+            $('#edg_clearselection_button').on('click', function(e) {
               edg_clearselection.clearSelection();
               edg_clearselection_result.html('Selection cleared...');
             });
 
             edg_clearselection.on('rowselect', function(e) {
-              const args = e.args;
-              const rowData = args.row;
+              const rowData = e.args.row;
               const result = JSON.stringify(rowData);
 
               edg_clearselection_result.html(result);
@@ -2272,7 +2020,6 @@ EDG = EnhanceDataGrid;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode: `grid.clearSelection();`,
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.clearSelection();\n' +
             '</pre></div>'
@@ -2281,11 +2028,18 @@ EDG = EnhanceDataGrid;
           id        : 'refresh',
           title     : `refresh`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#refresh',
-          init      : function(index, function_list) {
-            // Methods : refresh()
-            $('#edg_refresh').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_refresh').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_refresh = new EnhanceDataGrid({
@@ -2295,21 +2049,18 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_refresh_box2 = $('#edg_refresh_box2');
-
-            edg_refresh_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_refresh_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid mb-3">
-                <button id="edg_refresh_button" type="button" class="btn btn-outline-secondary">Refresh</button>
+                <button id="edg_refresh_button" type="button" class="btn btn-outline-secondary disabled">Refresh</button>
               </div>
               <div id="edg_refresh_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
                 No selection...
               </div>
             </div>`));
 
-            const edg_refresh_button = $('#edg_refresh_button');
             const edg_refresh_result = $('#edg_refresh_result');
 
-            edg_refresh_button.on('click', function(e) {
+            $('#edg_refresh_button').on('click', function(e) {
               edg_refresh.refresh();
               edg_refresh_result.html('Grid refreshed...');
             });
@@ -2326,7 +2077,6 @@ EDG = EnhanceDataGrid;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode: `grid.refresh();`,
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.refresh();\n' +
             '</pre></div>'
@@ -2335,11 +2085,18 @@ EDG = EnhanceDataGrid;
           id        : 'updatebounddata',
           title     : `updateBoundData`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#updateBoundData',
-          init      : function(index, function_list) {
-            // Methods : updateBoundData()
-            $('#edg_updatebounddata').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_updatebounddata').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_updatebounddata = new EnhanceDataGrid({
@@ -2349,21 +2106,18 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_updatebounddata_box2 = $('#edg_updatebounddata_box2');
-
-            edg_updatebounddata_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_updatebounddata_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid mb-3">
-                <button id="edg_updatebounddata_button" type="button" class="btn btn-outline-secondary">Update Bound Data</button>
+                <button id="edg_updatebounddata_button" type="button" class="btn btn-outline-secondary disabled">Update Bound Data</button>
               </div>
               <div id="edg_updatebounddata_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
                 Try sort any column and then select a row...
               </div>
             </div>`));
 
-            const edg_updatebounddata_button = $('#edg_updatebounddata_button');
             const edg_updatebounddata_result = $('#edg_updatebounddata_result');
 
-            edg_updatebounddata_button.on('click', function(e) {
+            $('#edg_updatebounddata_button').on('click', function(e) {
               edg_updatebounddata.updateBoundData();
               edg_updatebounddata_result.html('Bound data updated...');
             });
@@ -2380,7 +2134,6 @@ EDG = EnhanceDataGrid;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode: `grid.updateBoundData();`,
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.updateBoundData();\n' +
             '</pre></div>'
@@ -2389,11 +2142,18 @@ EDG = EnhanceDataGrid;
           id        : 'on',
           title     : `on`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#on',
-          init      : function(index, function_list) {
-            // Methods : on()
-            $('#edg_on').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_on').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_on = new EnhanceDataGrid({
@@ -2403,9 +2163,7 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_on_box2 = $('#edg_on_box2');
-
-            edg_on_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_on_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="mb-3 border rounded p-1">
                 The '<i class="text-danger">rowselect</i>' event was registerd with Grid.
                 Try selecting a row to display the row data.
@@ -2415,21 +2173,18 @@ EDG = EnhanceDataGrid;
               </div>
             </div>`));
 
-            const edg_on_result = $('#edg_on_result');
-
             edg_on.on('rowselect', function(e) {
               const args = e.args;
               const rowData = args.row;
               const result = JSON.stringify(rowData);
 
-              edg_on_result.html(result);
+              $('#edg_on_result').html(result);
             });
 
             return true;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode: `grid.on('&lt;jqxGrid-event>', callback_function() { /* coding... */ });`,
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.on(<span style="color: #4070a0">&#39;&lt;jqxGrid-event&gt;&#39;</span>, callback_function() { <span style="color: #60a0b0; font-style: italic">/* coding... */</span> });\n' +
             '</pre></div>'
@@ -2438,11 +2193,18 @@ EDG = EnhanceDataGrid;
           id        : 'getalldirty',
           title     : `getAllDirty`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getAllDirty',
-          init      : function(index, function_list) {
-            // Methods : getAllDirty()
-            $('#edg_getalldirty').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_getalldirty').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_getalldirty = new EnhanceDataGrid({
@@ -2453,9 +2215,7 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_getalldirty_box2 = $('#edg_getalldirty_box2');
-
-            edg_getalldirty_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_getalldirty_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="mb-3 border rounded p-1">
                 Try editing the data in the grid; all dirty data will appear in the result box with the format<br />
                 { <span class="text-primary">row_id</span> : { <span class="text-success">dirty_data</span> } }.
@@ -2465,19 +2225,17 @@ EDG = EnhanceDataGrid;
               </div>
             </div>`));
 
-            const edg_getalldirty_result = $('#edg_getalldirty_result');
 
             edg_getalldirty.on('cellvaluechanged', function(e) {
               const all_dirty = edg_getalldirty.getAllDirty();
 
-              edg_getalldirty_result.html(JSON.stringify(all_dirty));
+              $('#edg_getalldirty_result').html(JSON.stringify(all_dirty));
             });
 
             return true;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode: `grid.getAllDirty();`,
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getAllDirty();\n' +
             '</pre></div>'
@@ -2486,11 +2244,18 @@ EDG = EnhanceDataGrid;
           id        : 'getdirty',
           title     : `getDirty`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getDirty',
-          init      : function(index, function_list) {
-            // Methods : getDirty()
-            $('#edg_getdirty').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_getdirty').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_getdirty = new EnhanceDataGrid({
@@ -2506,9 +2271,7 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_getdirty_box2 = $('#edg_getdirty_box2');
-
-            edg_getdirty_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_getdirty_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="mb-3 border rounded p-1">
                 The <b>getDirty</b>() method only works with the <i class="text-danger">checkedDatafield</i> property.
                 It is useful in situations where you want to keep track of only one column's data changes.<br />
@@ -2519,19 +2282,17 @@ EDG = EnhanceDataGrid;
               </div>
             </div>`));
 
-            const edg_getdirty_result = $('#edg_getdirty_result');
 
             edg_getdirty.on('cellvaluechanged', function(e) {
               const all_dirty = edg_getdirty.getDirty();
 
-              edg_getdirty_result.html(JSON.stringify(all_dirty));
+              $('#edg_getdirty_result').html(JSON.stringify(all_dirty));
             });
 
             return true;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode: `grid.getDirty();`,
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getDirty();\n' +
             '</pre></div>'
@@ -2540,11 +2301,18 @@ EDG = EnhanceDataGrid;
           id        : 'getcheckeditems',
           title     : `getCheckedItems`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getCheckedItems',
-          init      : function(index, function_list) {
-            // Methods : getCheckedItems()
-            $('#edg_getcheckeditems').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_getcheckeditems').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_getcheckeditems = new EnhanceDataGrid({
@@ -2560,9 +2328,7 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_getcheckeditems_box2 = $('#edg_getcheckeditems_box2');
-
-            edg_getcheckeditems_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_getcheckeditems_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="mb-3 border rounded p-1">
                 The <b>getCheckedItems</b>() method has the same function as the <b>getDiry</b>() method, except that getCheckedItems only keep track of valid data,
                 and the return result is an Array of the row IDs of the valid data.<br />
@@ -2573,19 +2339,17 @@ EDG = EnhanceDataGrid;
               </div>
             </div>`));
 
-            const edg_getcheckeditems_result = $('#edg_getcheckeditems_result');
 
             edg_getcheckeditems.on('cellvaluechanged', function(e) {
               const all_dirty = edg_getcheckeditems.getCheckedItems();
 
-              edg_getcheckeditems_result.html(JSON.stringify(all_dirty));
+              $('#edg_getcheckeditems_result').html(JSON.stringify(all_dirty));
             });
 
             return true;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode: `grid.getCheckedItems();`,
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getCheckedItems();\n' +
             '</pre></div>'
@@ -2594,11 +2358,18 @@ EDG = EnhanceDataGrid;
           id        : 'getcellvalue',
           title     : `getCellValue`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getCellValue',
-          init      : function(index, function_list) {
-            // Methods : getCellValue()
-            $('#edg_getcellvalue').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_getcellvalue').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_getcellvalue = new EnhanceDataGrid({
@@ -2608,11 +2379,9 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_getcellvalue_box2 = $('#edg_getcellvalue_box2');
-
-            edg_getcellvalue_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_getcellvalue_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid mb-3">
-                <button id="edg_getcellvalue_button" type="button" class="btn btn-outline-secondary">getCellValue(1, 'firstname')</button>
+                <button id="edg_getcellvalue_button" type="button" class="btn btn-outline-secondary disabled">getCellValue(1, 'firstname')</button>
               </div>
               <div id="edg_getcellvalue_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
                 Click the button to display the value of rowindex 1, datafield 'firstname' here...<br /><br />
@@ -2620,21 +2389,15 @@ EDG = EnhanceDataGrid;
               </div>
             </div>`));
 
-            const edg_getcellvalue_button = $('#edg_getcellvalue_button');
-            const edg_getcellvalue_result = $('#edg_getcellvalue_result');
 
-            edg_getcellvalue_button.on('click', function(e) {
-              edg_getcellvalue_result.html(edg_getcellvalue.getCellValue(1, 'firstname'));
+            $('#edg_getcellvalue_button').on('click', function(e) {
+              $('#edg_getcellvalue_result').html(edg_getcellvalue.getCellValue(1, 'firstname'));
             });
 
             return true;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode:
-            "grid.getCellValue(&lt;rowBoundIndex>, &lt;dataField>);\n" +
-            "// example : get Name of Row 2\n" +
-            "grid.getCellValue(1, 'firstname');",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getCellValue(<span style="color: #666666">&lt;</span>rowBoundIndex<span style="color: #666666">&gt;</span>, <span style="color: #666666">&lt;</span>dataField<span style="color: #666666">&gt;</span>);\n' +
             '<span style="color: #60a0b0; font-style: italic">// example : get Name of Row 2</span>\n' +
@@ -2645,11 +2408,18 @@ EDG = EnhanceDataGrid;
           id        : 'getrows',
           title     : `getRows`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getRows',
-          init      : function(index, function_list) {
-            // Methods : getRows()
-            $('#edg_getrows').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_getrows').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_getrows = new EnhanceDataGrid({
@@ -2659,11 +2429,9 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_getrows_box2 = $('#edg_getrows_box2');
-
-            edg_getrows_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_getrows_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid mb-3">
-                <button id="edg_getrows_button" type="button" class="btn btn-outline-secondary">Get Rows</button>
+                <button id="edg_getrows_button" type="button" class="btn btn-outline-secondary disabled">Get Rows</button>
               </div>
               <div id="edg_getrows_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
                 Click the button to display bound data here...<br /><br />
@@ -2671,18 +2439,14 @@ EDG = EnhanceDataGrid;
               </div>
             </div>`));
 
-            const edg_getrows_button = $('#edg_getrows_button');
-            const edg_getrows_result = $('#edg_getrows_result');
-
-            edg_getrows_button.on('click', function(e) {
-              edg_getrows_result.html(JSON.stringify(edg_getrows.getRows()));
+            $('#edg_getrows_button').on('click', function(e) {
+              $('#edg_getrows_result').html(JSON.stringify(edg_getrows.getRows()));
             });
 
             return true;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode: `grid.getRows();`,
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getRows();\n' +
             '</pre></div>'
@@ -2691,11 +2455,18 @@ EDG = EnhanceDataGrid;
           id        : 'getrowdata',
           title     : `getRowData`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getRowData',
-          init      : function(index, function_list) {
-            // Methods : getRowData()
-            $('#edg_getrowdata').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_getrowdata').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_getrowdata = new EnhanceDataGrid({
@@ -2705,11 +2476,9 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_getrowdata_box2 = $('#edg_getrowdata_box2');
-
-            edg_getrowdata_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_getrowdata_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid mb-3">
-                <button id="edg_getrowdata_button" type="button" class="btn btn-outline-secondary">Get Row Data</button>
+                <button id="edg_getrowdata_button" type="button" class="btn btn-outline-secondary disabled">Get Row Data</button>
               </div>
               <div id="edg_getrowdata_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
                 Click the button to display data of rowindex 1 here...<br /><br />
@@ -2717,21 +2486,14 @@ EDG = EnhanceDataGrid;
               </div>
             </div>`));
 
-            const edg_getrowdata_button = $('#edg_getrowdata_button');
-            const edg_getrowdata_result = $('#edg_getrowdata_result');
-
-            edg_getrowdata_button.on('click', function(e) {
-              edg_getrowdata_result.html(JSON.stringify(edg_getrowdata.getRowData(1)));
+            $('#edg_getrowdata_button').on('click', function(e) {
+              $('#edg_getrowdata_result').html(JSON.stringify(edg_getrowdata.getRowData(1)));
             });
 
             return true;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode:
-            "grid.getRowData(&lt;rowBoundIndex>);\n" +
-            "// example : get data of Row 2\n" +
-            "grid.getRowData(1);",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getRowData(<span style="color: #666666">&lt;</span>rowBoundIndex<span style="color: #666666">&gt;</span>);\n' +
             '<span style="color: #60a0b0; font-style: italic">// example : get data of Row 2</span>\n' +
@@ -2742,11 +2504,18 @@ EDG = EnhanceDataGrid;
           id        : 'getselectedrowdata',
           title     : `getSelectedRowData`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getSelectedRowData',
-          init      : function(index, function_list) {
-            // Methods : getSelectedRowData()
-            $('#edg_getselectedrowdata').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_getselectedrowdata').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_getselectedrowdata = new EnhanceDataGrid({
@@ -2756,29 +2525,23 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_getselectedrowdata_box2 = $('#edg_getselectedrowdata_box2');
-
-            edg_getselectedrowdata_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_getselectedrowdata_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid mb-3">
-                <button id="edg_getselectedrowdata_button" type="button" class="btn btn-outline-secondary">Get Selected Row Data</button>
+                <button id="edg_getselectedrowdata_button" type="button" class="btn btn-outline-secondary disabled">Get Selected Row Data</button>
               </div>
               <div id="edg_getselectedrowdata_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
                 Select a row and click the button to display the row data here...
               </div>
             </div>`));
 
-            const edg_getselectedrowdata_button = $('#edg_getselectedrowdata_button');
-            const edg_getselectedrowdata_result = $('#edg_getselectedrowdata_result');
-
-            edg_getselectedrowdata_button.on('click', function(e) {
-              edg_getselectedrowdata_result.html(JSON.stringify(edg_getselectedrowdata.getSelectedRowData()));
+            $('#edg_getselectedrowdata_button').on('click', function(e) {
+              $('#edg_getselectedrowdata_result').html(JSON.stringify(edg_getselectedrowdata.getSelectedRowData()));
             });
 
             return true;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode: `grid.getSelectedRowData();`,
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getSelectedRowData();\n' +
             '</pre></div>'
@@ -2787,11 +2550,18 @@ EDG = EnhanceDataGrid;
           id        : 'getselectedcellvalue',
           title     : `getSelectedCellValue`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getSelectedCellValue',
-          init      : function(index, function_list) {
-            // Methods : getSelectedCellValue()
-            $('#edg_getselectedcellvalue').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_getselectedcellvalue').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_getselectedcellvalue = new EnhanceDataGrid({
@@ -2801,32 +2571,23 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_getselectedcellvalue_box2 = $('#edg_getselectedcellvalue_box2');
-
-            edg_getselectedcellvalue_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_getselectedcellvalue_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid mb-3">
-                <button id="edg_getselectedcellvalue_button" type="button" class="btn btn-outline-secondary">Get Selected Cell Value</button>
+                <button id="edg_getselectedcellvalue_button" type="button" class="btn btn-outline-secondary disabled">Get Selected Cell Value</button>
               </div>
               <div id="edg_getselectedcellvalue_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
                 Select a row and click the button to display the Name here...
               </div>
             </div>`));
 
-            const edg_getselectedcellvalue_button = $('#edg_getselectedcellvalue_button');
-            const edg_getselectedcellvalue_result = $('#edg_getselectedcellvalue_result');
-
-            edg_getselectedcellvalue_button.on('click', function(e) {
-              edg_getselectedcellvalue_result.html(JSON.stringify(edg_getselectedcellvalue.getSelectedCellValue('firstname')));
+            $('#edg_getselectedcellvalue_button').on('click', function(e) {
+              $('#edg_getselectedcellvalue_result').html(JSON.stringify(edg_getselectedcellvalue.getSelectedCellValue('firstname')));
             });
 
             return true;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode:
-            "grid.getSelectedCellValue(&lt;dataField>);\n" +
-            "// example : get selected row's Name\n" +
-            "grid.getSelectedCellValue('firstname');",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getSelectedCellValue(<span style="color: #666666">&lt;</span>dataField<span style="color: #666666">&gt;</span>);\n' +
             '<span style="color: #60a0b0; font-style: italic">// example : get selected row&#39;s Name</span>\n' +
@@ -2837,11 +2598,18 @@ EDG = EnhanceDataGrid;
           id        : 'getselectedrowindex',
           title     : `getSelectedRowIndex`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getSelectedRowIndex',
-          init      : function(index, function_list) {
-            // Methods : getSelectedRowIndex()
-            $('#edg_getselectedrowindex').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_getselectedrowindex').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_getselectedrowindex = new EnhanceDataGrid({
@@ -2851,11 +2619,9 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_getselectedrowindex_box2 = $('#edg_getselectedrowindex_box2');
-
-            edg_getselectedrowindex_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_getselectedrowindex_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid mb-3">
-                <button id="edg_getselectedrowindex_button" type="button" class="btn btn-outline-secondary">Get Selected Row Index</button>
+                <button id="edg_getselectedrowindex_button" type="button" class="btn btn-outline-secondary disabled">Get Selected Row Index</button>
               </div>
               <div id="edg_getselectedrowindex_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
                 Select a row and click the button to display the rowindex here...<br /><br />
@@ -2863,18 +2629,14 @@ EDG = EnhanceDataGrid;
               </div>
             </div>`));
 
-            const edg_getselectedrowindex_button = $('#edg_getselectedrowindex_button');
-            const edg_getselectedrowindex_result = $('#edg_getselectedrowindex_result');
-
-            edg_getselectedrowindex_button.on('click', function(e) {
-              edg_getselectedrowindex_result.html(JSON.stringify(edg_getselectedrowindex.getSelectedRowIndex()));
+            $('#edg_getselectedrowindex_button').on('click', function(e) {
+              $('#edg_getselectedrowindex_result').html(JSON.stringify(edg_getselectedrowindex.getSelectedRowIndex()));
             });
 
             return true;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode: `grid.getSelectedRowIndex();`,
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getSelectedRowIndex();\n' +
             '</pre></div>'
@@ -2883,11 +2645,18 @@ EDG = EnhanceDataGrid;
           id        : 'getselectedrowindexes',
           title     : `getSelectedRowIndexes`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getSelectedRowIndexes',
-          init      : function(index, function_list) {
-            // Methods : getSelectedRowIndexes()
-            $('#edg_getselectedrowindexes').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_getselectedrowindexes').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_getselectedrowindexes = new EnhanceDataGrid({
@@ -2898,11 +2667,9 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_getselectedrowindexes_box2 = $('#edg_getselectedrowindexes_box2');
-
-            edg_getselectedrowindexes_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_getselectedrowindexes_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid mb-3">
-                <button id="edg_getselectedrowindexes_button" type="button" class="btn btn-outline-secondary">Get Selected Row Index</button>
+                <button id="edg_getselectedrowindexes_button" type="button" class="btn btn-outline-secondary disabled">Get Selected Row Index</button>
               </div>
               <div id="edg_getselectedrowindexes_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
                 Select few rows and click the button to display the rowindexes here...<br /><br />
@@ -2910,18 +2677,14 @@ EDG = EnhanceDataGrid;
               </div>
             </div>`));
 
-            const edg_getselectedrowindexes_button = $('#edg_getselectedrowindexes_button');
-            const edg_getselectedrowindexes_result = $('#edg_getselectedrowindexes_result');
-
-            edg_getselectedrowindexes_button.on('click', function(e) {
-              edg_getselectedrowindexes_result.html(JSON.stringify(edg_getselectedrowindexes.getSelectedRowIndexes()));
+            $('#edg_getselectedrowindexes_button').on('click', function(e) {
+              $('#edg_getselectedrowindexes_result').html(JSON.stringify(edg_getselectedrowindexes.getSelectedRowIndexes()));
             });
 
             return true;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode: `grid.getSelectedRowIndexes();`,
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getSelectedRowIndexes();\n' +
             '</pre></div>'
@@ -2930,11 +2693,18 @@ EDG = EnhanceDataGrid;
           id        : 'hidecolumn',
           title     : `hideColumn`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#hideColumn',
-          init      : function(index, function_list) {
-            // Methods : hideColumn()
-            $('#edg_hidecolumn').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_hidecolumn').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_hidecolumn = new EnhanceDataGrid({
@@ -2945,29 +2715,23 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_hidecolumn_box2 = $('#edg_hidecolumn_box2');
-
-            edg_hidecolumn_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_hidecolumn_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid gap-2">
-                <button id="edg_hidecolumn_button1" type="button" class="btn btn-outline-secondary">Hide Product</button>
-                <button id="edg_hidecolumn_button2" type="button" class="btn btn-outline-secondary">Hide Name and Last Name</button>
-                <button id="edg_hidecolumn_button3" type="button" class="btn btn-outline-secondary">Show Hidden Columns</button>
+                <button id="edg_hidecolumn_button1" type="button" class="btn btn-outline-secondary disabled">Hide Product</button>
+                <button id="edg_hidecolumn_button2" type="button" class="btn btn-outline-secondary disabled">Hide Name and Last Name</button>
+                <button id="edg_hidecolumn_button3" type="button" class="btn btn-outline-secondary disabled">Show Hidden Columns</button>
               </div>
             </div>`));
 
-            const edg_hidecolumn_button1 = $('#edg_hidecolumn_button1');
-            const edg_hidecolumn_button2 = $('#edg_hidecolumn_button2');
-            const edg_hidecolumn_button3 = $('#edg_hidecolumn_button3');
-
-            edg_hidecolumn_button1.on('click', function(e) {
+            $('#edg_hidecolumn_button1').on('click', function(e) {
               edg_hidecolumn.hideColumn('productname');
             });
 
-            edg_hidecolumn_button2.on('click', function(e) {
+            $('#edg_hidecolumn_button2').on('click', function(e) {
               edg_hidecolumn.hideColumn(['firstname', 'lastname']);
             });
 
-            edg_hidecolumn_button3.on('click', function(e) {
+            $('#edg_hidecolumn_button3').on('click', function(e) {
               edg_hidecolumn.showColumn(['productname', 'firstname', 'lastname']);
             });
 
@@ -2975,15 +2739,6 @@ EDG = EnhanceDataGrid;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode:
-            "// Syntax 1\n" +
-            "grid.hideColumn(&lt;dataField>);\n" +
-            "// example : hide Product\n" +
-            "grid.hideColumn('productname');\n\n" +
-            "// Syntax 2\n" +
-            "grid.hideColumn(&lt;Array-of-dataField>);\n" +
-            "// example : hide Name and Last Name\n" +
-            "grid.hideColumn(['firstname', 'lastname']);",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #60a0b0; font-style: italic">// Syntax 1</span>\n' +
             'grid.hideColumn(<span style="color: #666666">&lt;</span>dataField<span style="color: #666666">&gt;</span>);\n' +
@@ -3000,11 +2755,18 @@ EDG = EnhanceDataGrid;
           id        : 'showcolumn',
           title     : `showColumn`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#showColumn',
-          init      : function(index, function_list) {
-            // Methods : showColumn()
-            $('#edg_showcolumn').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_showcolumn').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_showcolumn = new EnhanceDataGrid({
@@ -3024,29 +2786,23 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_showcolumn_box2 = $('#edg_showcolumn_box2');
-
-            edg_showcolumn_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_showcolumn_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid gap-2">
-                <button id="edg_showcolumn_button1" type="button" class="btn btn-outline-secondary">Show Product</button>
-                <button id="edg_showcolumn_button2" type="button" class="btn btn-outline-secondary">Show Name and Last Name</button>
-                <button id="edg_showcolumn_button3" type="button" class="btn btn-outline-secondary">Hide Product, Name, Last Name</button>
+                <button id="edg_showcolumn_button1" type="button" class="btn btn-outline-secondary disabled">Show Product</button>
+                <button id="edg_showcolumn_button2" type="button" class="btn btn-outline-secondary disabled">Show Name and Last Name</button>
+                <button id="edg_showcolumn_button3" type="button" class="btn btn-outline-secondary disabled">Hide Product, Name, Last Name</button>
               </div>
             </div>`));
 
-            const edg_showcolumn_button1 = $('#edg_showcolumn_button1');
-            const edg_showcolumn_button2 = $('#edg_showcolumn_button2');
-            const edg_showcolumn_button3 = $('#edg_showcolumn_button3');
-
-            edg_showcolumn_button1.on('click', function(e) {
+            $('#edg_showcolumn_button1').on('click', function(e) {
               edg_showcolumn.showColumn('productname');
             });
 
-            edg_showcolumn_button2.on('click', function(e) {
+            $('#edg_showcolumn_button2').on('click', function(e) {
               edg_showcolumn.showColumn(['firstname', 'lastname']);
             });
 
-            edg_showcolumn_button3.on('click', function(e) {
+            $('#edg_showcolumn_button3').on('click', function(e) {
               edg_showcolumn.hideColumn(['productname', 'firstname', 'lastname']);
             });
 
@@ -3054,15 +2810,6 @@ EDG = EnhanceDataGrid;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode:
-            "// Syntax 1\n" +
-            "grid.showColumn(&lt;dataField>);\n" +
-            "// example : show Product\n" +
-            "grid.showColumn('productname');\n\n" +
-            "// Syntax 2\n" +
-            "grid.showColumn(&lt;Array-of-dataField>);\n" +
-            "// example : show Name and Last Name\n" +
-            "grid.showColumn(['firstname', 'lastname']);",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #60a0b0; font-style: italic">// Syntax 1</span>\n' +
             'grid.showColumn(<span style="color: #666666">&lt;</span>dataField<span style="color: #666666">&gt;</span>);\n' +
@@ -3079,11 +2826,18 @@ EDG = EnhanceDataGrid;
           id        : 'updatecellvalue',
           title     : `updateCellValue`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#updateCellValue',
-          init      : function(index, function_list) {
-            // Methods : updateCellValue()
-            $('#edg_updatecellvalue').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_updatecellvalue').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_updatecellvalue = new EnhanceDataGrid({
@@ -3093,11 +2847,9 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_updatecellvalue_box2 = $('#edg_updatecellvalue_box2');
-
-            edg_updatecellvalue_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_updatecellvalue_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid mb-3">
-                <button id="edg_updatecellvalue_button" type="button" class="btn btn-outline-secondary">Update Cell Value</button>
+                <button id="edg_updatecellvalue_button" type="button" class="btn btn-outline-secondary disabled">Update Cell Value</button>
               </div>
               <div id="edg_updatecellvalue_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
                 Click the button to set the Name of Row 2 to "hello world"...<br /><br />
@@ -3105,9 +2857,7 @@ EDG = EnhanceDataGrid;
               </div>
             </div>`));
 
-            const edg_updatecellvalue_button = $('#edg_updatecellvalue_button');
-
-            edg_updatecellvalue_button.on('click', function(e) {
+            $('#edg_updatecellvalue_button').on('click', function(e) {
               edg_updatecellvalue.updateCellValue(1, 'firstname', 'hello world');
             });
 
@@ -3115,10 +2865,6 @@ EDG = EnhanceDataGrid;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode:
-            "grid.updateCellValue(&lt;rowBoundIndex>, &lt;dataField>, &lt;newValue>);\n" +
-            "// example : update Name of Row 2 to \"hello world\"\n" +
-            "grid.updateCellValue(1, 'firstname', 'hello world');",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.updateCellValue(<span style="color: #666666">&lt;</span>rowBoundIndex<span style="color: #666666">&gt;</span>, <span style="color: #666666">&lt;</span>dataField<span style="color: #666666">&gt;</span>, <span style="color: #666666">&lt;</span>newValue<span style="color: #666666">&gt;</span>);\n' +
             '<span style="color: #60a0b0; font-style: italic">// example : update Name of Row 2 to &quot;hello world&quot;</span>\n' +
@@ -3129,11 +2875,18 @@ EDG = EnhanceDataGrid;
           id        : 'updateselectedcellvalue',
           title     : `updateSelectedCellValue`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#updateSelectedCellValue',
-          init      : function(index, function_list) {
-            // Methods : updateSelectedCellValue()
-            $('#edg_updateselectedcellvalue').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_updateselectedcellvalue').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_updateselectedcellvalue = new EnhanceDataGrid({
@@ -3143,11 +2896,9 @@ EDG = EnhanceDataGrid;
               dataSource: JSON.parse(JSON.stringify(source)),
             });
 
-            const edg_updateselectedcellvalue_box2 = $('#edg_updateselectedcellvalue_box2');
-
-            edg_updateselectedcellvalue_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_updateselectedcellvalue_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid mb-3">
-                <button id="edg_updateselectedcellvalue_button" type="button" class="btn btn-outline-secondary">Update Selected Cell Value</button>
+                <button id="edg_updateselectedcellvalue_button" type="button" class="btn btn-outline-secondary disabled">Update Selected Cell Value</button>
               </div>
               <div id="edg_updateselectedcellvalue_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
                 Select a row and click the button to set the Name of Row to "hello world"...<br /><br />
@@ -3155,9 +2906,7 @@ EDG = EnhanceDataGrid;
               </div>
             </div>`));
 
-            const edg_updateselectedcellvalue_button = $('#edg_updateselectedcellvalue_button');
-
-            edg_updateselectedcellvalue_button.on('click', function(e) {
+            $('#edg_updateselectedcellvalue_button').on('click', function(e) {
               edg_updateselectedcellvalue.updateSelectedCellValue('firstname', 'hello world');
             });
 
@@ -3165,10 +2914,6 @@ EDG = EnhanceDataGrid;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode:
-            "grid.updateSelectedCellValue(&lt;dataField>, &lt;newValue>);\n" +
-            "// example : update selected row's Name to \"hello world\"\n" +
-            "grid.updateSelectedCellValue('firstname', 'hello world');",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.updateSelectedCellValue(<span style="color: #666666">&lt;</span>dataField<span style="color: #666666">&gt;</span>, <span style="color: #666666">&lt;</span>newValue<span style="color: #666666">&gt;</span>);\n' +
             '<span style="color: #60a0b0; font-style: italic">// example : update selected row&#39;s Name to &quot;hello world&quot;</span>\n' +
@@ -3179,11 +2924,18 @@ EDG = EnhanceDataGrid;
           id        : 'getsourceurl',
           title     : `getSourceUrl`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getSourceUrl',
-          init      : function(index, function_list) {
-            // Methods : getSourceUrl()
-            $('#edg_getsourceurl').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_getsourceurl').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_getsourceurl = new EnhanceDataGrid({
@@ -3209,29 +2961,23 @@ EDG = EnhanceDataGrid;
               },
             });
 
-            const edg_getsourceurl_box2 = $('#edg_getsourceurl_box2');
-
-            edg_getsourceurl_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_getsourceurl_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid mb-3">
-                <button id="edg_getsourceurl_button" type="button" class="btn btn-outline-secondary">Get Source URL</button>
+                <button id="edg_getsourceurl_button" type="button" class="btn btn-outline-secondary disabled">Get Source URL</button>
               </div>
               <div id="edg_getsourceurl_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
                 Click the button to display the source url here...
               </div>
             </div>`));
 
-            const edg_getsourceurl_button = $('#edg_getsourceurl_button');
-            const edg_getsourceurl_result = $('#edg_getsourceurl_result');
-
-            edg_getsourceurl_button.on('click', function(e) {
-              edg_getsourceurl_result.html(edg_getsourceurl.getSourceUrl());
+            $('#edg_getsourceurl_button').on('click', function(e) {
+              $('#edg_getsourceurl_result').html(edg_getsourceurl.getSourceUrl());
             });
 
             return true;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode: `grid.getSourceUrl();`,
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.getSourceUrl();\n' +
             '</pre></div>'
@@ -3240,11 +2986,18 @@ EDG = EnhanceDataGrid;
           id        : 'updatesourceurl',
           title     : `updateSourceUrl`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#updateSourceUrl',
-          init      : function(index, function_list) {
-            // Methods : updateSourceUrl()
-            $('#edg_updatesourceurl').on('bindingcomplete', function () {
-              index++;
-              setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            show_loading(id);
+
+            $('#edg_updatesourceurl').on('bindingcomplete', function() {
+              if (run_next_function) {
+                next_funct(id, index, function_list, object_list);
+
+                run_next_function = false;
+              }
             });
 
             const edg_updatesourceurl = new EnhanceDataGrid({
@@ -3270,28 +3023,24 @@ EDG = EnhanceDataGrid;
               },
             });
 
-            const edg_updatesourceurl_box2 = $('#edg_updatesourceurl_box2');
-
-            edg_updatesourceurl_box2.append($(`<div class="d-flex flex-column h-100 ms-3">
+            $('#edg_updatesourceurl_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
               <div class="d-grid gap-2 mb-3">
-                <button id="edg_updatesourceurl_button1" type="button" class="btn btn-outline-secondary">Update To New URL</button>
-                <button id="edg_updatesourceurl_button2" type="button" class="btn btn-outline-secondary">Update To Original Source URL</button>
+                <button id="edg_updatesourceurl_button1" type="button" class="btn btn-outline-secondary disabled">Update To New URL</button>
+                <button id="edg_updatesourceurl_button2" type="button" class="btn btn-outline-secondary disabled">Update To Original Source URL</button>
               </div>
               <div id="edg_updatesourceurl_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
                 Click the button to display the source url here...
               </div>
             </div>`));
 
-            const edg_updatesourceurl_button1 = $('#edg_updatesourceurl_button1');
-            const edg_updatesourceurl_button2 = $('#edg_updatesourceurl_button2');
             const edg_updatesourceurl_result = $('#edg_updatesourceurl_result');
 
-            edg_updatesourceurl_button1.on('click', function(e) {
+            $('#edg_updatesourceurl_button1').on('click', function(e) {
               edg_updatesourceurl.updateSourceUrl('demo/customers-2.txt');
               edg_updatesourceurl_result.html('Grid source URL updated to <i class="text-danger">demo/customers-2.txt</i>');
             });
 
-            edg_updatesourceurl_button2.on('click', function(e) {
+            $('#edg_updatesourceurl_button2').on('click', function(e) {
               edg_updatesourceurl.updateSourceUrl('demo/customers.txt');
               edg_updatesourceurl_result.html('Grid source URL updated to <i class="text-danger">demo/customers.txt</i>');
             });
@@ -3300,10 +3049,6 @@ EDG = EnhanceDataGrid;
           },
           desc      : null,
           ratio     : '7,5',
-          sourcecode:
-            "grid.updateSourceUrl(&lt;newUrl>);\n" +
-            "// example : update source url to \"demo/customers-2.txt\"\n" +
-            "grid.updateSourceUrl('demo/customers-2.txt');",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.updateSourceUrl(<span style="color: #666666">&lt;</span>newUrl<span style="color: #666666">&gt;</span>);\n' +
             '<span style="color: #60a0b0; font-style: italic">// example : update source url to &quot;demo/customers-2.txt&quot;</span>\n' +
@@ -3321,17 +3066,20 @@ EDG = EnhanceDataGrid;
           id        : 'debounce',
           title     : `debounce`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.debounce',
-          init      : function(index, function_list) {
-            index++;
-            // setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            if (run_next_function) {
+              next_funct(id, index, function_list, object_list);
+
+              run_next_function = false;
+            }
 
             return true;
           },
           desc      : 'Debounce function.',
           static    : true,
-          sourcecode:
-            "const debounce_func = EDG.debounce(() => console.log('3 seconds passed without function being called again.'), 3000);\n" +
-            "debounce_func();",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">const</span> debounce_func <span style="color: #666666">=</span> EDG.debounce(() <span style="color: #666666">=&gt;</span> console.log(<span style="color: #4070a0">&#39;3 seconds passed without function being called again.&#39;</span>), <span style="color: #40a070">3000</span>);\n' +
             'debounce_func();\n' +
@@ -3341,19 +3089,20 @@ EDG = EnhanceDataGrid;
           id        : 'getsearchparameters',
           title     : `getSearchParameters`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.getSearchParameters',
-          init      : function(index, function_list) {
-            index++;
-            // setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            if (run_next_function) {
+              next_funct(id, index, function_list, object_list);
+
+              run_next_function = false;
+            }
 
             return true;
           },
           desc      : 'Get query string of an URL.',
           static    : true,
-          sourcecode:
-            "// get current browser tab query string\n" +
-            "EDG.getSearchParameters();\n" +
-            "// get given url query string\n" +
-            "EDG.getSearchParameters(\"url.php?a=1&b=2\");",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #60a0b0; font-style: italic">// get current browser tab query string</span>\n' +
             'EDG.getSearchParameters();\n' +
@@ -3365,15 +3114,20 @@ EDG = EnhanceDataGrid;
           id        : 'insertquerystring',
           title     : `insertQueryString`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.insertQueryString',
-          init      : function(index, function_list) {
-            index++;
-            // setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            if (run_next_function) {
+              next_funct(id, index, function_list, object_list);
+
+              run_next_function = false;
+            }
 
             return true;
           },
           desc      : 'Append query string to an URL.',
           static    : true,
-          sourcecode: 'EDG.insertQueryString("url.php", { p1: 1, p2: 2 });',
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%">EDG.insertQueryString(<span style="color: #4070a0">&quot;url.php&quot;</span>, { p1<span style="color: #666666">:</span> <span style="color: #40a070">1</span>, p2<span style="color: #666666">:</span> <span style="color: #40a070">2</span> });\n' +
             '</pre></td></tr></table></div>'
@@ -3382,20 +3136,20 @@ EDG = EnhanceDataGrid;
           id        : 'isemptystring',
           title     : `isEmptyString`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.isEmptyString',
-          init      : function(index, function_list) {
-            index++;
-            // setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            if (run_next_function) {
+              next_funct(id, index, function_list, object_list);
+
+              run_next_function = false;
+            }
 
             return true;
           },
           desc      : 'Check input is an empty string.',
           static    : true,
-          sourcecode:
-            "// return true\n" +
-            "EDG.isEmptyString('');\n" +
-            "// return false\n" +
-            "EDG.isEmptyString('string');\n" +
-            "EDG.isEmptyString(1);",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #60a0b0; font-style: italic">// return true</span>\n' +
             'EDG.isEmptyString(<span style="color: #4070a0">&#39;&#39;</span>);\n' +
@@ -3408,22 +3162,20 @@ EDG = EnhanceDataGrid;
           id        : 'isnull',
           title     : `isNull`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.isNull',
-          init      : function(index, function_list) {
-            index++;
-            // setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            if (run_next_function) {
+              next_funct(id, index, function_list, object_list);
+
+              run_next_function = false;
+            }
 
             return true;
           },
           desc      : 'Check input is null.',
           static    : true,
-          sourcecode:
-            "// return true\n" +
-            "EDG.isNull(null);\n" +
-            "EDG.isNull('null');\n" +
-            "// return false\n" +
-            "EDG.isNull('null', true/* identital equal */);\n" +
-            "EDG.isNull(1);\n" +
-            "EDG.isNull('string');",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #60a0b0; font-style: italic">// return true</span>\n' +
             'EDG.isNull(<span style="color: #007020; font-weight: bold">null</span>);\n' +
@@ -3438,22 +3190,20 @@ EDG = EnhanceDataGrid;
           id        : 'isundefined',
           title     : `isUndefined`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.isUndefined',
-          init      : function(index, function_list) {
-            index++;
-            // setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            if (run_next_function) {
+              next_funct(id, index, function_list, object_list);
+
+              run_next_function = false;
+            }
 
             return true;
           },
           desc      : 'Check input is undefined.',
           static    : true,
-          sourcecode:
-            "// return true\n" +
-            "EDG.isUndefined(undefined);\n" +
-            "EDG.isUndefined('undefined');\n" +
-            "// return false\n" +
-            "EDG.isUndefined('undefined', true/* identital equal */);\n" +
-            "EDG.isUndefined(1);\n" +
-            "EDG.isUndefined('string');",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #60a0b0; font-style: italic">// return true</span>\n' +
             'EDG.isUndefined(<span style="color: #007020; font-weight: bold">undefined</span>);\n' +
@@ -3468,23 +3218,20 @@ EDG = EnhanceDataGrid;
           id        : 'isunset',
           title     : `isUnset`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.isUnset',
-          init      : function(index, function_list) {
-            index++;
-            // setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            if (run_next_function) {
+              next_funct(id, index, function_list, object_list);
+
+              run_next_function = false;
+            }
 
             return true;
           },
           desc      : 'Check input is unset.',
           static    : true,
-          sourcecode:
-            "// return true\n" +
-            "EDG.isUnset(null);\n" +
-            "EDG.isUnset(undefined);\n" +
-            "EDG.isUnset('');\n" +
-            "// return false\n" +
-            "EDG.isUndefined('0');\n" +
-            "EDG.isUndefined(0);\n" +
-            "EDG.isUndefined({ a: 1 });",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #60a0b0; font-style: italic">// return true</span>\n' +
             'EDG.isUnset(<span style="color: #007020; font-weight: bold">null</span>);\n' +
@@ -3500,20 +3247,20 @@ EDG = EnhanceDataGrid;
           id        : 'isvalidkeyboardinput',
           title     : `isValidKeyboardInput`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.isValidKeyboardInput',
-          init      : function(index, function_list) {
-            index++;
-            // setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            if (run_next_function) {
+              next_funct(id, index, function_list, object_list);
+
+              run_next_function = false;
+            }
 
             return true;
           },
           desc      : 'Check whether is a valid keyboard input.',
           static    : true,
-          sourcecode:
-            "$('input').keyup(e => {\n" +
-            "  if (EDG.isValidKeyboardInput(e)) {\n" +
-            "    // coding...\n" +
-            "  }\n" +
-            "});",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%">$(<span style="color: #4070a0">&#39;input&#39;</span>).keyup(e <span style="color: #666666">=&gt;</span> {\n' +
             '  <span style="color: #007020; font-weight: bold">if</span> (EDG.isValidKeyboardInput(e)) {\n' +
@@ -3526,17 +3273,20 @@ EDG = EnhanceDataGrid;
           id        : 'throttle',
           title     : `throttle`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.throttle',
-          init      : function(index, function_list) {
-            index++;
-            // setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            if (run_next_function) {
+              next_funct(id, index, function_list, object_list);
+
+              run_next_function = false;
+            }
 
             return true;
           },
           desc      : 'Throttle function.',
           static    : true,
-          sourcecode:
-            "const throttle_func = EDG.throttle(() => console.log('This function will execute at most once every 3 seconds.'), 3000);\n" +
-            "throttle_func();",
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">const</span> throttle_func <span style="color: #666666">=</span> EDG.throttle(() <span style="color: #666666">=&gt;</span> console.log(<span style="color: #4070a0">&#39;This function will execute at most once every 3 seconds.&#39;</span>), <span style="color: #40a070">3000</span>);\n' +
             'throttle_func();\n' +
@@ -3546,15 +3296,20 @@ EDG = EnhanceDataGrid;
           id        : 'transformobjecttostring',
           title     : `transformObjectToString`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.transformObjectToString',
-          init      : function(index, function_list) {
-            index++;
-            // setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            if (run_next_function) {
+              next_funct(id, index, function_list, object_list);
+
+              run_next_function = false;
+            }
 
             return true;
           },
           desc      : 'Transform Object to String.',
           static    : true,
-          sourcecode: 'EDG.transformObjectToString({ a: 1, b: 2 });',
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><table><tr><td><pre style="margin: 0; line-height: 125%"></pre></td><td><pre style="margin: 0; line-height: 125%">EDG.transformObjectToString({ a<span style="color: #666666">:</span> <span style="color: #40a070">1</span>, b<span style="color: #666666">:</span> <span style="color: #40a070">2</span> });\n' +
             '</pre></td></tr></table></div>'
@@ -3563,15 +3318,22 @@ EDG = EnhanceDataGrid;
           id        : 'transformstringtoobject',
           title     : `transformStringToObject`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#.transformStringToObject',
-          init      : function(index, function_list) {
-            // index++;
-            // setTimeout(() => function_list[index](index, function_list), 50);
+          init      : function(index, function_list, object_list) {
+            const id = this.id;
+            let run_next_function = true;
+
+            if (run_next_function) {
+              next_funct(id, index, function_list, object_list);
+
+              run_next_function = false;
+
+              last_init();
+            }
 
             return true;
           },
           desc      : 'Transform String to Object.',
           static    : true,
-          sourcecode: 'EDG.transformStringToObject("a=1&b=2");',
           colorcode :
             '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">EDG<span style="color: #666666">.</span>transformStringToObject(<span style="color: #4070a0">&quot;a=1&amp;b=2&quot;</span>);\n' +
             '</pre></div>'
@@ -3595,37 +3357,235 @@ EDG = EnhanceDataGrid;
     // },
   ];
 
-  let init_list = {};
+  function generate_aside_content(opt) {
+    const id = opt.id;
+    const title = opt.title;
+    const menu = opt.menu;
+    const ul = $(`<ul class="list-unstyled ps-3 collapse" id="${id}-collapse" />`);
+
+    menu.forEach(el => {
+      const li = $(`<li><a class="d-inline-flex align-items-center rounded text-decoration-none" href="#${el.id}">${el.title}</a></li>`);
+      ul.append(li);
+    });
+
+    const section = $(`<li class="my-2">
+      <button class="btn d-inline-flex align-items-center collapsed border-0" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#${id}-collapse" aria-controls="${id}-collapse">${title}</button>
+    </li>`);
+
+    return section.append(ul);
+  }
+
+  function generate_main_content(opt) {
+    const id = opt.id;
+    const title = opt.title;
+    const menu = opt.menu;
+    const sectionId = id.slice(0, id.length - 1);
+    // console.log(id);
+    // console.log(title);
+    // console.log(menu);
+    // console.log(sectionId);
+
+    const section = $(`<section id="${sectionId}">
+      <h2 class="sticky-xl-top fw-bold pt-3 pt-xl-5 pb-2 pb-xl-3">${title}</h2>
+    </section>`);
+
+    menu.forEach(el => {
+
+      /*/
+      // in jqxTabs
+      const article = $(`<article class="my-3" id="${el.id}">
+        <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+          <h3>${el.title.replace(' (', '<br>(')}</h3>
+          <a class="d-flex align-items-center" href="${doc}">Documentation</a>
+        </div>
+
+        <div class="position-relative grid-container">
+          <div class="position-absolute w-100">
+            <div class="tab-container">
+              <ul>
+                <li>Demo</li>
+                <li>View Source</li>
+              </ul>
+              <div class="p-1">
+                <div id="edg_${el.id}"></div>
+              </div>
+              <div>
+                Source Code
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>`);
+      /*/
+      // in bootstrap card
+      let article_class = 'my-3';
+
+      if (el.is_last == 1)
+        article_class += ' mb-5 pb-5';
+
+      let body = `<div id="edg_${el.id}"></div>`;
+
+      if (el.ratio) {
+        const ratio = el.ratio.split(',');
+        const flex_body = $(`<div class="d-flex flex-row h-100"></div>`);
+
+        ratio.forEach((rate, index) => {
+          const numb = index + 1;
+          let box = $(`<div id="edg_${el.id}_box${numb}" class="col-${rate} _border"></div>`);
+
+          // first box is always the EDG demo
+          if (index == 0)
+            box = $(`<div id="edg_${el.id}_box${numb}" class="col-${rate} _border">
+              <div id="edg_${el.id}"></div>
+            </div>`);
+
+          flex_body.append(box);
+        });
+
+        body = flex_body[0].outerHTML;
+      }
+
+      let desc = '';
+
+      if (el.desc)
+        desc = `<div class="card-header">${el.desc}</div>`;
+
+      let sourcecode = '';
+
+      if (el.sourcecode)
+        sourcecode =
+          `<div class="card-footer text-muted">
+            <pre class="m-0">${el.sourcecode}</pre>
+          </div>`;
+
+      if (el.colorcode)
+        sourcecode =
+          `<div class="card-footer text-muted overflow-hidden p-0">
+            ${el.colorcode}
+          </div>`;
+
+      let doc = el.doc;
+
+      if (!doc)
+        doc = 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html';
+
+      let article = $(`<article class="${article_class}" id="${el.id}">
+        <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+          <h3>${el.title.replace(' (', '<br>(')}</h3>
+          <a class="d-flex align-items-center" target="_blank" href="${doc}">Documentation</a>
+        </div>
+
+        <div class="position-relative">
+          <div class="card">
+            ${desc}
+            <div class="card-body grid-container position-relative">
+              ${body}
+              <div
+                id="${el.id}_loading"
+                class="d-flex align-items-center justify-content-center position-absolute start-0 top-0 w-100 h-100 bg-light bg-opacity-75"
+                style="z-index: 99;"
+              >
+                <div class="spinner-grow spinner-grow-sm text-danger" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <div id="${el.id}_text_waiting" class="ms-3 text-muted">Queuing ...</div>
+                <div id="${el.id}_text_loading" class="ms-3 text-muted d-none">Initializing EDG ...</div>
+              </div>
+            </div>
+            ${sourcecode}
+          </div>
+        </div>
+      </article>`);
+
+      if (el.static) {
+        if (el.desc)
+          desc = `<div class="card-body">${el.desc}</div>`;
+
+        article = $(`<article class="${article_class}" id="${el.id}">
+          <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+            <h3>${el.title.replace(' (', '<br>(')}</h3>
+            <a class="d-flex align-items-center" target="_blank" href="${doc}">Documentation</a>
+          </div>
+
+          <div class="position-relative">
+            <div class="card">
+              ${desc}
+              ${sourcecode}
+            </div>
+          </div>
+        </article>`);
+      }
+      //*/
+
+      section.append(article);
+    });
+
+    return section;
+  }
+
+  function get_edg_func_object(opt, func_list, object_list) {
+    const menu = opt.menu;
+
+    menu.forEach(el => {
+      const index = Object.keys(func_list).length + 1;
+      // const index = Object.keys(object_list).length + 1;
+
+      func_list[index] = el.init;
+      object_list[index] = el;
+    });
+
+    return [func_list, object_list];
+  }
+
+  const toc = $('#toc');
+  const toc_aside = toc.children(0);
+  // toc_aside.empty();
+
+  const main_body = $('.bd-cheatsheet')
+  // main_body.empty();
+
+  let init_edg_function = {};
+  let init_edg_object = {};
 
   aside_list.forEach((item, index) => {
-    // console.log(item);
-
     if (aside_list.length == (index + 1))
       item.menu[item.menu.length - 1].is_last = 1;
 
     //*/
+    // NOTE: Insert DOM
     toc_aside.append(generate_aside_content(item));
     main_body.append(generate_main_content(item));
-    // init_edg(item);
+
+    // NOTE: Store EDT object & function
+    [init_edg_function, init_edg_object] = get_edg_func_object(item, init_edg_function, init_edg_object);
     /*/
     toc_aside.prepend(generate_aside_content(item));
     main_body.prepend(generate_main_content(item));
     //*/
   });
+  // console.log(init_edg_object)
 
-  aside_list.forEach((item, index) => {
-    init_list = init_edg(item, init_list);
+  // slice object - https://stackoverflow.com/questions/39336556/how-can-i-slice-an-object-in-javascript
+  /*/
+  // TODO: enable for debugging usage
+  init_edg_function = Object.keys(init_edg_function).slice(0, 5).reduce((result, key) => {
+    result[key] = init_edg_function[key];
 
-    // init_list = [
-    //   ...init_list,
-    //   ...init_edg(item)
-    // ];
-  });
+    return result;
+  }, {});
+  //*/
 
-  console.log(init_list);
-  init_list[1](1, init_list);
+  // console.log(init_edg_function);
+
+  // TODO: trigger first init and it will run automatically for the rest
   // recursive await function - https://www.youtube.com/watch?v=i3jiRzZw4ic
 
+  // init_edg_function[1](1, init_edg_function);
+  init_edg_function[1].call(init_edg_object[1], 1, init_edg_function, init_edg_object);
+
+  // =============================================================================================================
+
+  // Testing Section
   var items = [1,2,3,4,5,6,7,8,9,10];
   var index = 0;
   var seconds = 1;
@@ -3641,13 +3601,13 @@ EDG = EnhanceDataGrid;
       run(idx);
     }
     /*/
-    // console.log(Object.keys(init_list).length)
+    // console.log(Object.keys(init_edg_function).length)
     // console.log(idx)
-    // if (Object.keys(init_list).length >= idx) {
+    // if (Object.keys(init_edg_function).length >= idx) {
     if (5 > idx) {
       console.log(idx);
-      // console.log(init_list[idx++].toString());
-      await init_list[idx++]();
+      // console.log(init_edg_function[idx++].toString());
+      await init_edg_function[idx++]();
       run(idx);
     }
     //*/
