@@ -553,7 +553,8 @@ class EnhanceDataGrid {
     showFindButton      : false,
     showRowIndex        : true,
     tbElement           : [],
-    useBootstrap        : false, // TODO: think about the controlling of this flag, use Bootstrap theme ? function ?
+    useBootstrap        : false,
+    // TODO: think about the controlling of this flag, use Bootstrap theme ? function ?
     // useBootstrap > use bootstrap helper 'd-flex' on button-container instead of my own 'edg-group'
   };
 
@@ -1416,13 +1417,14 @@ class EnhanceDataGrid {
               const _fail       = self.#_getGridButtonProps(tbElement, button_id, 'fail');
               let _url          = self.#_getGridButtonProps(tbElement, button_id, 'url');
               // let _title        = self.#_getGridButtonProps(tbElement, button_id, 'title');
-              let _message      = self.#_getGridButtonProps(tbElement, button_id, 'message');
+              // let _message      = self.#_getGridButtonProps(tbElement, button_id, 'message');
               let _debug        = self.#_getGridButtonProps(tbElement, button_id, 'debug');
 
-              // TODO: think about usage of title in 'delete' button
+              // TODO: defined new inner-variable to control delete button 'title' & 'message'
               // _title = (typeof _title === 'undefined' || _title === '') ? 'Delete Record' : _title;
+              // _message = (typeof _message === 'undefined' || _message === '') ? 'Are you sure to delete selected record ?' : _message;
               const _title = 'Delete Record';
-              _message = (typeof _message === 'undefined' || _message === '') ? 'Are you sure to delete selected record ?' : _message;
+              const _message = 'Are you sure to delete selected record ?';
 
               if (typeof _url === 'undefined' || _url === undefined || typeof _url === 'null' || _url === null) {
                 _promptError({
@@ -3022,7 +3024,7 @@ class EnhanceDataGrid {
   } // end of on
 
   /**
-   * Repaints the Grid View.
+   * Clears the selection, updates the bound data and refreshed the grid.
    *
    * @returns None
    *
