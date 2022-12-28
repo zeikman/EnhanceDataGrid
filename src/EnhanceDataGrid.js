@@ -2593,7 +2593,7 @@ class EnhanceDataGrid {
      *   id                 : '#grid_id',
      *   // using either one, (1)jsonSource | (2)dataSource
      *   jsonSource         : source_json_object, // method (1)
-     *   dataSource         : source_url_object,  // method (2), refer to updateSourceUrl() method for example
+     *   dataSource         : source_url_object,  // method (2), refer to setSourceUrl() method for example
      *   // dateFormat         : 'yyyy-MM-dd',
      *   checkedDatafield   : 'checked',
      *   buttonTheme        : 'fresh',
@@ -3170,15 +3170,15 @@ class EnhanceDataGrid {
    * @example
    * const grid = new EnhanceDataGrid();
    * //  set value of 'column_name' of selected row
-   * grid.updateCellValue('column_name', 'new value');
+   * grid.setSelectedCellValue('column_name', 'new value');
    */
-  updateSelectedCellValue(column, value) {
+  setSelectedCellValue(column, value) {
     if (this.#_syntax === 'old')
       this.jqxGrid.jqxGrid('setcellvalue', this.getSelectedRowIndex(), column, value);
 
     if (this.#_syntax === 'new')
       this.jqxGrid.setcellvalue(this.getSelectedRowIndex(), column, value);
-  } // end of updateSelectedCellValue
+  } // end of setSelectedCellValue
 
   /**
    * Update URL of data source and refresh Grid.
@@ -3217,11 +3217,11 @@ class EnhanceDataGrid {
    *   parameter2: value2,
    *   ...
    * });
-   * grid.updateSourceUrl(new_source_url);
+   * grid.setSourceUrl(new_source_url);
    *
    * @see jqxGrid has multiple types of data collections, refer [Grid Data Sources]{@link https://www.jqwidgets.com/jquery-widgets-documentation/documentation/jqxgrid/jquery-grid-datasources.htm?search=jqxGrid} for complete reference.
    */
-  updateSourceUrl(url, autoRefresh) {
+  setSourceUrl(url, autoRefresh) {
     if (!this.#_dataSource)
       this.dataAdapter._source.url = url;
     else
@@ -3229,5 +3229,5 @@ class EnhanceDataGrid {
 
     if (typeof autoRefresh === 'undefined' || (typeof autoRefresh === 'boolean' && autoRefresh))
       this.refresh();
-  } // end of updateSourceUrl
+  } // end of setSourceUrl
 }

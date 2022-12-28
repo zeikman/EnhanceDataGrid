@@ -1,6 +1,8 @@
-# [EnhanceDataGrid.js](https://www.rightpristine.com/zeikman/EnhanceDataGrid/) (Beta v0.3.0)
+# [EnhanceDataGrid.js](https://www.rightpristine.com/zeikman/EnhanceDataGrid/) (Beta v0.3.1)
 
-EnhanceDataGrid is a library that extends [jQWidgets](https://www.jqwidgets.com/)' [jqxGrid](https://www.jqwidgets.com/jquery-widgets-demo/demos/jqxgrid/index.htm) widget and provides a lot of useful built-in methods and functionalities to deal with data retrieving, updateing, filtering, finding, etc.
+EnhanceDataGrid is a [jQWidgets](https://www.jqwidgets.com/)' [jqxGrid](https://www.jqwidgets.com/jquery-widgets-demo/demos/jqxgrid/index.htm) plugin that provides a set of useful methods and functionalities to deal with data retrieving, updating, filtering, finding, and etc.
+
+Please take note that jQWidget is ***NOT FREE FOR COMMERCIAL***, [read the licensing here](https://www.jqwidgets.com/license/).
 
 ## Get Started
 
@@ -239,7 +241,7 @@ const grid = new EnhanceDataGrid({
       <td>Gets all dirty { key:value } pairs.</td>
     </tr>
     <tr>
-      <td>getCellValue</td>
+      <td><del>getCellValue</del></td>
       <td>Gets the value of a cell.</td>
     </tr>
     <tr>
@@ -251,11 +253,11 @@ const grid = new EnhanceDataGrid({
       <td>Gets all dirty { id:value } pairs.</td>
     </tr>
     <tr>
-      <td>getRowData</td>
+      <td><del>getRowData</del></td>
       <td>Gets the data of a row.</td>
     </tr>
     <tr>
-      <td>getRows</td>
+      <td><del>getRows</del></td>
       <td>Gets all rows.</td>
     </tr>
     <tr>
@@ -267,11 +269,11 @@ const grid = new EnhanceDataGrid({
       <td>Gets the data of the selected row.</td>
     </tr>
     <tr>
-      <td>getSelectedRowIndex</td>
+      <td><del>getSelectedRowIndex</del></td>
       <td>Gets the bound index of the selected row.</td>
     </tr>
     <tr>
-      <td>getSelectedRowIndexes</td>
+      <td><del>getSelectedRowIndexes</del></td>
       <td>Gets the indexes of the selected rows.</td>
     </tr>
     <tr>
@@ -299,15 +301,15 @@ const grid = new EnhanceDataGrid({
       <td>Updates the bound data and refreshes the grid.</td>
     </tr>
     <tr>
-      <td>updateCellValue</td>
+      <td><del>updateCellValue</del></td>
       <td>Sets a new value to a cell.</td>
     </tr>
     <tr>
-      <td>updateSelectedCellValue</td>
+      <td>setSelectedCellValue</td>
       <td>Sets a new value to a cell of the selected row.</td>
     </tr>
     <tr>
-      <td>updateSourceUrl</td>
+      <td>setSourceUrl</td>
       <td>Update URL of data source and refresh grid.</td>
     </tr>
   </tbody>

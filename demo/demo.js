@@ -1271,7 +1271,7 @@ style : friendly
         },
         {
           id        : 'getcellvalue',
-          title     : `getCellValue()`,
+          title     : `<del class="text-danger">getCellValue()</del>`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getCellValue',
           desc      : 'Gets the value of a cell.',
           ratio     : '7,5',
@@ -1283,7 +1283,7 @@ style : friendly
         },
         {
           id        : 'getrows',
-          title     : `getRows()`,
+          title     : `<del class="text-danger">getRows()</del>`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getRows',
           desc      : 'Gets all rows.',
           ratio     : '7,5',
@@ -1293,7 +1293,7 @@ style : friendly
         },
         {
           id        : 'getrowdata',
-          title     : `getRowData()`,
+          title     : `<del class="text-danger">getRowData()</del>`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getRowData',
           desc      : 'Gets the data of a row.',
           ratio     : '7,5',
@@ -1327,7 +1327,7 @@ style : friendly
         },
         {
           id        : 'getselectedrowindex',
-          title     : `getSelectedRowIndex()`,
+          title     : `<del class="text-danger">getSelectedRowIndex()</del>`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getSelectedRowIndex',
           desc      : 'Gets the bound index of the selected row.',
           ratio     : '7,5',
@@ -1337,7 +1337,7 @@ style : friendly
         },
         {
           id        : 'getselectedrowindexes',
-          title     : `getSelectedRowIndexes()`,
+          title     : `<del class="text-danger">getSelectedRowIndexes()</del>`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#getSelectedRowIndexes',
           desc      : 'Gets the indexes of the selected rows.',
           ratio     : '7,5',
@@ -1383,7 +1383,7 @@ style : friendly
         },
         {
           id        : 'updatecellvalue',
-          title     : `updateCellValue()`,
+          title     : `<del class="text-danger">updateCellValue()</del>`,
           doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#updateCellValue',
           desc      : 'Sets a new value to a cell.',
           ratio     : '7,5',
@@ -1394,15 +1394,15 @@ style : friendly
             '</pre></div>'
         },
         {
-          id        : 'updateselectedcellvalue',
-          title     : `updateSelectedCellValue()`,
-          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#updateSelectedCellValue',
+          id        : 'setselectedcellvalue',
+          title     : `setSelectedCellValue()`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#setSelectedCellValue',
           desc      : 'Sets a new value to a cell of the selected row.',
           ratio     : '7,5',
           colorcode :
-            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.updateSelectedCellValue(<span style="color: #666666">&lt;</span>dataField<span style="color: #666666">&gt;</span>, <span style="color: #666666">&lt;</span>newValue<span style="color: #666666">&gt;</span>);\n' +
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.setSelectedCellValue(<span style="color: #666666">&lt;</span>dataField<span style="color: #666666">&gt;</span>, <span style="color: #666666">&lt;</span>newValue<span style="color: #666666">&gt;</span>);\n' +
             '<span style="color: #60a0b0; font-style: italic">// example : update selected row&#39;s Name to &quot;hello world&quot;</span>\n' +
-            'grid.updateSelectedCellValue(<span style="color: #4070a0">&#39;firstname&#39;</span>, <span style="color: #4070a0">&#39;hello world&#39;</span>);\n' +
+            'grid.setSelectedCellValue(<span style="color: #4070a0">&#39;firstname&#39;</span>, <span style="color: #4070a0">&#39;hello world&#39;</span>);\n' +
             '</pre></div>'
         },
         {
@@ -1416,15 +1416,15 @@ style : friendly
             '</pre></div>'
         },
         {
-          id        : 'updatesourceurl',
-          title     : `updateSourceUrl()`,
-          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#updateSourceUrl',
+          id        : 'setsourceurl',
+          title     : `setSourceUrl()`,
+          doc       : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/EnhanceDataGrid.html#setSourceUrl',
           desc      : 'Update URL of data source and refresh Grid.',
           ratio     : '7,5',
           colorcode :
-            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.updateSourceUrl(<span style="color: #666666">&lt;</span>newUrl<span style="color: #666666">&gt;</span>);\n' +
+            '<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.0em .0em .0em .8em;padding:.6em;"><pre style="margin: 0; line-height: 125%">grid.setSourceUrl(<span style="color: #666666">&lt;</span>newUrl<span style="color: #666666">&gt;</span>);\n' +
             '<span style="color: #60a0b0; font-style: italic">// example : update source url to &quot;demo/customers-2.txt&quot;</span>\n' +
-            'grid.updateSourceUrl(<span style="color: #4070a0">&#39;demo/customers-2.txt&#39;</span>);\n' +
+            'grid.setSourceUrl(<span style="color: #4070a0">&#39;demo/customers-2.txt&#39;</span>);\n' +
             '</pre></div>'
         },
       ],
@@ -2687,30 +2687,29 @@ style : friendly
       edg_updatecellvalue.updateCellValue(1, 'firstname', 'hello world');
     });
 
-    // Methods : updateSelectedCellValue()
-    $('#edg_updateselectedcellvalue_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
+    // Methods : setSelectedCellValue()
+    $('#edg_setselectedcellvalue_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
       <div class="d-grid mb-3">
-        <button id="edg_updateselectedcellvalue_button" type="button" class="btn btn-outline-secondary disabled">Update Selected Cell Value</button>
+        <button id="edg_setselectedcellvalue_button" type="button" class="btn btn-outline-secondary disabled">Update Selected Cell Value</button>
       </div>
-      <div id="edg_updateselectedcellvalue_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      <div id="edg_setselectedcellvalue_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
         Select a row and click the button to set the Name of Row to "hello world"...<br /><br />
-        It is exactly the same with jqxGrid's "setcellvalue" method.
       </div>
     </div>`));
 
-    $('#edg_updateselectedcellvalue').on('bindingcomplete', function() {
-      $('#updateselectedcellvalue .btn-outline-secondary.disabled').removeClass('disabled');
+    $('#edg_setselectedcellvalue').on('bindingcomplete', function() {
+      $('#setselectedcellvalue .btn-outline-secondary.disabled').removeClass('disabled');
     });
 
-    const edg_updateselectedcellvalue = new EnhanceDataGrid({
-      id        : '#edg_updateselectedcellvalue',
+    const edg_setselectedcellvalue = new EnhanceDataGrid({
+      id        : '#edg_setselectedcellvalue',
       altrows   : true,
       columns   : JSON.parse(JSON.stringify(columns)),
       dataSource: JSON.parse(JSON.stringify(source)),
     });
 
-    $('#edg_updateselectedcellvalue_button').on('click', function(e) {
-      edg_updateselectedcellvalue.updateSelectedCellValue('firstname', 'hello world');
+    $('#edg_setselectedcellvalue_button').on('click', function(e) {
+      edg_setselectedcellvalue.setSelectedCellValue('firstname', 'hello world');
     });
 
     // Methods : getSourceUrl()
@@ -2754,23 +2753,23 @@ style : friendly
       $('#edg_getsourceurl_result').html(edg_getsourceurl.getSourceUrl());
     });
 
-    // Methods : updateSourceUrl()
-    $('#edg_updatesourceurl_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
+    // Methods : setSourceUrl()
+    $('#edg_setsourceurl_box2').append($(`<div class="d-flex flex-column h-100 ms-3">
       <div class="d-grid gap-2 mb-3">
-        <button id="edg_updatesourceurl_button1" type="button" class="btn btn-outline-secondary disabled">Update To New URL</button>
-        <button id="edg_updatesourceurl_button2" type="button" class="btn btn-outline-secondary disabled">Update To Original Source URL</button>
+        <button id="edg_setsourceurl_button1" type="button" class="btn btn-outline-secondary disabled">Update To New URL</button>
+        <button id="edg_setsourceurl_button2" type="button" class="btn btn-outline-secondary disabled">Update To Original Source URL</button>
       </div>
-      <div id="edg_updatesourceurl_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
+      <div id="edg_setsourceurl_result" class="flex-fill border rounded p-1 text-muted overflow-auto">
         Click the button to display the source url here...
       </div>
     </div>`));
 
-    $('#edg_updatesourceurl').on('bindingcomplete', function() {
-      $('#updatesourceurl .btn-outline-secondary.disabled').removeClass('disabled');
+    $('#edg_setsourceurl').on('bindingcomplete', function() {
+      $('#setsourceurl .btn-outline-secondary.disabled').removeClass('disabled');
     });
 
-    const edg_updatesourceurl = new EnhanceDataGrid({
-      id        : '#edg_updatesourceurl',
+    const edg_setsourceurl = new EnhanceDataGrid({
+      id        : '#edg_setsourceurl',
       altrows   : true,
       columns   : [
         { text: 'Company Name', datafield: 'CompanyName', width: 250 },
@@ -2792,16 +2791,16 @@ style : friendly
       },
     });
 
-    const edg_updatesourceurl_result = $('#edg_updatesourceurl_result');
+    const edg_setsourceurl_result = $('#edg_setsourceurl_result');
 
-    $('#edg_updatesourceurl_button1').on('click', function(e) {
-      edg_updatesourceurl.updateSourceUrl('demo/customers-2.txt');
-      edg_updatesourceurl_result.html('Grid source URL updated to <i class="text-danger">demo/customers-2.txt</i>');
+    $('#edg_setsourceurl_button1').on('click', function(e) {
+      edg_setsourceurl.setSourceUrl('demo/customers-2.txt');
+      edg_setsourceurl_result.html('Grid source URL updated to <i class="text-danger">demo/customers-2.txt</i>');
     });
 
-    $('#edg_updatesourceurl_button2').on('click', function(e) {
-      edg_updatesourceurl.updateSourceUrl('demo/customers.txt');
-      edg_updatesourceurl_result.html('Grid source URL updated to <i class="text-danger">demo/customers.txt</i>');
+    $('#edg_setsourceurl_button2').on('click', function(e) {
+      edg_setsourceurl.setSourceUrl('demo/customers.txt');
+      edg_setsourceurl_result.html('Grid source URL updated to <i class="text-danger">demo/customers.txt</i>');
     });
   // }, 500);
 
