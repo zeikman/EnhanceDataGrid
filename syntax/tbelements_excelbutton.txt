@@ -1,0 +1,14 @@
+
+new EnhanceDataGrid({
+  id          : '#edg_excelbutton',
+  buttonTheme : 'material-purple',
+  altrows     : true,
+  columns     : columns_array,
+  dataSource  : source_object,
+  tbElement   : [
+    {
+      button  : 'excel',
+      filename: 'My_Excel_File',
+    },
+  ]
+});

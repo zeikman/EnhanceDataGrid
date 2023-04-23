@@ -1,0 +1,29 @@
+
+new EnhanceDataGrid({
+  id          : '#edg_editbutton',
+  buttonTheme : 'material-purple',
+  altrows     : true,
+  columns     : columns_array,
+  dataSource  : source_object,
+  tbElement   : [
+    { button: 'edit',
+      click: function() {
+        window.alert('You clicked the edit button');
+      },
+    },
+    { button: 'edit',
+      text: 'Open jqxWindow',
+      win: '#edg_jqxWindow',
+      beforeClick: function() {
+        // fill in data before jqxWindow open
+      },
+    },
+    { button: 'edit',
+      text: 'Open Modal',
+      modal: '#exampleModal',
+      beforeClick: function() {
+        // fill in data before Bootstrap Modal open
+      },
+    },
+  ]
+});

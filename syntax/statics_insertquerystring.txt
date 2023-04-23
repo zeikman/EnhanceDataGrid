@@ -1,0 +1,2 @@
+
+EDG.insertQueryString("url.php", { p1: 1, p2: 2 });

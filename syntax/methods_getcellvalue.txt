@@ -1,0 +1,3 @@
+
+// example : get Name of Row 2
+grid.getCellValue(1 /* rowBoundIndex */, 'firstname' /* dataField */);

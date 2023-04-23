@@ -1,0 +1,8 @@
+
+// Syntax 1
+// example : hide Product
+grid.hideColumn('productname' /* dataField */);
+
+// Syntax 2
+// example : hide Name and Last Name
+grid.hideColumn(['firstname', 'lastname'] /* Array-of-dataField */);

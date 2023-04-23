@@ -1,0 +1,11 @@
+
+new EnhanceDataGrid({
+  id          : '#edg_reloadbutton',
+  buttonTheme : 'material-purple',
+  searchInput : true,
+  columns     : columns_array,
+  dataSource  : source_object,
+  tbElement   : [
+    { button: 'reload' },
+  ]
+});

@@ -1,0 +1,4 @@
+
+const msg = 'This function will execute at most once every 3 seconds.';
+const throttle_func = EDG.throttle(() => console.log(msg), 3000);
+throttle_func();

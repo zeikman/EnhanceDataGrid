@@ -1,0 +1,6 @@
+
+$('input').keyup(e => {
+  if (EDG.isValidKeyboardInput(e)) {
+    // coding...
+  }
+});

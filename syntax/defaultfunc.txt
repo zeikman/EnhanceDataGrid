@@ -1,0 +1,13 @@
+
+const grid = new EnhanceDataGrid({
+  id          : '#edg_defaultfunc',
+  altrows     : true,
+  columns     : columns_array,
+  columngroups: [
+    { text: 'Buyer Details', name: 'buyer' },
+  ],
+  dataSource  : source_object,
+});
+
+// get original jqxGrid object
+const jqxGridObject = grid.jqxGrid;

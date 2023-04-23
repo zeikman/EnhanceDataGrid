@@ -1,0 +1,38 @@
+
+new EnhanceDataGrid({
+  id          : '#edg_deletebutton',
+  buttonTheme : 'material-purple',
+  altrows     : true,
+  columns     : JSON.parse(JSON.stringify(columns)),
+  dataSource  : JSON.parse(JSON.stringify(source)),
+  tbElement   : [
+    { button: 'delete',
+      url: 'post_delete.php?mod=delete_data',
+    },
+    { button: 'delete',
+      url: function(data, id) {
+        // coding...
+      }
+    },
+    { button: 'delete',
+      url: 'delete.php',
+      check: function() {
+        return _condition_to_pass_
+          ? true
+          : false;
+      }
+    },
+    { button: 'delete',
+      url: 'delete.php',
+      param: { p1: 1, p2: 2 },
+    },
+    { button: 'delete',
+      url: 'delete.php',
+      param: function() {
+        return {
+          random: (Math.random() * 100).toFixed(2)
+        };
+      }
+    },
+  ]
+});

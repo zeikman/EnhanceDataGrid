@@ -1,0 +1,5 @@
+
+// get current browser tab query string
+EDG.getSearchParameters();
+// get given url query string
+EDG.getSearchParameters("url.php?a=1&b=2");

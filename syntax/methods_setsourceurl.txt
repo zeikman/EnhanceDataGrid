@@ -1,0 +1,3 @@
+
+// example : update source url to "demo/customers-2.txt"
+grid.setSourceUrl('demo/customers-2.txt' /* newUrl */);

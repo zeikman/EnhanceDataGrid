@@ -1,0 +1,17 @@
+
+new EnhanceDataGrid({
+  id          : '#edg_divider',
+  buttonTheme : 'material-purple',
+  altrows     : true,
+  columns     : columns_array,
+  dataSource  : source_object,
+  tbElement   : [
+    { button : 'reload' },
+    { button : 'divider' },
+    {
+      button: 'print',
+      text  : 'Documentation',
+      url   : 'https://www.rightpristine.com/zeikman/EnhanceDataGrid/doc/EnhanceDataGrid.html'
+    },
+  ]
+});

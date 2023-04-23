@@ -21,6 +21,8 @@
   <link rel="stylesheet" href="jqwidgets/jqwidgets/styles/jqx.material-purple.css" type="text/css" />
   <link rel="stylesheet" href="jqwidgets/jqwidgets/styles/jqx.fresh.css" type="text/css" />
   <link rel="stylesheet" href="jqwidgets/jqwidgets/styles/jqx.light.css" type="text/css" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="Fontawesome/6.2.1/all.min.css">
   <!-- EnhanceDataGrid -->
   <!-- <link rel="stylesheet" href="src/EnhanceDataGrid.css" type="text/css" /> -->
   <link rel="stylesheet" href="src/EnhanceDataGrid.min.css" type="text/css" />
@@ -93,15 +95,15 @@
         </a>
       </h1>
       <small class="edg-status text-white align-self-end ms-2 fst-italic" style="display: none;">Page init...</small>
-      <span class="ms-auto link-light">&copy; 2022 <a class="link-light text-decoration-none" target="_blank" href="https://www.rightpristine.com/zeikman/">Zeikman</a></span>
+      <span class="ms-auto link-light">&copy; 2023 <a class="link-light text-decoration-none" target="_blank" href="https://www.rightpristine.com/zeikman/">Zeikman</a></span>
       <!-- https://www.rightpristine.com/zeikman/ -->
-      <!-- <a class="ms-auto link-light text-decoration-none" hreflang="ar">&copy; 2022 Zeikman &#10072; All rights reserved</a> -->
+      <!-- <a class="ms-auto link-light text-decoration-none" hreflang="ar">&copy; 2023 Zeikman &#10072; All rights reserved</a> -->
       <!-- <a href="../examples/cheatsheet-rtl/" class="ms-auto link-light" hreflang="ar">RTL cheatsheet</a> -->
     </div>
   </header>
 
   <aside class="bd-aside sticky-xl-top text-muted align-self-start mb-3 mb-xl-5 px-2 overflow-auto" style="margin-bottom: 0px!important;">
-    <h2 class="h6 pt-4 pb-3 mb-4 border-bottom">On this page</h2>
+    <h2 class="h6 pt-4 pb-3 mb-4 border-bottom">Table Of Content</h2>
     <nav class="small" id="toc">
       <ul class="list-unstyled">
         <li class="my-2">
@@ -131,7 +133,7 @@
           EDG inherits all the properties from jqxGrid.
           <br />
           <br />
-          Please take note that jQWidget is <i><span class="text-danger">NOT FREE FOR COMMERCIAL</span>, <a target="_blank" href="https://www.jqwidgets.com/license/">read the licensing here</a>.</i>
+          Please take note that jQWidget is <i><span class="text-danger fw-bold">NOT FREE FOR COMMERCIAL</span>, <a target="_blank" href="https://www.jqwidgets.com/license/">read the licensing here</a>.</i>
           <br />
           <br />
           Version : Beta v0.3.1
@@ -158,6 +160,19 @@
             <li><a target="_blank" href="https://craftpip.github.io/jquery-confirm/">jQuery-Confirm</a> - Utilizes jQuery.confirm, jQuery.alert, and etc on grid's messaging</li>
             <li><a target="_blank" href="https://getbootstrap.com/">Bootstrap</a> - Needed when setup <i>useBootstrap:true</i> which utilizes Boostrap Modal on grid's messaging</li>
           </ul>
+
+          <h4>Get Started</h4>
+          <p class="mt-0">Include EnhanceDataGrid library after jqxGrid library.</p>
+
+          <code>
+            <pre class="bg-light px-3 py-2 m-0">
+&lt;link rel="stylesheet" href="path-to-jqwidgets/jqwidgets/styles/jqx.base.css" type="text/css" /&gt;
+&lt;script type="text/javascript" src="path-to-jqwidgets/jqwidgets/jqxgrid.js"&gt;&lt;/script&gt;
+<span class="text-success fst-italic">&lt;!-- ## Remember to include all jqxgrid related libraries and other necessary dependency libraries ## --&gt;</span>
+
+&lt;link rel="stylesheet" href="path-to-EnhanceDataGrid/EnhanceDataGrid.css" type="text/css" /&gt;
+&lt;script type="text/javascript" src="path-to-EnhanceDataGrid/EnhanceDataGrid.js"&gt;&lt;/script&gt;</pre>
+          </code>
         </div>
       </article>
 
@@ -173,11 +188,12 @@
               This example shows the basic syntax of EnhanceDataGrid.
               By default, EnhanceDataGrid displays the row number along with the aggregate Row Total.
             </div>
-            <div class="card-body grid-container">
+            <div class="card-body grid-container active">
               <div id="edg_defaultfunc"></div>
             </div>
-            <div class="card-footer text-muted">
-              <pre class="m-0">
+            <div class="card-footer _text-muted p-0 overflow-hidden">
+              <div id="ace_defaultfunc"></div>
+              <pre class="m-0 d-none">
                 <!-- const edg_defaultfunc = new EnhanceDataGrid({
                   id          <i class="fa-solid fa-chevron-right"></i> '#edg_defaultfunc',
                   altrows     <i class="fa-solid fa-chevron-right"></i> true,
@@ -217,7 +233,7 @@
                 </div>
                 <div class="mb-3">
                   <div>Bootstrap Date</div>
-                  <input type="date" id="date" name="normal_date" class="form-control form-control-sm" value="2022-01-01" />
+                  <input type="date" id="date" name="normal_date" class="form-control form-control-sm" value="2023-01-01" />
                 </div>
                 <div class="mb-3">
                   <div>Bootstrap Checks</div>
@@ -389,10 +405,14 @@
   <!-- JSZIP -->
   <script type="text/javascript" src="jszip/jszip.min.js"></script>
   <!-- Font Awesome -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"
       integrity="sha512-rpLlll167T5LJHwp0waJCh3ZRf7pO6IT1+LZOhAyP6phAirwchClbTZV3iqL3BMrVxIYRbzGTpli4rfxsCK6Vw=="
       crossorigin="anonymous"
-      referrerpolicy="no-referrer"></script>
+      referrerpolicy="no-referrer"></script> -->
+  <!-- Ace Editor -->
+  <script src="ace/ace.js"></script>
+  <script src="ace/theme-one_dark.js"></script>
+  <script src="ace/mode-javascript.js"></script>
   <!-- Bootstrap -->
   <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- jQuery-Confirm -->

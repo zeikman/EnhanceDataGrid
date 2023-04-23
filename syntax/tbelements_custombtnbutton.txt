@@ -1,0 +1,19 @@
+
+new EnhanceDataGrid({
+  id          : '#edg_custombtnbutton',
+  buttonTheme : 'material-purple',
+  altrows     : true,
+  columns     : columns_array,
+  dataSource  : source_object,
+  tbElement   : [
+    {
+      button    : 'custombutton',
+      icon      : 'fa-solid fa-earth',
+      iconColor : 'yellow',
+      text      : 'Hello World !',
+      click: function() {
+        window.alert('Hello World !');
+      },
+    },
+  ]
+});

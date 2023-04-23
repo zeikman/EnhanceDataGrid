@@ -1,0 +1,15 @@
+
+new EnhanceDataGrid({
+  id          : '#edg_printbutton',
+  buttonTheme : 'material-purple',
+  altrows     : true,
+  columns     : columns_array,
+  dataSource  : source_object,
+  tbElement   : [
+    {
+      button: 'print',
+      text  : 'Open Documentation',
+      url   : 'url_link'
+    },
+  ]
+});

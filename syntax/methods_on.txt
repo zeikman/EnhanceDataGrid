@@ -1,0 +1,6 @@
+
+const callback_function = function() {
+  // coding...
+};
+
+grid.on('rowselect'/* jqxGrid-event */, callback_function);

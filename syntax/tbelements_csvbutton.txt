@@ -1,0 +1,14 @@
+
+new EnhanceDataGrid({
+  id          : '#edg_csvbutton',
+  buttonTheme : 'material-purple',
+  altrows     : true,
+  columns     : columns_array,
+  dataSource  : source_object,
+  tbElement   : [
+    {
+      button  : 'csv',
+      filename: 'My_CSV_File',
+    },
+  ]
+});

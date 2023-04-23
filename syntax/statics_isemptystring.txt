@@ -1,0 +1,6 @@
+
+// return true
+EDG.isEmptyString('');
+// return false
+EDG.isEmptyString('string');
+EDG.isEmptyString(1);

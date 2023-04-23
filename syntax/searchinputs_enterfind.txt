@@ -1,0 +1,13 @@
+
+new EnhanceDataGrid({
+  id              : '#edg_enterfind',
+  buttonTheme     : 'material-purple',
+  altrows         : true,
+  searchInput     : true,
+  showFindButton  : true,
+  enterFind       : true,
+  showFilterButton: false,
+  enterFilter     : false,
+  columns         : columns_array,
+  dataSource      : source_object,
+});

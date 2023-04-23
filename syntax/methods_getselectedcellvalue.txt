@@ -1,0 +1,3 @@
+
+// example : get selected row's Name
+grid.getSelectedCellValue('firstname' /* dataField */);

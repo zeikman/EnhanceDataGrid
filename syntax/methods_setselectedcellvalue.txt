@@ -1,0 +1,3 @@
+
+// example : update selected row's Name to "hello world"
+grid.setSelectedCellValue('firstname' /* dataField */, 'hello world' /* newValue */);

@@ -1,0 +1,11 @@
+
+new EnhanceDataGrid({
+  id              : '#edg_centeredcolumns',
+  altrows         : true,
+  centeredColumns : true,
+  columns         : JSON.parse(JSON.stringify(columns)),
+  dataSource      : JSON.parse(JSON.stringify(source)),
+  columngroups    : [
+    { text: 'Buyer Details', name: 'buyer' },
+  ],
+});

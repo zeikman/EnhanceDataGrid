@@ -1,0 +1,23 @@
+
+new EnhanceDataGrid({
+  id: '#edg_jsonsource',
+  altrows: true,
+  columns: [
+    { text: 'Company Name', datafield: 'CompanyName', width: 250 },
+    { text: 'Contact Name', datafield: 'ContactName', width: 150 },
+    { text: 'Contact Title', datafield: 'ContactTitle', width: 180 },
+    { text: 'City', datafield: 'City', width: 120 },
+    { text: 'Country', datafield: 'Country' },
+  ],
+  jsonSource: {
+    url: 'demo/customers.txt',
+    datafields: [
+      { name: 'CompanyName', type: 'string' },
+      { name: 'ContactName', type: 'string' },
+      { name: 'ContactTitle', type: 'string' },
+      { name: 'Address', type: 'string' },
+      { name: 'City', type: 'string' },
+      { name: 'Country', type: 'string' },
+    ]
+  },
+});

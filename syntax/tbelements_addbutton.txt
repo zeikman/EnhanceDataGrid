@@ -1,0 +1,25 @@
+
+new EnhanceDataGrid({
+  id          : '#edg_addbutton',
+  buttonTheme : 'material-purple',
+  altrows     : true,
+  columns     : columns_array,
+  dataSource  : source_object,
+  tbElement   : [
+    { button: 'add',
+      click: function() {
+        window.alert('You clicked the add button');
+      },
+    },
+    { button: 'add',
+      text: 'Open jqxWindow',
+      win: '#edg_jqxWindow',
+      form: '#exampleJqwidgetsForm',
+    },
+    { button: 'add',
+      text: 'Open Modal',
+      modal: '#exampleModal',
+      form: '#exampleBootstrapForm',
+    },
+  ]
+});

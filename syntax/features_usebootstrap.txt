@@ -1,0 +1,14 @@
+
+new EnhanceDataGrid({
+  id          : '#edg_usebootstrap',
+  buttonTheme : 'material-purple',
+  altrows     : true,
+  useBootstrap: true,
+  columns     : JSON.parse(JSON.stringify(columns)),
+  dataSource  : JSON.parse(JSON.stringify(source)),
+  tbElement   : [
+    { button: 'reload' },
+    { button: 'edit' },
+    { button: 'print' },
+  ]
+});

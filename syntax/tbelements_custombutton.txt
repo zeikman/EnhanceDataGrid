@@ -1,0 +1,13 @@
+
+new EnhanceDataGrid({
+  id          : '#edg_custombutton',
+  altrows     : true,
+  columns     : columns_array,
+  dataSource  : source_object,
+  tbElement   : [
+    {
+      button    : 'custom',
+      buttonNode: $('<i class="text-primary">Welcome to EnhanceDataGrid.js !')
+    },
+  ]
+});

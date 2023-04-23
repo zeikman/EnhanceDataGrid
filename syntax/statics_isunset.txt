@@ -1,0 +1,9 @@
+
+// return true
+EDG.isUnset(null);
+EDG.isUnset(undefined);
+EDG.isUnset('');
+// return false
+EDG.isUndefined('0');
+EDG.isUndefined(0);
+EDG.isUndefined({ a: 1 });

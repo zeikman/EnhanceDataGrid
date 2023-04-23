@@ -1,0 +1,10 @@
+
+new EnhanceDataGrid({
+  id          : '#edg_autofilter',
+  buttonTheme : 'material-purple',
+  altrows     : true,
+  searchInput : true,
+  autoFilter  : true,
+  columns     : columns_array,
+  dataSource  : source_object,
+});

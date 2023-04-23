@@ -1,0 +1,8 @@
+
+// Syntax 1
+// example : show Product
+grid.showColumn('productname' /* dataField */);
+
+// Syntax 2
+// example : show Name and Last Name
+grid.showColumn(['firstname', 'lastname'] /* Array-of-dataField */);

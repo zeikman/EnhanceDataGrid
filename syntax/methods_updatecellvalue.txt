@@ -1,0 +1,7 @@
+
+// example : update Name of Row 2 to "hello world"
+grid.updateCellValue(
+  1,            // rowBoundIndex
+  'firstname',  // dataField
+  'hello world' // newValue
+);

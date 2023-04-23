@@ -1,0 +1,17 @@
+
+new EnhanceDataGrid({
+  id          : '#edg_separator',
+  buttonTheme : 'material-purple',
+  altrows     : true,
+  columns     : columns_array,
+  dataSource  : source_object,
+  tbElement   : [
+    { button : 'reload' },
+    { button : 'separator' },
+    {
+      button: 'custombutton',
+      icon  : 'none',
+      text  : 'Oh no... Do not leave me T_T',
+    },
+  ]
+});

@@ -1,0 +1,4 @@
+
+const msg = '3 seconds passed without function being called again.';
+const debounce_func = EDG.debounce(() => console.log(msg), 3000);
+debounce_func();

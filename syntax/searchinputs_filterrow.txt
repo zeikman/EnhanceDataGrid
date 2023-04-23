@@ -1,0 +1,11 @@
+
+new EnhanceDataGrid({
+  id                  : '#edg_filterrow',
+  buttonTheme         : 'material-purple',
+  altrows             : true,
+  searchInput         : true,
+  showfilterrow       : true,
+  showFilterRowButton : false,
+  columns             : columns_array,
+  dataSource          : source_object,
+});
