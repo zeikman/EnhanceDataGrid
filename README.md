@@ -30,7 +30,14 @@ It is recommended to use with the following libraries to have a prettier UI expe
 Full documentation is over [here](https://www.rightpristine.com/zeikman/EnhanceDataGrid/documentation/).
 And the demonstration is over [here](https://www.rightpristine.com/zeikman/EnhanceDataGrid/).
 
+```html
+<!-- HTML Syntax -->
+<div id="grid_id"></div>
+```
+
 ```javascript
+/* JavaScript Syntax */
+
 // jsonSource comes with some preset options
 const source_json_object = {
   url: 'url.php',
